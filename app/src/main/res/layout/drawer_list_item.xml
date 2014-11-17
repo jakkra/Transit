@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:clickable="false"
+              android:descendantFocusability="blocksDescendants"
+              android:focusable="false"
+              android:focusableInTouchMode="false"
+              android:padding="6dip">
+
+    <!--android:background="@drawable/listitem_selector"-->
+    <!--background insert-->
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:textSize="15sp" android:id="@+id/label" android:gravity="left"
+            android:textColor="#d8e2ec" android:textStyle="bold" android:typeface="normal"/>
+
+
+</LinearLayout>
