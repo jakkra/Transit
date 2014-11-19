@@ -1,5 +1,4 @@
 package se.jakobkrantz.transit.app;
-
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -45,6 +44,7 @@ public class MainActivity extends ActionBarActivity {
         drawerList = (ListView) findViewById(R.id.left_drawer);
         drawerListAdapter = new DrawerListAdapter(getApplicationContext(), drawerListText);
         drawerListClickListener = new DrawerListClickListener(this, drawerList, drawerLayout, drawerListText);
+        drawerLayout.setDrawerListener(drawerListClickListener);
         drawerList.setAdapter(drawerListAdapter);
         drawerList.setOnItemClickListener(drawerListClickListener);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
@@ -52,7 +52,6 @@ public class MainActivity extends ActionBarActivity {
         drawerToggle.syncState();
         drawerLayout.setDrawerListener(drawerToggle);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -3,4 +3,9 @@ package se.jakobkrantz.transit.app.skanetrafikenAPI;/*
  */
 
 public class APIComunication {
+
+    public String getXmlFromUrl(String url){
+
+        return null;
+    }
 }

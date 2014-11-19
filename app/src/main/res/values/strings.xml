@@ -6,9 +6,11 @@
     <string name="action_settings">Settings</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="edit_text_search_hint">Önskad station</string>
     <string-array name="drawer_labels">
         <item>Sök</item>
-        <item>Shit</item>
+        <item>Stationer</item>
+        <item>shit</item>
         <item>More shit</item>
         <item>Settings</item>
     </string-array>

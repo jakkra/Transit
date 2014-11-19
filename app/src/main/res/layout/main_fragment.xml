@@ -3,12 +3,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="fill_parent"
-              android:layout_height="match_parent"
-              android:background="#ff6966ff">
+              android:layout_height="match_parent" android:padding="10dp">
 
-    <TextView
+    <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText" android:layout_weight="0.10" android:background="#ff6fab1c" android:textColor="#fff1f8ff"
-            android:textSize="60sp"/>
+            android:id="@+id/searchField" android:layout_weight="0.00"
+            android:background="@drawable/abc_edit_text_material"
+            android:hint="@string/edit_text_search_hint" android:paddingTop="5dp" android:textSize="20dp"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Test parse XML stations"
+            android:id="@+id/button" android:layout_gravity="center_horizontal" android:layout_weight="0.00"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView" android:layout_gravity="center_horizontal" android:layout_weight="0.02"/>
+
 </LinearLayout>
