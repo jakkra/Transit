@@ -6,7 +6,9 @@
     <string name="action_settings">Settings</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
-    <string name="edit_text_search_hint">Önskad station</string>
+    <string name="edit_text_search_hint">Sök station</string>
+    <string name="edit_text_search_from">Sök från</string>
+    <string name="edit_text_search_to">Sök till</string>
     <string-array name="drawer_labels">
         <item>Sök</item>
         <item>Stationer</item>

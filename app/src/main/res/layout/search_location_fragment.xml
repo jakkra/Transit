@@ -11,13 +11,13 @@
             android:id="@+id/search_station"
             android:layout_gravity="center"
             android:hint="@string/edit_text_search_hint"
-            android:background="@drawable/edit_text_nicer"
-            android:textSize="20sp" android:textColor="@android:color/black"
-            android:gravity="center"/>
+            android:background="@drawable/abc_edit_text_material"
+            android:textSize="25sp"
+            android:gravity="center" android:paddingRight="5dp" android:paddingLeft="5dp"/>
     <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/stations_list"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal" android:paddingTop="10dp"/>
 
 </LinearLayout>

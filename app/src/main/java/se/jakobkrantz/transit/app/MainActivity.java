@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 import se.jakobkrantz.transit.app.adapters.DrawerListAdapter;
 import se.jakobkrantz.transit.app.drawer.DrawerListClickListener;
@@ -83,7 +84,6 @@ public class MainActivity extends ActionBarActivity implements SearchLocationFra
     }
 
     public void replaceFragment(FragmentTypes searchStation, Bundle args) {
-
         switch (searchStation) {
             case SEARCH_JOURNEY_FROM_TO:
                 MainFragment fragment = new MainFragment();

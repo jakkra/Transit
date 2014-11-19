@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -75,6 +76,8 @@ public class SearchLocationFragment extends Fragment implements ListView.OnItemC
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
         Bundle args = getArguments();
         String source = args.getString(MainFragment.SOURCE);
         if (source.equals(MainFragment.SOURCE_FROM_STATION)) {
@@ -82,7 +85,6 @@ public class SearchLocationFragment extends Fragment implements ListView.OnItemC
         } else if (source.equals(MainFragment.SOURCE_TO_STATION)) {
             args.putString(MainFragment.TO_STATION, searchFragmentListAdapter.getItem(position).toString());
         }
-
 
         callBack.onStationSelected(args); //Changed to adpter.getPos(positon) will return string station
 
@@ -110,6 +112,7 @@ public class SearchLocationFragment extends Fragment implements ListView.OnItemC
         if (s.length() > 1) {
             SearchStationsTask searchTask = new SearchStationsTask(searchFragmentListAdapter);
             searchTask.execute(Constants.getSearchStationURL(s.toString()));
+            //Save X last searches
         }
     }
 
