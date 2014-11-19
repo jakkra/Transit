@@ -5,12 +5,14 @@
               android:layout_width="fill_parent"
               android:layout_height="match_parent" android:padding="10dp">
 
-    <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/searchField" android:layout_weight="0.00"
-            android:background="@drawable/abc_edit_text_material"
-            android:hint="@string/edit_text_search_hint" android:paddingTop="5dp" android:textSize="20dp"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/text_view_from_station"
+              android:layout_weight="0.00" android:background="@drawable/abc_edit_text_material"
+              android:hint="@string/edit_text_search_hint" android:paddingTop="5dp" android:textSize="22sp"
+              android:layout_gravity="center_horizontal"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/text_view_to_station"
+              android:layout_weight="0.00" android:background="@drawable/abc_edit_text_material"
+              android:hint="@string/edit_text_search_hint" android:paddingTop="5dp" android:textSize="22sp"
+              android:layout_gravity="center_horizontal"/>
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

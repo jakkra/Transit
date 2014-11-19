@@ -7,9 +7,9 @@ import android.widget.TextView;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import se.jakobkrantz.transit.app.adapters.SearchFragmentListAdapter;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Station;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.XMLQueryStationHandler;
-
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -20,10 +20,10 @@ import java.util.ArrayList;
 public class SearchStationsTask extends AsyncTask<String, Void, ArrayList<Station>> {
     private XMLQueryStationHandler xmlStationHandler;
     private XMLReader xmlR;
-    private TextView textView;
+    private SearchFragmentListAdapter adapter;
 
-    public SearchStationsTask(TextView textView) {
-        this.textView = textView; // and an adapter
+    public SearchStationsTask(SearchFragmentListAdapter adapter) {
+        this.adapter = adapter;
         SAXParserFactory saxPF = SAXParserFactory.newInstance();
         SAXParser saxP;
 
@@ -57,7 +57,7 @@ public class SearchStationsTask extends AsyncTask<String, Void, ArrayList<Statio
     protected void onPostExecute(ArrayList<Station> stations) {
         //Log.d("Stations:", stations.toString());
         if (stations != null) {
-            textView.setText(stations.toString());
+            adapter.setSearchResults(stations);
         }
         //Fill listView with the stations
         //listViewAdapter = new CustomListViewAdapter(context, stations);

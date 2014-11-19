@@ -38,17 +38,14 @@ public class DrawerListClickListener implements ListView.OnItemClickListener {
 
         switch (position) {
             case 0:
-                fragment = new MainFragment();
+                activity.replaceFragment(MainActivity.FragmentTypes.SEARCH_JOURNEY_FROM_TO, null);
                 break;
             default:
-                fragment = new DummyFragment();
+                activity.replaceFragment(MainActivity.FragmentTypes.DUMMY, null);
                 break;
         }
 
-        FragmentManager fragmentManager = activity.getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, fragment)
-                .commit();
+
 
         // Highlight the selected item, update the title, and close the drawer
         drawerList.setItemChecked(position, true);

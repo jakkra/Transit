@@ -43,4 +43,15 @@ public class Constants {
         String url = baseURL + queryURL + pipe + startStationNumber + pipe + midPartURL + pipe + endStationNumber + pipe + "0" + noOfResults + nbrRes;
         return url;
     }
+
+    /**
+     * Build the QueryString to search for stations
+     *
+     * @param search search for stations with {@search} in them.
+     * @return url to use with skånetrafiken api
+     */
+    public static String getSearchStationURL(String search){
+        String url = baseURL + getStationURL + search;
+        return url.replace(" ", space);
+    }
 }

@@ -1,4 +1,5 @@
 package se.jakobkrantz.transit.app;
+
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -7,12 +8,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
-import se.jakobkrantz.transit.app.drawer.DrawerListAdapter;
+import se.jakobkrantz.transit.app.adapters.DrawerListAdapter;
 import se.jakobkrantz.transit.app.drawer.DrawerListClickListener;
+import se.jakobkrantz.transit.app.fragments.DummyFragment;
 import se.jakobkrantz.transit.app.fragments.MainFragment;
+import se.jakobkrantz.transit.app.fragments.SearchLocationFragment;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements SearchLocationFragment.StationSelectedListener {
+
+    public enum FragmentTypes {
+        SEARCH_STATION, SEARCH_JOURNEY_FROM_TO, DUMMY
+    }
+
     private ListView drawerList;
     private DrawerLayout drawerLayout;
     private String[] drawerListText;
@@ -30,9 +38,9 @@ public class MainActivity extends ActionBarActivity {
             if (savedInstanceState != null) {
                 return;
             }
-            MainFragment firstFragment = new MainFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, firstFragment).commit();
+
         }
+        replaceFragment(FragmentTypes.SEARCH_JOURNEY_FROM_TO, null);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -44,7 +52,6 @@ public class MainActivity extends ActionBarActivity {
         drawerList = (ListView) findViewById(R.id.left_drawer);
         drawerListAdapter = new DrawerListAdapter(getApplicationContext(), drawerListText);
         drawerListClickListener = new DrawerListClickListener(this, drawerList, drawerLayout, drawerListText);
-        drawerLayout.setDrawerListener(drawerListClickListener);
         drawerList.setAdapter(drawerListAdapter);
         drawerList.setOnItemClickListener(drawerListClickListener);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
@@ -73,6 +80,31 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void replaceFragment(FragmentTypes searchStation, Bundle args) {
+
+        switch (searchStation) {
+            case SEARCH_JOURNEY_FROM_TO:
+                MainFragment fragment = new MainFragment();
+                fragment.setArguments(args);
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+                break;
+            case SEARCH_STATION:
+                SearchLocationFragment searchFragment = new SearchLocationFragment();
+                searchFragment.setArguments(args);
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, searchFragment).addToBackStack(null).commit();
+                break;
+            default:
+                DummyFragment dummyFragment = new DummyFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, dummyFragment).addToBackStack(null).commit();
+                break;
+        }
+    }
+
+    @Override
+    public void onStationSelected(Bundle args) {
+        replaceFragment(FragmentTypes.SEARCH_JOURNEY_FROM_TO, args);
     }
 
     @Override

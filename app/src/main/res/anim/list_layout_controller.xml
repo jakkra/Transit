@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<set xmlns:android="http://schemas.android.com/apk/res/android">
-
-</set>
+<layoutAnimation xmlns:android="http://schemas.android.com/apk/res/android"
+                 android:delay="10%"
+                 android:animation="@anim/scale" />
