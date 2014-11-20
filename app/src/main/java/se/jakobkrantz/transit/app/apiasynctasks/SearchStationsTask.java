@@ -3,6 +3,7 @@ package se.jakobkrantz.transit.app.apiasynctasks;/*
  */
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.TextView;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -59,6 +60,7 @@ public class SearchStationsTask extends AsyncTask<String, Void, ArrayList<Statio
         if (stations != null) {
             adapter.setSearchResults(stations);
         }
+
         //Fill listView with the stations
         //listViewAdapter = new CustomListViewAdapter(context, stations);
         //listView.setAdapter(listViewAdapter);

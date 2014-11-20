@@ -111,9 +111,9 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void deleteFavouriteJourney(Journey j) {
-        Station s1 = j.getStartStation();
-        Station s2 = j.getEndStation();
+    public void deleteFavouriteJourney(SimpleJourney j) {
+        Station s1 = j.getFromStation();
+        Station s2 = j.getToStation();
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_NAME_FAVOURITES, COLUMN_STATION_ID + "= ? AND " + COLUMN_STATION_ID1 + "= ?", new String[]{Integer.toString(s1.getStationId()), Integer.toString(s2.getStationId())});
         db.close();
@@ -161,11 +161,11 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
     }
 
     /**
-     * @param howMany amount os favourite journeys returned. Passing null return all.
+     * @param howMany amount os favourite journeys returned as SimpleJourney objects. Passing null return all.
      *                Sorted after time added/searched
      * @return
      */
-    public List<Journey> getAllFavouriteJourneys(int howMany) {
+    public List<SimpleJourney> getAllFavouriteJourneys(int howMany) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_NAME_RECENT, COLUMNS_FAVOURITES, null, null, null, null, COLUMN_TIME_SEARCHED + " DESC", Integer.toString(howMany));
@@ -173,7 +173,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
         if (cursor != null) {
             cursor.moveToFirst();
         }
-        ArrayList<Journey> journeys = new ArrayList<Journey>(howMany);
+        ArrayList<SimpleJourney> journeys = new ArrayList<SimpleJourney>(howMany);
         while (!cursor.isAfterLast()) {
             Station s1 = new Station();
             Station s2 = new Station();
@@ -197,7 +197,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
             s2.setTimeSearched(cursor.getString(10));
 
             cursor.moveToNext();
-            journeys.add(new Journey(s1, s2));
+            journeys.add(new SimpleJourney(s1,s2));
         }
 
         db.close();

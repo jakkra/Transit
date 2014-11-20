@@ -7,9 +7,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 import se.jakobkrantz.transit.app.adapters.DrawerListAdapter;
+import se.jakobkrantz.transit.app.database.DatabaseTransitSQLite;
 import se.jakobkrantz.transit.app.drawer.DrawerListClickListener;
 import se.jakobkrantz.transit.app.fragments.DummyFragment;
 import se.jakobkrantz.transit.app.fragments.MainFragment;
@@ -22,6 +22,7 @@ public class MainActivity extends ActionBarActivity implements SearchLocationFra
         SEARCH_STATION, SEARCH_JOURNEY_FROM_TO, DUMMY
     }
 
+    private DatabaseTransitSQLite database;
     private ListView drawerList;
     private DrawerLayout drawerLayout;
     private String[] drawerListText;
@@ -32,6 +33,7 @@ public class MainActivity extends ActionBarActivity implements SearchLocationFra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        database = new DatabaseTransitSQLite(this);
         setContentView(R.layout.activity_main);
         drawerListText = getResources().getStringArray(R.array.drawer_labels);
 

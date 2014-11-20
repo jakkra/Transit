@@ -1,3 +1,3 @@
 Transit
 =======
-Transit android app used to searches for journeys with Skånetrafiken API.
+Transit android app used to searche for journeys with Skånetrafiken API.

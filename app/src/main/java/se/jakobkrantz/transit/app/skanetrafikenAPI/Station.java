@@ -9,6 +9,7 @@ public class Station {
     private double longitude;
     private String type;
     private String timeSearched;
+    private String stopPoint;
 
     public Station(String stationName, int stationId, double latitude, double longitude, String type) {
         this.stationName = stationName;
@@ -77,5 +78,13 @@ public class Station {
 
     public String getTimeSearched() {
         return timeSearched;
+    }
+
+    public void setStopPoint(String stopPoint) {
+        this.stopPoint = stopPoint;
+    }
+
+    public String getStopPoint() {
+        return stopPoint;
     }
 }
