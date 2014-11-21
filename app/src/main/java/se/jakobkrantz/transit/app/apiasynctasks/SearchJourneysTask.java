@@ -62,10 +62,10 @@ public class SearchJourneysTask extends AsyncTask<String, Void, ArrayList<Journe
     protected void onPostExecute(ArrayList<Journey> journeys) {
         //Log.d("Stations:", stations.toString());
         if (journeys != null) {
-            tv.setText(journeys.get(0).getStartStation().toString() + "\n" + journeys.get(0).getEndStation().toString() + "\n" + journeys.get(0).getDepDateTime() + "\n" + journeys.get(0).getArrDateTime());
-            for (Journey j : journeys) {
-                Log.d("\nJourneys searched result: \n", j.toString());
-            }
+            Log.d("\nJourneys searched result: \n", journeys.get(0).toString());
+            tv.setText(journeys.get(0).toString());
+//            for (Journey j : journeys) {
+//            }
 //            adapter.setSearchResults(stations);
         }
 

@@ -29,14 +29,12 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
     public static final String COLUMN_STATION_TYPE = "stationType";
     public static final String COLUMN_TIME_SEARCHED = "timeSearchedStation";
 
+    public static final String TABLE_NAME_FAVOURITES = "favTable";
     public static final String COLUMN_STATION_ID1 = "id1";
     public static final String COLUMN_STATION_NAME1 = "stationName1";
     public static final String COLUMN_LATITUDE1 = "latitude1";
     public static final String COLUMN_LONG1 = "longitude1";
     public static final String COLUMN_STATION_TYPE1 = "stationType1";
-    public static final String COLUMN_TIME_SEARCHED1 = "timeSearchedStation1";
-
-    public static final String TABLE_NAME_FAVOURITES = "favTable";
 
 
     private static final String[] COLUMNS_RECENT = {COLUMN_STATION_ID, COLUMN_STATION_NAME, COLUMN_LATITUDE, COLUMN_LONG, COLUMN_STATION_TYPE, COLUMN_TIME_SEARCHED};
@@ -72,6 +70,12 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
 
     public DatabaseTransitSQLite(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    public void clearTableRecent(){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("delete from "+ TABLE_NAME_RECENT);
+        db.close();
     }
 
     public void addStationsToRecent(List<Station> stations) {
@@ -121,7 +125,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
     }
 
 
-    public Station getStation(String stationName) {
+    public Station getRecentStation(String stationName) {
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_NAME_RECENT, null, COLUMN_STATION_NAME + " = ? ", new String[]{stationName}, null, null, null, "1");
@@ -150,7 +154,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
      *                Sorted after last time searched.
      * @return
      */
-    public List<Station> getRecentStations(final int howMany) {
+    public List<Station> getRecentStations(int howMany) {
         List<Station> stations = new ArrayList<Station>(howMany);
         SQLiteDatabase db = getReadableDatabase();
 

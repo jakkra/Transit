@@ -2,9 +2,12 @@
 <resources>
     <color name="colorPrimary">#ffab0049</color>
     <color name="colorPrimaryDark">#FF1693EC</color>
+    <color name="colorPrimaryDarkMore">#ff1688de</color>
 
     <color name="colorSecondary">@color/material_deep_teal_200</color>
     <color name="colorSecondaryDark">#FF1693EC</color>
+
+    <color name="white">#ffe3e3e3</color>
 
     <color name="windowBackgroundColor">#333333</color>
     <color name="black_translucent">#FF1693EC</color>

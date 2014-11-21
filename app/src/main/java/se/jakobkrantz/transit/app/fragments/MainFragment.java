@@ -4,7 +4,9 @@ package se.jakobkrantz.transit.app.fragments;/*
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,9 +15,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import se.jakobkrantz.transit.app.MainActivity;
 import se.jakobkrantz.transit.app.R;
-import se.jakobkrantz.transit.app.apiasynctasks.SearchJourneysTask;
+import se.jakobkrantz.transit.app.adapters.FavouriteListAdapter;
 import se.jakobkrantz.transit.app.database.DatabaseTransitSQLite;
-import se.jakobkrantz.transit.app.skanetrafikenAPI.Constants;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Station;
 
 import java.util.ArrayList;
@@ -38,27 +39,35 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
     public static final String TO_STATION_TYPE = "tostattype";
     public static final String TO_STATION_SEARCHED = "tostatsearch";
 
-    private TextView textView;
     private TextView fromStation;
     private TextView toStation;
     private Button button;
     private DatabaseTransitSQLite database;
+    private RecyclerView listView;
+    private FavouriteListAdapter favListAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         database = new DatabaseTransitSQLite(getActivity());
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.main_fragment, container, false);
-        textView = (TextView) view.findViewById(R.id.textView);
         toStation = (TextView) view.findViewById(R.id.text_view_to_station);
         fromStation = (TextView) view.findViewById(R.id.text_view_from_station);
         button = (Button) view.findViewById(R.id.button);
+        listView = (RecyclerView) view.findViewById(R.id.listView);
+
+        favListAdapter = new FavouriteListAdapter(database.getFavouriteJourneys(15), database);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        listView.setLayoutManager(mLayoutManager);
+        listView.setHasFixedSize(true);
+        listView.setAdapter(favListAdapter);
+        listView.setItemAnimator(new DefaultItemAnimator());
+
         button.setOnTouchListener(this);
         fromStation.setOnClickListener(this);
         toStation.setOnClickListener(this);
@@ -119,16 +128,14 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (MotionEvent.ACTION_UP == event.getAction()) {
-            SearchJourneysTask task = new SearchJourneysTask(textView);
+            //SearchJourneysTask task = new SearchJourneysTask(textView);
             Bundle b = getArguments();
-            Log.d("Bundle nbr", b.getString(FROM_STATION_ID) + "");
             List<Station> recentSearches = new ArrayList<Station>();
-
             recentSearches.add(new Station(b.getString(FROM_STATION), Integer.parseInt(b.getString(FROM_STATION_ID)), Double.parseDouble(b.getString(FROM_STATION_LAT)), Double.parseDouble(b.getString(FROM_STATION_LONG)), b.getString(FROM_STATION_TYPE)));
             recentSearches.add(new Station(b.getString(TO_STATION), Integer.parseInt(b.getString(TO_STATION_ID)), Double.parseDouble(b.getString(TO_STATION_LAT)), Double.parseDouble(b.getString(TO_STATION_LONG)), b.getString(TO_STATION_TYPE)));
-
             database.addStationsToRecent(recentSearches);
-            task.execute(Constants.getURL(b.getString(FROM_STATION_ID), b.getString(TO_STATION_ID), Constants.getCurrentDate(), Constants.getCurrentTime(), 5));
+            database.addStationFavPair(recentSearches.get(0), recentSearches.get(1));
+            //task.execute(Constants.getURL(b.getString(FROM_STATION_ID), b.getString(TO_STATION_ID), Constants.getCurrentDate(), Constants.getCurrentTime(), 5));
             return true;
         }
         return false;

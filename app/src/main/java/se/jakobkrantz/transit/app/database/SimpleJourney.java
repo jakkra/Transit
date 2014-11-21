@@ -9,7 +9,7 @@ public class SimpleJourney {
     private final Station fromStation;
     private final Station toStation;
 
-    public SimpleJourney(Station fromStation, Station toStation){
+    public SimpleJourney(Station fromStation, Station toStation) {
         this.fromStation = fromStation;
         this.toStation = toStation;
     }
@@ -18,7 +18,12 @@ public class SimpleJourney {
         return fromStation;
     }
 
+
     public Station getToStation() {
         return toStation;
+    }
+
+    public String toString() {
+        return fromStation + " -> " + toStation;
     }
 }

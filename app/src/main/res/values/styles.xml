@@ -9,6 +9,11 @@
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
     </style>
+
+    <style name="ToolBarStyle" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+    </style>
 </resources>
 
 

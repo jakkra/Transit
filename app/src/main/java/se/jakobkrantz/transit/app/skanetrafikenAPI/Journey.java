@@ -123,11 +123,11 @@ public class Journey {
     }
 
     public Station getStartStation() {
-        return routeLinks.get(routeLinks.size() - 1).getFromStation();
+        return routeLinks.get(0).getFromStation();
     }
 
     public Station getEndStation() {
-        return routeLinks.get(0).getToStation();
+        return routeLinks.get(routeLinks.size()-1).getToStation();
     }
 
     public String toString() {

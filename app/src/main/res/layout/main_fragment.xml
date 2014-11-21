@@ -1,26 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="match_parent" android:padding="10dp">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent" android:padding="10dp"
+                android:background="@color/colorPrimaryDark">
 
-    <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/text_view_from_station"
-              android:layout_weight="0.00" android:background="@drawable/abc_edit_text_material"
+
+    <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:scrollbars="vertical"
+            android:id="@+id/listView"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentTop="true"/>
+
+    <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+              android:id="@+id/text_view_from_station"
+              android:background="@drawable/abc_edit_text_material"
               android:hint="@string/edit_text_search_from" android:paddingTop="5dp" android:textSize="22sp"
-              android:layout_gravity="center_horizontal"/>
-    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/text_view_to_station"
-              android:layout_weight="0.00" android:background="@drawable/abc_edit_text_material"
+              android:layout_above="@+id/text_view_to_station" android:layout_alignParentLeft="true"
+              android:layout_alignParentStart="true"/>
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:id="@+id/text_view_to_station" android:background="@drawable/abc_edit_text_material"
               android:hint="@string/edit_text_search_to" android:paddingTop="5dp" android:textSize="22sp"
-              android:layout_gravity="center_horizontal"/>
+              android:layout_above="@+id/button" android:layout_alignParentLeft="true"
+              android:layout_alignParentStart="true"/>
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Test parse XML stations"
-            android:id="@+id/button" android:layout_gravity="center_horizontal" android:layout_weight="0.00"/>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView" android:layout_gravity="center_horizontal" android:layout_weight="0.02"/>
+            android:text="@string/search_journey_button_text"
+            android:id="@+id/button" android:layout_gravity="center_horizontal"
+            android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"/>
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/text_view_from_station" android:layout_below="@+id/listView">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Öresundståg 255"
+                android:id="@+id/textView2" android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" android:textSize="20sp"/>
+    </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>

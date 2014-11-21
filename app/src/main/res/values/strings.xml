@@ -8,6 +8,7 @@
     <string name="close">Close</string>
     <string name="edit_text_search_hint">Sök station</string>
     <string name="edit_text_search_from">Sök från</string>
+    <string name="search_journey_button_text">Sök</string>
     <string name="edit_text_search_to">Sök till</string>
     <string-array name="drawer_labels">
         <item>Sök</item>
