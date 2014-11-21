@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +20,11 @@ import android.widget.ListView;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.adapters.SearchFragmentListAdapter;
 import se.jakobkrantz.transit.app.apiasynctasks.SearchStationsTask;
+import se.jakobkrantz.transit.app.database.DatabaseTransitSQLite;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Constants;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Station;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -33,6 +35,7 @@ public class SearchLocationFragment extends Fragment implements ListView.OnItemC
     private EditText searchView;
     private StationSelectedListener callBack;
     private SearchFragmentListAdapter searchFragmentListAdapter;
+    private DatabaseTransitSQLite database;
 
     // The container Activity must implement this interface so the frag can deliver messages
     public interface StationSelectedListener {
@@ -46,6 +49,8 @@ public class SearchLocationFragment extends Fragment implements ListView.OnItemC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        database = new DatabaseTransitSQLite(getActivity());
+
     }
 
     @Override
@@ -53,16 +58,7 @@ public class SearchLocationFragment extends Fragment implements ListView.OnItemC
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.search_location_fragment, container, false);
 
-        ArrayList<Station> stations = new ArrayList<Station>();
-        stations.add(new Station("Lund", 1, 1, 1, "TYPE"));
-        stations.add(new Station("Malmö", 1, 1, 1, "TYPE"));
-        stations.add(new Station("Malmö Värnhem", 1, 1, 1, "TYPE"));
-        stations.add(new Station("Simrishamn", 1, 1, 1, "TYPE"));
-        stations.add(new Station("Kristianstad", 1, 1, 1, "TYPE"));
-        stations.add(new Station("Ystad", 1, 1, 1, "TYPE"));
-        stations.add(new Station("Svedala", 1, 1, 1, "TYPE"));
-        stations.add(new Station("Lund LTH", 1, 1, 1, "TYPE"));
-
+        List<Station> stations = database.getRecentStations(10);
         searchFragmentListAdapter = new SearchFragmentListAdapter(getActivity(), stations);
         listView = (ListView) view.findViewById(R.id.stations_list);
         searchView = (EditText) view.findViewById(R.id.search_station);
@@ -80,10 +76,24 @@ public class SearchLocationFragment extends Fragment implements ListView.OnItemC
         imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
         Bundle args = getArguments();
         String source = args.getString(MainFragment.SOURCE);
+        Station s = ((Station) searchFragmentListAdapter.getItem(position));
         if (source.equals(MainFragment.SOURCE_FROM_STATION)) {
-            args.putString(MainFragment.FROM_STATION, searchFragmentListAdapter.getItem(position).toString());
+
+            args.putString(MainFragment.FROM_STATION, s.getStationName());
+            args.putString(MainFragment.FROM_STATION_ID, Integer.toString(s.getStationId()));
+            args.putString(MainFragment.FROM_STATION_LONG, Double.toString(s.getLongitude()));
+            args.putString(MainFragment.FROM_STATION_LAT, Double.toString(s.getLatitude()));
+            args.putString(MainFragment.FROM_STATION_TYPE, s.getType());
+            args.putString(MainFragment.FROM_STATION_SEARCHED, s.getTimeSearched());
+
         } else if (source.equals(MainFragment.SOURCE_TO_STATION)) {
-            args.putString(MainFragment.TO_STATION, searchFragmentListAdapter.getItem(position).toString());
+
+            args.putString(MainFragment.TO_STATION, s.getStationName());
+            args.putString(MainFragment.TO_STATION_ID, Integer.toString(s.getStationId()));
+            args.putString(MainFragment.TO_STATION_LONG, Double.toString(s.getLongitude()));
+            args.putString(MainFragment.TO_STATION_LAT, Double.toString(s.getLatitude()));
+            args.putString(MainFragment.TO_STATION_TYPE, s.getType());
+            args.putString(MainFragment.TO_STATION_SEARCHED, s.getTimeSearched());
         }
 
         callBack.onStationSelected(args); //Changed to adpter.getPos(positon) will return string station
@@ -112,7 +122,6 @@ public class SearchLocationFragment extends Fragment implements ListView.OnItemC
         if (s.length() > 1) {
             SearchStationsTask searchTask = new SearchStationsTask(searchFragmentListAdapter);
             searchTask.execute(Constants.getSearchStationURL(s.toString()));
-            //Save X last searches
         }
     }
 

@@ -21,7 +21,7 @@ public class Journey {
     private String CO2value; // CO2 value in kg/person/km
 
 
-    public void setRouteLinks(List<RouteLink> routeLinks){
+    public void setRouteLinks(List<RouteLink> routeLinks) {
         this.routeLinks = routeLinks;
     }
 
@@ -123,10 +123,23 @@ public class Journey {
     }
 
     public Station getStartStation() {
-        return routeLinks.get(0).getFromStation();
+        return routeLinks.get(routeLinks.size() - 1).getFromStation();
     }
 
     public Station getEndStation() {
         return routeLinks.get(0).getToStation();
+    }
+
+    public String toString() {
+        return "______Journey_Start_____\n" +
+                "Start journey: " + getStartStation() + "\n" +
+                "To journey: " + getEndStation() + "\n" +
+                "Dep journey: " + getDepDateTime() + "\n" +
+                "Arr journey: " + getArrDateTime() + "\n" +
+                "Nbr changes: " + getNbrOfChanges() + "\n" +
+                "Total distance: " + getDistance() + "\n" +
+                "Part routes: " + "\n" + routeLinks.toString() +
+                "\n_________Journey Snd________\n";
+
     }
 }

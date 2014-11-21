@@ -5,10 +5,10 @@ package se.jakobkrantz.transit.app.database;/*
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.AsyncTask;
-import se.jakobkrantz.transit.app.skanetrafikenAPI.Journey;
+import android.util.Log;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Station;
 
 import java.text.SimpleDateFormat;
@@ -74,22 +74,23 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public void addStationsToRecent(final ArrayList<Station> stations) {
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                SQLiteDatabase db = getWritableDatabase();
-                for (int i = 0; i < stations.size(); i++) {
-                    db.insert(TABLE_NAME_RECENT, null, stationToContentValues(stations.get(i)));
+    public void addStationsToRecent(List<Station> stations) {
+        if (stations != null) {
+            Log.d("DATABASE stations.size()", stations.size() + "");
+            SQLiteDatabase db = getWritableDatabase();
+            for (int i = 0; i < stations.size(); i++) {
+                try {
+                    db.insertOrThrow(TABLE_NAME_RECENT, null, stationToContentValues(stations.get(i)));
+                } catch(SQLException e){
+
                 }
-                db.close();
-                return null;
             }
-        }.execute();
+
+            db.close();
+        }
     }
 
-
-    public void addStationPair(Station s1, Station s2) {
+    public void addStationFavPair(Station s1, Station s2) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = stationToContentValues(s1);
         values.put(COLUMN_STATION_NAME1, s2.getStationName());
@@ -119,44 +120,57 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
         db.close();
     }
 
+
+    public Station getStation(String stationName) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_NAME_RECENT, null, COLUMN_STATION_NAME + " = ? ", new String[]{stationName}, null, null, null, "1");
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        Station s = new Station();
+        if (cursor.getColumnCount() > 1) {
+
+            s.setStationId(cursor.getInt(0));
+            s.setStationName(cursor.getString(1));
+            s.setLatitude(Double.parseDouble(cursor.getString(2)));
+            s.setLongitude(Double.parseDouble(cursor.getString(3)));
+            s.setType(cursor.getString(4));
+            s.setTimeSearched(cursor.getString(5));
+
+            cursor.moveToNext();
+
+            db.close();
+        }
+        return s;
+    }
+
     /**
-     * @param howMany Amount of Stations returned, passing null returns all.
+     * @param howMany Amount of Stations returned, passing null returns all. TODO: Can't enter null, FIX
      *                Sorted after last time searched.
      * @return
      */
     public List<Station> getRecentStations(final int howMany) {
-        final ArrayList<Station> stations = new ArrayList<Station>(howMany);
+        List<Station> stations = new ArrayList<Station>(howMany);
+        SQLiteDatabase db = getReadableDatabase();
 
+        Cursor cursor = db.query(TABLE_NAME_RECENT, COLUMNS_RECENT, null, null, null, null, COLUMN_TIME_SEARCHED + " DESC", Integer.toString(howMany));
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        while (!cursor.isAfterLast()) {
 
-        new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                SQLiteDatabase db = getReadableDatabase();
-
-                Cursor cursor = db.query(TABLE_NAME_RECENT, COLUMNS_RECENT, null, null, null, null, COLUMN_TIME_SEARCHED + " DESC", Integer.toString(howMany));
-                db.close();
-                if (cursor != null) {
-                    cursor.moveToFirst();
-                }
-                while (!cursor.isAfterLast()) {
-
-                    Station s = new Station();
-                    s.setStationId(cursor.getInt(0));
-                    s.setStationName(cursor.getString(1));
-                    s.setLatitude(Double.parseDouble(cursor.getString(2)));
-                    s.setLongitude(Double.parseDouble(cursor.getString(3)));
-                    s.setType(cursor.getString(4));
-                    s.setTimeSearched(cursor.getString(5));
-                    stations.add(s);
-                    cursor.moveToNext();
-                }
-                return null;
-            }
-
-
-        }.execute();
-
+            Station s = new Station();
+            s.setStationId(cursor.getInt(0));
+            s.setStationName(cursor.getString(1));
+            s.setLatitude(Double.parseDouble(cursor.getString(2)));
+            s.setLongitude(Double.parseDouble(cursor.getString(3)));
+            s.setType(cursor.getString(4));
+            s.setTimeSearched(cursor.getString(5));
+            stations.add(s);
+            cursor.moveToNext();
+        }
+        db.close();
         return stations;
     }
 
@@ -165,15 +179,15 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
      *                Sorted after time added/searched
      * @return
      */
-    public List<SimpleJourney> getAllFavouriteJourneys(int howMany) {
+    public List<SimpleJourney> getFavouriteJourneys(int howMany) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_NAME_RECENT, COLUMNS_FAVOURITES, null, null, null, null, COLUMN_TIME_SEARCHED + " DESC", Integer.toString(howMany));
+        Cursor cursor = db.query(TABLE_NAME_FAVOURITES, COLUMNS_FAVOURITES, null, null, null, null, COLUMN_TIME_SEARCHED + " DESC", Integer.toString(howMany));
 
         if (cursor != null) {
             cursor.moveToFirst();
         }
-        ArrayList<SimpleJourney> journeys = new ArrayList<SimpleJourney>(howMany);
+        List<SimpleJourney> journeys = new ArrayList<SimpleJourney>(howMany);
         while (!cursor.isAfterLast()) {
             Station s1 = new Station();
             Station s2 = new Station();
@@ -182,7 +196,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
             s2.setStationId(cursor.getInt(1));
 
             s1.setStationName(cursor.getString(2));
-            s1.setStationName(cursor.getString(3));
+            s2.setStationName(cursor.getString(3));
 
             s1.setLatitude(Double.parseDouble(cursor.getString(4)));
             s2.setLatitude(Double.parseDouble(cursor.getString(5)));
@@ -197,7 +211,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
             s2.setTimeSearched(cursor.getString(10));
 
             cursor.moveToNext();
-            journeys.add(new SimpleJourney(s1,s2));
+            journeys.add(new SimpleJourney(s1, s2));
         }
 
         db.close();

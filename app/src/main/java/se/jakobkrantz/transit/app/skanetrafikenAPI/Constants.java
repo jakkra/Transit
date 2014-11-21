@@ -2,6 +2,11 @@ package se.jakobkrantz.transit.app.skanetrafikenAPI;/*
  * Created by krantz on 14-11-18.
  */
 
+import android.util.Log;
+
+import java.util.Calendar;
+import java.util.Date;
+
 public class Constants {
 
     public static final String testURL = "http://www.labs.skanetrafiken.se/v2.2/resultspage.asp?cmdaction=next&selPointFr=%7C81116%7C0&selPointTo=%7C65008%7C0&LastStart=2012-10-14%2008:00";
@@ -48,10 +53,40 @@ public class Constants {
      * Build the QueryString to search for stations
      *
      * @param search search for stations with {@search} in them.
-     * @return url to use with skånetrafiken api
+     * @return url to use with Skånetrafiken api
      */
-    public static String getSearchStationURL(String search){
+    public static String getSearchStationURL(String search) {
         String url = baseURL + getStationURL + search;
         return url.replace(" ", space);
+    }
+
+    public static String getCurrentDate() {
+        Calendar cal = Calendar.getInstance();
+        Date date = new Date();
+        String year = String.valueOf(cal.get(Calendar.YEAR));
+        String day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
+        String month = String.valueOf(cal.get(Calendar.MONTH) + 1);
+        Log.d("Date", year + "-" + month + "-" + day);
+        return year + "-" + month + "-" + day;
+    }
+
+    public static String getCurrentTime() {
+        Calendar cal = Calendar.getInstance();
+        Date date = new Date();
+        cal.setTime(date);
+        String hour;
+        if (cal.get(Calendar.HOUR_OF_DAY) < 10) {
+            hour = "0" + String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
+        } else {
+            hour = String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
+        }
+        String minute;
+        if (cal.get(Calendar.MINUTE) < 10) {
+            minute = "0" + String.valueOf(cal.get(Calendar.MINUTE));
+        } else {
+            minute = String.valueOf(cal.get(Calendar.MINUTE));
+        }
+        Log.d("Time", hour + ":"+ minute);
+        return hour + ":" + minute;
     }
 }

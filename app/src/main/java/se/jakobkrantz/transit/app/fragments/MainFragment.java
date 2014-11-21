@@ -4,29 +4,50 @@ package se.jakobkrantz.transit.app.fragments;/*
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import se.jakobkrantz.transit.app.MainActivity;
 import se.jakobkrantz.transit.app.R;
+import se.jakobkrantz.transit.app.apiasynctasks.SearchJourneysTask;
+import se.jakobkrantz.transit.app.database.DatabaseTransitSQLite;
+import se.jakobkrantz.transit.app.skanetrafikenAPI.Constants;
+import se.jakobkrantz.transit.app.skanetrafikenAPI.Station;
 
-public class MainFragment extends Fragment implements View.OnClickListener {
-    public final static String FROM_STATION = "fromstation";
-    public final static String TO_STATION = "tostation";
-    public final static String SOURCE = "source";
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainFragment extends Fragment implements View.OnClickListener, View.OnTouchListener {
+    public static final String SOURCE = "source";
     public static final String SOURCE_TO_STATION = "sourcetostation";
     public static final String SOURCE_FROM_STATION = "sourcefromstation";
+    public static final String FROM_STATION = "fromstation";
+    public static final String FROM_STATION_ID = "fromstatid";
+    public static final String FROM_STATION_LONG = "fromstatlong";
+    public static final String FROM_STATION_LAT = "fromstatlat";
+    public static final String FROM_STATION_TYPE = "fromstattype";
+    public static final String FROM_STATION_SEARCHED = "fromstatsearchedtime";
+    public static final String TO_STATION = "tostation";
+    public static final String TO_STATION_ID = "tostattid";
+    public static final String TO_STATION_LONG = "tostatlong";
+    public static final String TO_STATION_LAT = "tostatlat";
+    public static final String TO_STATION_TYPE = "tostattype";
+    public static final String TO_STATION_SEARCHED = "tostatsearch";
 
-    TextView textView;
-    TextView fromStation;
-    TextView toStation;
-    Button button;
+    private TextView textView;
+    private TextView fromStation;
+    private TextView toStation;
+    private Button button;
+    private DatabaseTransitSQLite database;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        database = new DatabaseTransitSQLite(getActivity());
 
     }
 
@@ -38,6 +59,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         toStation = (TextView) view.findViewById(R.id.text_view_to_station);
         fromStation = (TextView) view.findViewById(R.id.text_view_from_station);
         button = (Button) view.findViewById(R.id.button);
+        button.setOnTouchListener(this);
         fromStation.setOnClickListener(this);
         toStation.setOnClickListener(this);
         return view;
@@ -60,8 +82,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Bundle args = new Bundle();
-
+        Bundle args = getArguments();
+        if (args == null) args = new Bundle();
         if (v.getId() == R.id.text_view_from_station) args.putString(SOURCE, SOURCE_FROM_STATION);
         if (v.getId() == R.id.text_view_to_station) args.putString(SOURCE, SOURCE_TO_STATION);
 
@@ -92,5 +114,23 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         outState.putString(MainFragment.TO_STATION, toStation.getText().toString());
         outState.putString(MainFragment.FROM_STATION, fromStation.getText().toString());
 
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if (MotionEvent.ACTION_UP == event.getAction()) {
+            SearchJourneysTask task = new SearchJourneysTask(textView);
+            Bundle b = getArguments();
+            Log.d("Bundle nbr", b.getString(FROM_STATION_ID) + "");
+            List<Station> recentSearches = new ArrayList<Station>();
+
+            recentSearches.add(new Station(b.getString(FROM_STATION), Integer.parseInt(b.getString(FROM_STATION_ID)), Double.parseDouble(b.getString(FROM_STATION_LAT)), Double.parseDouble(b.getString(FROM_STATION_LONG)), b.getString(FROM_STATION_TYPE)));
+            recentSearches.add(new Station(b.getString(TO_STATION), Integer.parseInt(b.getString(TO_STATION_ID)), Double.parseDouble(b.getString(TO_STATION_LAT)), Double.parseDouble(b.getString(TO_STATION_LONG)), b.getString(TO_STATION_TYPE)));
+
+            database.addStationsToRecent(recentSearches);
+            task.execute(Constants.getURL(b.getString(FROM_STATION_ID), b.getString(TO_STATION_ID), Constants.getCurrentDate(), Constants.getCurrentTime(), 5));
+            return true;
+        }
+        return false;
     }
 }

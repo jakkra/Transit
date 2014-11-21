@@ -18,6 +18,7 @@ public class XMLQueryJourneyHandler extends DefaultHandler {
     private RouteLink r;
     private boolean isOnRouteLinksElement;
     private boolean isOnLineElement;
+    private boolean isOnPriceZoneElement;
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attribute) {
@@ -32,6 +33,8 @@ public class XMLQueryJourneyHandler extends DefaultHandler {
             tempStation = new Station();
         } else if (localName.equals("Line")) {
             isOnLineElement = true;
+        } else if (localName.equals("PriceZones")) {
+            isOnPriceZoneElement = true;
         } else if (localName.equals("RouteLinks")) {
             routeLinks = new ArrayList<RouteLink>();
             isOnRouteLinksElement = true;
@@ -87,7 +90,7 @@ public class XMLQueryJourneyHandler extends DefaultHandler {
             r.setArrTimeDeviation(elementValue);
         } else if (localName.equals("ArrDeviationAffect")) {
             r.setArrDeviationAffect(elementValue);
-        } else if (localName.equals("Id")) {
+        } else if (localName.equals("Id") && !isOnPriceZoneElement) {
             tempStation.setStationId(Integer.parseInt(elementValue));
         } else if (localName.equals("Name") && !isOnLineElement) {
             tempStation.setStationName(elementValue);
@@ -143,17 +146,23 @@ public class XMLQueryJourneyHandler extends DefaultHandler {
             t.setCO2value(elementValue);
 
         } else if (localName.equals("From")) {
-            routeLinks.get(routeLinks.size() - 1).setFromStation(tempStation);
+            r.setFromStation(tempStation);
+            //routeLinks.get(routeLinks.size() - 1).setFromStation(tempStation);
         } else if (localName.equals("To")) {
-            routeLinks.get(routeLinks.size() - 1).setToStation(tempStation);
+            r.setToStation(tempStation);
+//            routeLinks.get(routeLinks.size() - 1).setToStation(tempStation);
         } else if (localName.equals("Line")) {
             isOnLineElement = false;
+        } else if (localName.equals("PriceZones")) {
+            isOnPriceZoneElement = true;
         } else if (localName.equals("RouteLink")) {
-            isOnRouteLinksElement = false;
+            routeLinks.add(r);
         } else if (localName.equals("Journey")) {
             t.setRouteLinks(routeLinks);
+            journeys.add(t);
+        } else if (localName.equals("RouteLinks")) {
+            isOnRouteLinksElement = false;
         }
-
     }
 
     @Override

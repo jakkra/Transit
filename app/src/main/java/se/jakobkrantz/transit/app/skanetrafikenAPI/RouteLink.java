@@ -29,14 +29,45 @@ public class RouteLink {
     private Station toStation; // to station, can be an middle point
     private String depDeviationAffect; //Describes how departure time deviation affects the journey.
     private String arrDeviationAffect; //Describes how arrival time deviation affects the journey.
-    private String text; //FootNote's text
 
     //Notes
     private String publicNote;
+    private String text; //FootNote's text
     private String header;
     private String summary;
     private String shortText;
 
+
+    public String toString() {
+        return "\n-------RouteLink start---------\n" +
+                "From station: " + getFromStation() + "\n" +
+                "To stations: " + getToStation() + "\n" +
+                "Line nbr: " + getLineNbr() + "\n" +
+                "Line name: " + getLineName() + "\n" +
+                "Run nbr: " + getRunNbr() + "\n" +
+                "Line typ name: " + getLineTypeName() + "\n" +
+                "Transport mode name: " + getTransportModeName() + "\n" +
+                "Train nbr (bland if not a train): " + getTrainNbr() + "\n" +
+                "Operator id name: " + getOperatorName() + "\n" +
+                "Operator name: " + getOperatorName() + "\n" +
+                "Towards: " + getTowardDirection() + "\n" +
+                "Dep time: " + getDepDateTime() + "\n" +
+                "Dep is timing point: " + getDepIsTimingPoint() + "\n" +
+                "Dep time deviation: " + getDepTimeDeviation() + "\n" +
+                "Dep time deviation affect: " + getDepDeviationAffect() + "\n" +
+                "Arr time: " + getArrDateTime() + "\n" +
+                "Arr is timing point: " + getArrIsTimingPoint() + "\n" +
+                "Arr deviation time: " + getArrTimeDeviation() + "\n" +
+                "Arr time deviation effect: " + getArrDeviationAffect() + "\n" +
+                "Accessability level: " + getAccessibility() + "\n" +
+                "\n" +
+                "Text: " + getText() + "\n" +
+                "Public note: " + getPublicNote() + "\n" +
+                "Header: " + getHeader() + "\n" +
+                "Summary: " + getSummary() + "\n" +
+                "Short text: " + getShortText() + "\n" +
+                "-------RouteLink end---------";
+    }
 
     public void setLineNbr(String lineNbr) {
         this.lineNbr = lineNbr;
@@ -91,6 +122,7 @@ public class RouteLink {
     }
 
     public String getTrainNbr() {
+        if (trainNbr == null) return "";
         return trainNbr;
     }
 
@@ -136,11 +168,10 @@ public class RouteLink {
     }
 
 
-
     /**
-     * @param accessibility  sum of accesibility features for line where
-     *                       1=R (Adapted for wheelchair), 2=S (Visually impaired),
-     *                       4=H (Hearing impaired)
+     * @param accessibility sum of accesibility features for line where
+     *                      1=R (Adapted for wheelchair), 2=S (Visually impaired),
+     *                      4=H (Hearing impaired)
      */
     public void setAccessibility(String accessibility) {
         this.accessibility = accessibility;

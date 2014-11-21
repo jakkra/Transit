@@ -12,14 +12,14 @@ import android.widget.TextView;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Station;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class SearchFragmentListAdapter extends BaseAdapter {
     private final Activity activity;
-    private ArrayList<Station> searchResults;
+    private List<Station> searchResults;
     private static LayoutInflater inflater = null;
 
-    public SearchFragmentListAdapter(Activity activity, ArrayList<Station> initialList) {
+    public SearchFragmentListAdapter(Activity activity, List<Station> initialList) {
         this.activity = activity;
         this.searchResults = initialList;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -51,8 +51,9 @@ public class SearchFragmentListAdapter extends BaseAdapter {
         return vi;
     }
 
-    public void setSearchResults(ArrayList<Station> searchResults) {
+    public void setSearchResults(List<Station> searchResults) {
         this.searchResults = searchResults;
         notifyDataSetChanged();
     }
+
 }

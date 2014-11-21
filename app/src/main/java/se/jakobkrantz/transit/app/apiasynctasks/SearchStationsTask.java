@@ -17,6 +17,7 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SearchStationsTask extends AsyncTask<String, Void, ArrayList<Station>> {
     private XMLQueryStationHandler xmlStationHandler;
@@ -56,7 +57,6 @@ public class SearchStationsTask extends AsyncTask<String, Void, ArrayList<Statio
 
     @Override
     protected void onPostExecute(ArrayList<Station> stations) {
-        //Log.d("Stations:", stations.toString());
         if (stations != null) {
             adapter.setSearchResults(stations);
         }
@@ -65,4 +65,5 @@ public class SearchStationsTask extends AsyncTask<String, Void, ArrayList<Statio
         //listViewAdapter = new CustomListViewAdapter(context, stations);
         //listView.setAdapter(listViewAdapter);
     }
+
 }
