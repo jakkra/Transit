@@ -24,7 +24,6 @@ public class SearchJourneysTask extends AsyncTask<String, Void, ArrayList<Journe
     private DataDownloadListener dataDownloadListener;
 
     public SearchJourneysTask() {
-        //this.adapter = adapter;
         SAXParserFactory saxPF = SAXParserFactory.newInstance();
         SAXParser saxP;
 

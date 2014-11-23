@@ -8,7 +8,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +69,7 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
 
     @Override
     public void onRefresh() {
+        //TODO adapter will also do notifyChangeALL
         Toast.makeText(getActivity(), "Is refreshing", Toast.LENGTH_SHORT).show();
     }
 
