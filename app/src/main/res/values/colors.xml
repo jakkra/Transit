@@ -8,7 +8,10 @@
     <color name="colorSecondaryDark">#FF1693EC</color>
 
     <color name="white">#ffe3e3e3</color>
+    <drawable name="colorFavPressed">#FF1661B5</drawable>
 
+    <color name="resultListTextColor">#ff6d6d6e</color>
+    <color name="resultListBackground">#ffe4e4e4</color>
     <color name="windowBackgroundColor">#333333</color>
     <color name="black_translucent">#FF1693EC</color>
 </resources>

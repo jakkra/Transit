@@ -17,10 +17,14 @@ public class Journey {
     private String journeyKey; // Used by the Elmer search engine to identify an object uniquely in the scope of a traffic data. Information may be used by back-end services like Map Service to draw itinerary on map.
 
     private List<RouteLink> routeLinks; // All part distances, if more than one you need to change bus/tran..
+
     private String distance; // Distance i meters.
     private String CO2value; // CO2 value in kg/person/km
 
 
+    public List<RouteLink> getRouteLinks() {
+        return routeLinks;
+    }
     public void setRouteLinks(List<RouteLink> routeLinks) {
         this.routeLinks = routeLinks;
     }

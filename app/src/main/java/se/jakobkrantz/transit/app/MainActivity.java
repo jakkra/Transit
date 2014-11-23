@@ -7,19 +7,19 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.ListView;
 import se.jakobkrantz.transit.app.adapters.DrawerListAdapter;
 import se.jakobkrantz.transit.app.drawer.DrawerListClickListener;
 import se.jakobkrantz.transit.app.fragments.DummyFragment;
 import se.jakobkrantz.transit.app.fragments.MainFragment;
+import se.jakobkrantz.transit.app.fragments.ResultFragment;
 import se.jakobkrantz.transit.app.fragments.SearchLocationFragment;
 
 
 public class MainActivity extends ActionBarActivity implements SearchLocationFragment.StationSelectedListener {
 
     public enum FragmentTypes {
-        SEARCH_STATION, SEARCH_JOURNEY_FROM_TO, DUMMY
+        SEARCH_STATION, SEARCH_JOURNEY_FROM_TO, SEARCH_RESULT, DUMMY
     }
 
     private ListView drawerList;
@@ -61,27 +61,6 @@ public class MainActivity extends ActionBarActivity implements SearchLocationFra
         drawerLayout.setDrawerListener(drawerToggle);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     public void replaceFragment(FragmentTypes searchStation, Bundle args) {
         switch (searchStation) {
@@ -95,6 +74,11 @@ public class MainActivity extends ActionBarActivity implements SearchLocationFra
                 searchFragment.setArguments(args);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, searchFragment).addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
                 break;
+            case SEARCH_RESULT:
+                ResultFragment resultFragment = new ResultFragment();
+                resultFragment.setArguments(args);
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, resultFragment).addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
+                break;
             default:
                 DummyFragment dummyFragment = new DummyFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, dummyFragment).commit();
@@ -105,6 +89,13 @@ public class MainActivity extends ActionBarActivity implements SearchLocationFra
     @Override
     public void onStationSelected(Bundle args) {
         replaceFragment(FragmentTypes.SEARCH_JOURNEY_FROM_TO, args);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
     @Override

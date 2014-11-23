@@ -15,6 +15,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_alignParentTop="true"/>
 
+
     <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
               android:id="@+id/text_view_from_station"
               android:background="@drawable/abc_edit_text_material"
@@ -31,18 +32,68 @@
             android:layout_height="wrap_content"
             android:text="@string/search_journey_button_text"
             android:id="@+id/button" android:layout_gravity="center_horizontal"
-            android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"/>
+            android:layout_alignParentBottom="true" android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
     <RelativeLayout
             android:layout_width="fill_parent"
+            android:id="@+id/relative"
             android:layout_height="fill_parent"
             android:layout_centerHorizontal="true"
             android:layout_above="@+id/text_view_from_station" android:layout_below="@+id/listView">
+
+        <View style="@style/Divider" android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
+              android:layout_alignParentStart="true" android:padding="5dp"/>
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/abc_ic_commit_search_api_mtrl_alpha"
+                android:id="@+id/imageView"
+                android:contentDescription="TEMPTEST" android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true" android:layout_alignParentEnd="true"/>
+
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Öresundståg 255"
-                android:id="@+id/textView2" android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true" android:textSize="20sp"/>
+                android:text="@string/label_departure"
+                android:id="@+id/label_arrival"
+                android:layout_above="@+id/label_departure" android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_arrival"
+                android:id="@+id/label_departure"
+                android:layout_centerVertical="true" android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:id="@+id/dep_time"
+                  android:layout_alignTop="@+id/label_arrival" android:layout_toRightOf="@+id/label_arrival"
+                  android:layout_toEndOf="@+id/label_arrival"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:id="@+id/arr_time"
+                  android:layout_toEndOf="@+id/label_departure"
+                  android:layout_alignBaseline="@+id/label_departure" android:layout_alignBottom="@+id/label_departure"
+                  android:layout_toRightOf="@+id/label_departure"/>
+        <ProgressBar
+                style="@android:style/Widget.ProgressBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/progressBar" android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/transport_type" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"/>
+
     </RelativeLayout>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fav_btn"
+            android:id="@+id/favourite_button" android:layout_below="@+id/text_view_to_station"
+            android:layout_alignParentLeft="true" android:layout_alignParentStart="true"/>
 
 </RelativeLayout>

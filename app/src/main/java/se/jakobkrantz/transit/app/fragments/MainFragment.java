@@ -7,22 +7,27 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import se.jakobkrantz.transit.app.MainActivity;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.adapters.FavouriteListAdapter;
+import se.jakobkrantz.transit.app.apiasynctasks.SearchJourneysTask;
 import se.jakobkrantz.transit.app.database.DatabaseTransitSQLite;
+import se.jakobkrantz.transit.app.database.SimpleJourney;
+import se.jakobkrantz.transit.app.skanetrafikenAPI.Constants;
+import se.jakobkrantz.transit.app.skanetrafikenAPI.Journey;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Station;
+import se.jakobkrantz.transit.app.skanetrafikenAPI.TimeAndDateConverter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainFragment extends Fragment implements View.OnClickListener, View.OnTouchListener {
+public class MainFragment extends Fragment implements View.OnClickListener, FavouriteListAdapter.OnItemChangeListener, SearchJourneysTask.DataDownloadListener {
+    //TODO Change to enum
     public static final String SOURCE = "source";
     public static final String SOURCE_TO_STATION = "sourcetostation";
     public static final String SOURCE_FROM_STATION = "sourcefromstation";
@@ -38,17 +43,25 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
     public static final String TO_STATION_LAT = "tostatlat";
     public static final String TO_STATION_TYPE = "tostattype";
     public static final String TO_STATION_SEARCHED = "tostatsearch";
+    public static final int NBR_OF_LIST_ITEM_TO_SHOW = 10;
 
     private TextView fromStation;
     private TextView toStation;
-    private Button button;
+    private Button searchButton;
+    private Button favButton;
     private DatabaseTransitSQLite database;
     private RecyclerView listView;
     private FavouriteListAdapter favListAdapter;
+    private ProgressBar progressBar;
+    private TextView dep;
+    private TextView arr;
+    private TextView transportType;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         database = new DatabaseTransitSQLite(getActivity());
     }
 
@@ -58,27 +71,62 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
         View view = inflater.inflate(R.layout.main_fragment, container, false);
         toStation = (TextView) view.findViewById(R.id.text_view_to_station);
         fromStation = (TextView) view.findViewById(R.id.text_view_from_station);
-        button = (Button) view.findViewById(R.id.button);
+        searchButton = (Button) view.findViewById(R.id.button);
+        favButton = (Button) view.findViewById(R.id.favourite_button);
         listView = (RecyclerView) view.findViewById(R.id.listView);
-
-        favListAdapter = new FavouriteListAdapter(database.getFavouriteJourneys(15), database);
+        arr = (TextView) view.findViewById(R.id.arr_time);
+        dep = (TextView) view.findViewById(R.id.dep_time);
+        transportType = (TextView) view.findViewById(R.id.transport_type);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
+        favListAdapter = new FavouriteListAdapter(database.getFavouriteJourneys(NBR_OF_LIST_ITEM_TO_SHOW), database.getRecentJourneys(NBR_OF_LIST_ITEM_TO_SHOW), this, NBR_OF_LIST_ITEM_TO_SHOW);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         listView.setLayoutManager(mLayoutManager);
         listView.setHasFixedSize(true);
         listView.setAdapter(favListAdapter);
         listView.setItemAnimator(new DefaultItemAnimator());
 
-        button.setOnTouchListener(this);
-        fromStation.setOnClickListener(this);
-        toStation.setOnClickListener(this);
+
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        fromStation.setOnClickListener(this);
+        toStation.setOnClickListener(this);
+
+        favButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = getArguments();
+                Station s1 = new Station(b.getString(FROM_STATION), Integer.parseInt(b.getString(FROM_STATION_ID)), Double.parseDouble(b.getString(FROM_STATION_LAT)), Double.parseDouble(b.getString(FROM_STATION_LONG)), b.getString(FROM_STATION_TYPE));
+                Station s2 = new Station(b.getString(TO_STATION), Integer.parseInt(b.getString(TO_STATION_ID)), Double.parseDouble(b.getString(TO_STATION_LAT)), Double.parseDouble(b.getString(TO_STATION_LONG)), b.getString(TO_STATION_TYPE));
+                SimpleJourney s = new SimpleJourney(s1, s2);
+                database.addStationFavPair(s);
+                favListAdapter.addFavourite(s);
+            }
+        });
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = getArguments();
+                List<Station> recentSearches = new ArrayList<Station>();
+                recentSearches.add(new Station(b.getString(FROM_STATION), Integer.parseInt(b.getString(FROM_STATION_ID)), Double.parseDouble(b.getString(FROM_STATION_LAT)), Double.parseDouble(b.getString(FROM_STATION_LONG)), b.getString(FROM_STATION_TYPE)));
+                recentSearches.add(new Station(b.getString(TO_STATION), Integer.parseInt(b.getString(TO_STATION_ID)), Double.parseDouble(b.getString(TO_STATION_LAT)), Double.parseDouble(b.getString(TO_STATION_LONG)), b.getString(TO_STATION_TYPE)));
+                database.addStationsToRecent(recentSearches);
+                SimpleJourney s = new SimpleJourney(recentSearches.get(0), recentSearches.get(1));
+                database.addRecentJourneySearch(s);
+                favListAdapter.addRecentJourney(s);
+                ((MainActivity) getActivity()).replaceFragment(MainActivity.FragmentTypes.SEARCH_RESULT, b);
+
+
+            }
+        });
         fillStationsText(getArguments());
     }
+
 
     private void fillStationsText(Bundle args) {
         if (args != null) {
@@ -108,6 +156,33 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Do something that differs the Activity's menu here
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // Do Activity menu item stuff here
+                return true;
+            case R.id.action_clear_recent_searches:
+                database.clearRecentJourneySearches();
+                favListAdapter.clearAllSearches();
+                return true;
+            case R.id.action_clear_favourites:
+                database.clearAllFavourites();
+                favListAdapter.clearAllFavourites();
+                return true;
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
@@ -126,18 +201,56 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
     }
 
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        if (MotionEvent.ACTION_UP == event.getAction()) {
-            //SearchJourneysTask task = new SearchJourneysTask(textView);
-            Bundle b = getArguments();
-            List<Station> recentSearches = new ArrayList<Station>();
-            recentSearches.add(new Station(b.getString(FROM_STATION), Integer.parseInt(b.getString(FROM_STATION_ID)), Double.parseDouble(b.getString(FROM_STATION_LAT)), Double.parseDouble(b.getString(FROM_STATION_LONG)), b.getString(FROM_STATION_TYPE)));
-            recentSearches.add(new Station(b.getString(TO_STATION), Integer.parseInt(b.getString(TO_STATION_ID)), Double.parseDouble(b.getString(TO_STATION_LAT)), Double.parseDouble(b.getString(TO_STATION_LONG)), b.getString(TO_STATION_TYPE)));
-            database.addStationsToRecent(recentSearches);
-            database.addStationFavPair(recentSearches.get(0), recentSearches.get(1));
-            //task.execute(Constants.getURL(b.getString(FROM_STATION_ID), b.getString(TO_STATION_ID), Constants.getCurrentDate(), Constants.getCurrentTime(), 5));
-            return true;
-        }
-        return false;
+    public void onRecentSearchItemAdded(SimpleJourney s) {
+        database.addRecentJourneySearch(s);
     }
+
+    @Override
+    public void onItemClickListener(SimpleJourney s) {
+        Toast.makeText(getActivity(), s.getFromStation() + " -> " + s.getToStation(), Toast.LENGTH_SHORT).show();
+        SearchJourneysTask task = new SearchJourneysTask();
+        task.setDataDownloadListener(this);
+        String url = Constants.getURL(s.getFromStation().getStationId(), s.getToStation().getStationId(), Constants.getCurrentDate(), Constants.getCurrentTime(), 1);
+        progressBar.setVisibility(View.VISIBLE);
+        task.execute(url);
+        //TODO get this data from database
+        //fromStation.setText(s.getFromStation().toString());
+        //toStation.setText(s.getToStation().toString());
+    }
+
+    @Override
+    public void onItemLongClickListener(SimpleJourney s) {
+        Toast.makeText(getActivity(), s.getFromStation() + " -> " + s.getToStation(), Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onFavouriteItemAdded(SimpleJourney s) {
+        database.addStationFavPair(s);
+    }
+
+    @Override
+    public void onFavouriteItemRemoved(SimpleJourney s) {
+        database.deleteFavouriteJourney(s);
+    }
+
+    @Override
+    public void dataDownloadedSuccessfully(Object data) {
+        progressBar.setVisibility(View.GONE);
+        List<Journey> journeyList = (List<Journey>) data;
+        Journey j = journeyList.get(0);
+        dep.setText(TimeAndDateConverter.formatTime(j.getDepDateTime()));
+        arr.setText(TimeAndDateConverter.formatTime(j.getArrDateTime()));
+        transportType.setText(j.getRouteLinks().get(0).getTransportModeName() + " " + j.getRouteLinks().get(0).getLineNbr());
+
+    }
+
+    @Override
+    public void dataDownloadFailed() {
+        progressBar.setVisibility(View.GONE);
+        Toast.makeText(getActivity(), "Failed to load data, none or slow internet connection", Toast.LENGTH_LONG).show();
+
+
+    }
+
 }

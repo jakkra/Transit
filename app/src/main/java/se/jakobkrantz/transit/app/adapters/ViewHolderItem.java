@@ -10,26 +10,26 @@ import se.jakobkrantz.transit.app.R;
 // Provide a reference to the views for each data item
 // Complex data items may need more than one view per item, and
 // you provide access to all the views for a data item in a view holder
-public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+public class ViewHolderItem extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-    public final View v;
-    private int positon;
+    private final View v;
     private final ViewHolderClickListener listener;
     // each data item is just a string in this case
-    public TextView mTextView;
+    public TextView favTextView;
 
-    public ViewHolder(View v, ViewHolderClickListener listener, int position) {
+    public ViewHolderItem(View v, ViewHolderClickListener listener) {
         super(v);
         this.v = v;
         this.listener = listener;
-        this.positon = position;
-        mTextView = (TextView) v.findViewById(R.id.info_text);
+        favTextView = (TextView) v.findViewById(R.id.info_text);
+        favTextView.setOnClickListener(this);
+        favTextView.setOnLongClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         if (v instanceof TextView) {
-            listener.onTextViewClick(v, positon);
+            listener.onViewClick(v, getPosition());
         } else {
 
         }
@@ -38,16 +38,10 @@ public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickL
     @Override
     public boolean onLongClick(View v) {
         if (v instanceof TextView) {
-            listener.onTextViewLongClick(v, positon);
+            listener.onViewLongClick(v, getPosition());
             return true;
         } else {
             return false;
         }
-    }
-
-    public static interface ViewHolderClickListener {
-        public void onTextViewClick(View caller, int position);
-
-        public void onTextViewLongClick(View caller, int position);
     }
 }

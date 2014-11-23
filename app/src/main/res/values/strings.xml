@@ -10,6 +10,16 @@
     <string name="edit_text_search_from">Sök från</string>
     <string name="search_journey_button_text">Sök</string>
     <string name="edit_text_search_to">Sök till</string>
+    <string name="line_separator">lineSeparator</string>
+    <string name="fav_btn">Spara sökning</string>
+    <string name="fav_header">Favoriter</string>
+    <string name="rec_header">Senaste sökningar</string>
+    <string name="clear_searches">Rensa sökningar</string>
+    <string name="clear_favourites">Rensa favoriter</string>
+    <string name="label_arrival">Ankomst: </string>
+    <string name="label_departure">Avgår: </string>
+    <string name="load_earlier">Tidigare</string>
+    <string name="load_later">Senare</string>
     <string-array name="drawer_labels">
         <item>Sök</item>
         <item>Stationer</item>

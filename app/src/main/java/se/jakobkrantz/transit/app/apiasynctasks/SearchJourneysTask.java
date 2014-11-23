@@ -4,7 +4,6 @@ package se.jakobkrantz.transit.app.apiasynctasks;/*
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.TextView;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -22,11 +21,9 @@ import java.util.ArrayList;
 public class SearchJourneysTask extends AsyncTask<String, Void, ArrayList<Journey>> {
     private XMLQueryJourneyHandler xmlQueryJourneyHandler;
     private XMLReader xmlR;
-    //private SearchFragmentListAdapter adapter;
-    private TextView tv;
+    private DataDownloadListener dataDownloadListener;
 
-    public SearchJourneysTask(TextView tv) {
-        this.tv = tv;
+    public SearchJourneysTask() {
         //this.adapter = adapter;
         SAXParserFactory saxPF = SAXParserFactory.newInstance();
         SAXParser saxP;
@@ -43,7 +40,9 @@ public class SearchJourneysTask extends AsyncTask<String, Void, ArrayList<Journe
         xmlR.setContentHandler(xmlQueryJourneyHandler);
     }
 
-
+    public void setDataDownloadListener(DataDownloadListener dataDownloadListener) {
+        this.dataDownloadListener = dataDownloadListener;
+    }
     @Override
     protected ArrayList<Journey> doInBackground(String... params) {
         Log.d("URL", params[0]);
@@ -60,18 +59,18 @@ public class SearchJourneysTask extends AsyncTask<String, Void, ArrayList<Journe
 
     @Override
     protected void onPostExecute(ArrayList<Journey> journeys) {
-        //Log.d("Stations:", stations.toString());
         if (journeys != null) {
-            Log.d("\nJourneys searched result: \n", journeys.get(0).toString());
-            tv.setText(journeys.get(0).toString());
-//            for (Journey j : journeys) {
-//            }
-//            adapter.setSearchResults(stations);
+
+            dataDownloadListener.dataDownloadedSuccessfully(journeys);
+        } else {
+            dataDownloadListener.dataDownloadFailed();
         }
 
-        //Fill listView with the stations
-        //listViewAdapter = new CustomListViewAdapter(context, stations);
-        //listView.setAdapter(listViewAdapter);
+    }
+
+    public static interface DataDownloadListener {
+        void dataDownloadedSuccessfully(Object data);
+        void dataDownloadFailed();
     }
 }
 

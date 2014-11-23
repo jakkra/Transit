@@ -56,17 +56,21 @@ public class SearchLocationFragment extends Fragment implements ListView.OnItemC
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.search_location_fragment, container, false);
+        searchView = (EditText) view.findViewById(R.id.search_station);
+        listView = (ListView) view.findViewById(R.id.stations_list);
+        return view;
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
         List<Station> stations = database.getRecentStations(10);
         searchFragmentListAdapter = new SearchFragmentListAdapter(getActivity(), stations);
-        listView = (ListView) view.findViewById(R.id.stations_list);
-        searchView = (EditText) view.findViewById(R.id.search_station);
         searchView.addTextChangedListener(this);
         listView.setAdapter(searchFragmentListAdapter);
         listView.setOnItemClickListener(this);
         LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.list_layout_controller);
         listView.setLayoutAnimation(controller);
-        return view;
     }
 
     @Override

@@ -30,7 +30,7 @@ public class Constants {
      * @param time               in format hh:mm 24 H
      * @param nbrResults         max 20
      */
-    public static String getURL(String startStationNumber, String endStationNumber, String date, String time, int nbrResults) {
+    public static String getURL(int startStationNumber, int endStationNumber, String date, String time, int nbrResults) {
         String nbrRes = String.valueOf(nbrResults);
         String url = baseURL + queryURL + pipe + startStationNumber + pipe + midPartURL + pipe + endStationNumber + pipe + lastPartURL + date + space + time + noOfResults + nbrRes;
         return url;
@@ -43,7 +43,7 @@ public class Constants {
      * @param endStationNumber   from skånetrafiken
      * @param nbrResults         max 20 from now
      */
-    public static String getURL(String startStationNumber, String endStationNumber, int nbrResults) {
+    public static String getURL(int startStationNumber, int endStationNumber, int nbrResults) {
         String nbrRes = String.valueOf(nbrResults);
         String url = baseURL + queryURL + pipe + startStationNumber + pipe + midPartURL + pipe + endStationNumber + pipe + "0" + noOfResults + nbrRes;
         return url;

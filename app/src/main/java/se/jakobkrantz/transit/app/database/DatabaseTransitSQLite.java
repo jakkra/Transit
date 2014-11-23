@@ -36,9 +36,11 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
     public static final String COLUMN_LONG1 = "longitude1";
     public static final String COLUMN_STATION_TYPE1 = "stationType1";
 
+    public static final String TABLE_RECENT_JOURNEY_SEARCH = "recentjourneysearch";
+
 
     private static final String[] COLUMNS_RECENT = {COLUMN_STATION_ID, COLUMN_STATION_NAME, COLUMN_LATITUDE, COLUMN_LONG, COLUMN_STATION_TYPE, COLUMN_TIME_SEARCHED};
-    private static final String[] COLUMNS_FAVOURITES = {COLUMN_STATION_ID, COLUMN_STATION_ID1, COLUMN_STATION_NAME, COLUMN_STATION_NAME1, COLUMN_LATITUDE, COLUMN_LATITUDE1,
+    private static final String[] COLUMNS_JOURNEYS = {COLUMN_STATION_ID, COLUMN_STATION_ID1, COLUMN_STATION_NAME, COLUMN_STATION_NAME1, COLUMN_LATITUDE, COLUMN_LATITUDE1,
             COLUMN_LONG, COLUMN_LONG1, COLUMN_STATION_TYPE, COLUMN_STATION_TYPE1, COLUMN_TIME_SEARCHED};
 
 
@@ -67,14 +69,34 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
             + " text, " + COLUMN_TIME_SEARCHED
             + " datetime DEFAULT CURRENT_TIMESTAMP);";
 
+    private static final String DATABASE_CREATE_TABLE_RECENT_JOURNEY_SEARCH = "create table "
+            + TABLE_RECENT_JOURNEY_SEARCH + "(" + COLUMN_STATION_ID
+            + " integer, " + COLUMN_STATION_ID1
+            + " integer, " + COLUMN_STATION_NAME
+            + " text, " + COLUMN_STATION_NAME1
+            + " text, " + COLUMN_LONG
+            + " text, " + COLUMN_LONG1
+            + " text, " + COLUMN_LATITUDE
+            + " text, " + COLUMN_LATITUDE1
+            + " text, " + COLUMN_STATION_TYPE
+            + " text, " + COLUMN_STATION_TYPE1
+            + " text, " + COLUMN_TIME_SEARCHED
+            + " datetime DEFAULT CURRENT_TIMESTAMP);";
+
 
     public DatabaseTransitSQLite(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public void clearTableRecent(){
+    public void clearRecentJourneySearches() {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("delete from "+ TABLE_NAME_RECENT);
+        db.execSQL("delete from " + TABLE_RECENT_JOURNEY_SEARCH);
+        db.close();
+    }
+
+    public void clearAllFavourites() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("delete from " + TABLE_NAME_FAVOURITES);
         db.close();
     }
 
@@ -85,7 +107,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
             for (int i = 0; i < stations.size(); i++) {
                 try {
                     db.insertOrThrow(TABLE_NAME_RECENT, null, stationToContentValues(stations.get(i)));
-                } catch(SQLException e){
+                } catch (SQLException e) {
 
                 }
             }
@@ -94,7 +116,18 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
         }
     }
 
-    public void addStationFavPair(Station s1, Station s2) {
+    public void addRecentJourneySearch(SimpleJourney s) {
+        addJourney(s, TABLE_RECENT_JOURNEY_SEARCH);
+    }
+
+    public void addStationFavPair(SimpleJourney s) {
+        addJourney(s, TABLE_NAME_FAVOURITES);
+
+    }
+
+    private void addJourney(SimpleJourney s, String table) {
+        Station s1 = s.getFromStation();
+        Station s2 = s.getToStation();
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = stationToContentValues(s1);
         values.put(COLUMN_STATION_NAME1, s2.getStationName());
@@ -102,9 +135,24 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
         values.put(COLUMN_LONG1, s2.getLongitude());
         values.put(COLUMN_LATITUDE1, s2.getLatitude());
         values.put(COLUMN_STATION_TYPE1, s2.getType());
-        db.insert(TABLE_NAME_FAVOURITES, null, values);
+        db.insert(table, null, values);
     }
 
+    public void deleteFavouriteJourney(SimpleJourney j) {
+        deleteFavouriteJourney(j, TABLE_NAME_FAVOURITES);
+    }
+
+    public void deleteRecentJourney(SimpleJourney j) {
+        deleteFavouriteJourney(j, TABLE_RECENT_JOURNEY_SEARCH);
+    }
+
+    private void deleteFavouriteJourney(SimpleJourney j, String tableName) {
+        Station s1 = j.getFromStation();
+        Station s2 = j.getToStation();
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(tableName, COLUMN_STATION_ID + "= ? AND " + COLUMN_STATION_ID1 + "= ?", new String[]{Integer.toString(s1.getStationId()), Integer.toString(s2.getStationId())});
+        db.close();
+    }
 
     public void deleteRecentStation(Station s) {
         deleteRecentStation(s.getStationId());
@@ -113,14 +161,6 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
     public void deleteRecentStation(int stationId) {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_NAME_RECENT, COLUMN_STATION_ID + "= ?", new String[]{Integer.toString(stationId)});
-        db.close();
-    }
-
-    public void deleteFavouriteJourney(SimpleJourney j) {
-        Station s1 = j.getFromStation();
-        Station s2 = j.getToStation();
-        SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_NAME_FAVOURITES, COLUMN_STATION_ID + "= ? AND " + COLUMN_STATION_ID1 + "= ?", new String[]{Integer.toString(s1.getStationId()), Integer.toString(s2.getStationId())});
         db.close();
     }
 
@@ -179,14 +219,28 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
     }
 
     /**
-     * @param howMany amount os favourite journeys returned as SimpleJourney objects. Passing null return all.
+     * @param howMany amount favourite journeys returned as SimpleJourney objects. Passing null return all.
      *                Sorted after time added/searched
      * @return
      */
     public List<SimpleJourney> getFavouriteJourneys(int howMany) {
+        return getFavouriteJourneys(howMany, TABLE_NAME_FAVOURITES);
+    }
+
+    /**
+     * @param howMany amount recent journeys returned as SimpleJourney objects. Passing null return all.
+     *                Sorted after time added/searched
+     * @return
+     */
+    public List<SimpleJourney> getRecentJourneys(int howMany) {
+        return getFavouriteJourneys(howMany, TABLE_RECENT_JOURNEY_SEARCH);
+    }
+
+
+    private List<SimpleJourney> getFavouriteJourneys(int howMany, String table) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_NAME_FAVOURITES, COLUMNS_FAVOURITES, null, null, null, null, COLUMN_TIME_SEARCHED + " DESC", Integer.toString(howMany));
+        Cursor cursor = db.query(table, COLUMNS_JOURNEYS, null, null, null, null, COLUMN_TIME_SEARCHED + " DESC", Integer.toString(howMany));
 
         if (cursor != null) {
             cursor.moveToFirst();
@@ -226,6 +280,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DATABASE_CREATE_TABLE_RECENT);
         db.execSQL(DATABASE_CREATE_TABLE_FAVOURITES);
+
     }
 
 
@@ -251,5 +306,6 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
         values.put(COLUMN_TIME_SEARCHED, getDateTime());
         return values;
     }
+
 
 }
