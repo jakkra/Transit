@@ -132,7 +132,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
                     b = new Bundle();
                     Station s1 = s.getFromStation();
                     Station s2 = s.getToStation();
-
                     b.putString(MainFragment.FROM_STATION, s1.getStationName());
                     b.putString(MainFragment.FROM_STATION_ID, Integer.toString(s1.getStationId()));
                     b.putString(MainFragment.FROM_STATION_LONG, Double.toString(s1.getLongitude()));
