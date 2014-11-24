@@ -20,6 +20,7 @@
     <string name="label_departure">Avgår: </string>
     <string name="load_earlier">Tidigare</string>
     <string name="load_later">Senare</string>
+    <string name="passed">Passerat</string>
     <string-array name="drawer_labels">
         <item>Sök</item>
         <item>Stationer</item>

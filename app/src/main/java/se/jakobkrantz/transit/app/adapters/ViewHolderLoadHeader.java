@@ -4,12 +4,11 @@ package se.jakobkrantz.transit.app.adapters;/*
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import se.jakobkrantz.transit.app.R;
 
-public class ViewHolderLoadHeader extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+public class ViewHolderLoadHeader extends RecyclerView.ViewHolder implements View.OnClickListener {
     private final View v;
     private final ViewHolderClickListener listener;
     public TextView loadMore;
@@ -21,18 +20,12 @@ public class ViewHolderLoadHeader extends RecyclerView.ViewHolder implements Vie
         loadMore = (TextView) v.findViewById(R.id.res_load_more);
         CardView cw = (CardView) v.findViewById(R.id.resultCardHeader);
         cw.setOnClickListener(this);
-        cw.setOnLongClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        Log.d("OnClick CardView", "yeah");
         listener.onViewClick(v, getPosition());
     }
 
-    @Override
-    public boolean onLongClick(View v) {
-        listener.onViewLongClick(v, getPosition());
-        return true;
-    }
+
 }

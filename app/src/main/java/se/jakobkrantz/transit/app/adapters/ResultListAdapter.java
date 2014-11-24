@@ -1,4 +1,5 @@
-package se.jakobkrantz.transit.app.adapters;/*
+package se.jakobkrantz.transit.app.adapters;
+/*
  * Created by krantz on 14-11-22.
  */
 
@@ -17,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ResultListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public static final int NBR_ITEMS_PER_LOAD = 6;
+
     private static final int LOAD_MORE_HOLDER = 0;
     private static final int ITEM_HOLDER = 1;
     private ArrayList<Journey> journeys;
@@ -34,9 +37,9 @@ public class ResultListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             @Override
             public void onViewClick(View caller, int position) {
                 if (position == 0) {
-                    listener.onLoadMoreResults(true);
+                    listener.onLoadMoreResults(true, journeys.get(0).getDepDateTime());
                 } else if (position == journeys.size() + 1) {
-                    listener.onLoadMoreResults(false);
+                    listener.onLoadMoreResults(false, journeys.get(journeys.size() - 1).getDepDateTime());
                 } else {
                     listener.onResultClicked(journeys.get(position - 1));
                 }
@@ -44,7 +47,7 @@ public class ResultListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
             @Override
             public void onViewLongClick(View caller, int position) {
-
+                listener.onResultLongClickListener(journeys.get(position - 1));
             }
         };
         if (viewType == ITEM_HOLDER) {
@@ -70,14 +73,27 @@ public class ResultListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             List<RouteLink> links = journeys.get(i - 1).getRouteLinks();
             String route = "";
             String mess = "";
+            boolean inTime = false;
+            //TODO move those methods and calculations inside Journey or helper class
             for (RouteLink r : links) {
                 route += r.getLineName() + " " + r.getLineNbr() + " -> ";
                 mess += r.getSummary() + "\n";
+                if (r.getDepTimeDeviation() != null) if (r.getDepTimeDeviation().equals("0")) inTime = true;
             }
             result.timeBetween.setText(j.getDepDateTime() + " - " + j.getArrDateTime());
-            result.timeToArrival.setText(j.getStartStation() + " om" + TimeAndDateConverter.timeToDeparture(j.getArrDateTime()));
+            String travelTime = TimeAndDateConverter.timeToDeparture(j.getArrDateTime());
+            String depIn = "";
+            if (travelTime.contains("-")) {
+                depIn = "Passerat";
+            } else {
+                depIn = "Avgår från " + j.getStartStation() + " om " + TimeAndDateConverter.timeToDeparture(j.getDepDateTime()) + " min ";
+            }
+
+            result.timeToArrival.setText(depIn);
             result.timeBetween.setText(TimeAndDateConverter.formatTime(j.getDepDateTime()) + " - " + TimeAndDateConverter.formatTime(j.getArrDateTime()));
-            result.nbrDepTime.setText("Tid " + TimeAndDateConverter.getTravelTimeinMinutes(j.getDepDateTime(), j.getArrDateTime()));
+            String arrInTime = "";
+            if (inTime) arrInTime = "I tid";
+            result.nbrDepTime.setText(TimeAndDateConverter.getTravelTimeinMinutes(j.getDepDateTime(), j.getArrDateTime()) + " min ");
 
         } else if (viewHolder instanceof ViewHolderLoadHeader) {
             TextView header = ((ViewHolderLoadHeader) viewHolder).loadMore;
@@ -105,9 +121,33 @@ public class ResultListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
 
-    public void addJourneys(ArrayList<Journey> journeys) {
+    /**
+     * @param journeys journeys to bew showed in the list
+     * @param b        true if added to beginning, false if added to the end
+     */
+    public void addJourneys(ArrayList<Journey> update, boolean b) {
+        int prevLastItem = journeys.size();
+        if (b) {
+            journeys.addAll(0, update);
+            notifyItemRangeInserted(1, update.size());
+
+        } else {
+            journeys.addAll(update);
+            notifyItemRangeInserted(prevLastItem + 1, update.size());
+        }
+    }
+
+    public void setJourneys(ArrayList<Journey> j) {
+        if (journeys.size() == NBR_ITEMS_PER_LOAD) {
+            journeys = j;
+            notifyItemRangeChanged(1, NBR_ITEMS_PER_LOAD);
+        } else {
+            journeys = j;
+            notifyDataSetChanged();
+        }
 
     }
+
 
     public static interface OnResultItemClicked {
         public void onResultClicked(Journey j);
@@ -117,7 +157,7 @@ public class ResultListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         /**
          * @param b true if load earlier result, false if load later results
          */
-        public void onLoadMoreResults(boolean b);
+        public void onLoadMoreResults(boolean b, String dateAndTime);
     }
 
 

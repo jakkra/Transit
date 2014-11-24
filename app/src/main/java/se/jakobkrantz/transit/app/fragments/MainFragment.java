@@ -55,6 +55,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
     private ProgressBar progressBar;
     private TextView dep;
     private TextView arr;
+    private TextView shortMessText;
+    private TextView travelTime;
     private TextView transportType;
 
 
@@ -77,6 +79,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
         arr = (TextView) view.findViewById(R.id.arr_time);
         dep = (TextView) view.findViewById(R.id.dep_time);
         transportType = (TextView) view.findViewById(R.id.transport_type);
+        shortMessText = (TextView) view.findViewById(R.id.short_message);
+        travelTime = (TextView) view.findViewById(R.id.travel_time);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
         favListAdapter = new FavouriteListAdapter(database.getFavouriteJourneys(NBR_OF_LIST_ITEM_TO_SHOW), database.getRecentJourneys(NBR_OF_LIST_ITEM_TO_SHOW), this, NBR_OF_LIST_ITEM_TO_SHOW);
@@ -276,9 +280,11 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
             dep.setText(TimeAndDateConverter.formatTime(j.getDepDateTime()));
             arr.setText(TimeAndDateConverter.formatTime(j.getArrDateTime()));
             transportType.setText(j.getRouteLinks().get(0).getTransportModeName() + " " + j.getRouteLinks().get(0).getLineNbr());
+            travelTime.setText(TimeAndDateConverter.getTravelTimeinMinutes(j.getDepDateTime(), j.getArrDateTime()) + " min ");
+            shortMessText.setText(j.getRouteLinks().get(0).getShortText());
         } else {
             //TODO show better message if no routes found.
-            Toast.makeText(getActivity(), "No Journeys found", Toast.LENGTH_SHORT);
+            Toast.makeText(getActivity(), "No Journeys found", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -289,5 +295,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
 
 
     }
+
 
 }

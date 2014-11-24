@@ -19,13 +19,12 @@ import se.jakobkrantz.transit.app.apiasynctasks.SearchJourneysTask;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Constants;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Journey;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Station;
+import se.jakobkrantz.transit.app.skanetrafikenAPI.TimeAndDateConverter;
 
 import java.util.ArrayList;
 
 
 public class ResultFragment extends Fragment implements SearchJourneysTask.DataDownloadListener, SwipeRefreshLayout.OnRefreshListener {
-    private static final int SEARCH_RESULT_COUNT = 6;
-
     private Station fromStation;
     private Station toStation;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -64,13 +63,17 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
         swipeRefreshLayout.setOnRefreshListener(this);
         SearchJourneysTask task = new SearchJourneysTask();
         task.setDataDownloadListener(this);
-        task.execute(Constants.getURL(fromStation.getStationId(), toStation.getStationId(), Constants.getCurrentDate(), Constants.getCurrentTime(), SEARCH_RESULT_COUNT));
+        task.execute(Constants.getURL(fromStation.getStationId(), toStation.getStationId(), Constants.getCurrentDate(), Constants.getCurrentTime(), ResultListAdapter.NBR_ITEMS_PER_LOAD));
     }
 
+    /**
+     * Reloads {SEARCH_RESULT_COUNT} results in the list. If the list contains more, they are removed totally.
+     */
     @Override
     public void onRefresh() {
-        //TODO adapter will also do notifyChangeALL
-        Toast.makeText(getActivity(), "Is refreshing", Toast.LENGTH_SHORT).show();
+        SearchJourneysTask task = new SearchJourneysTask();
+        task.setDataDownloadListener(this);
+        task.execute(Constants.getURL(fromStation.getStationId(), toStation.getStationId(), Constants.getCurrentDate(), Constants.getCurrentTime(), ResultListAdapter.NBR_ITEMS_PER_LOAD));
     }
 
     @Override
@@ -78,16 +81,16 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
         ArrayList<Journey> journeys = (ArrayList<Journey>) data;
         swipeRefreshLayout.setRefreshing(false);
         if (resultListAdapter == null) {
-
             resultListAdapter = new ResultListAdapter(journeys, new ResultListListener());
             recycleView.setAdapter(resultListAdapter);
         } else {
-            resultListAdapter.addJourneys(journeys);
+            resultListAdapter.setJourneys(journeys);
         }
     }
 
     @Override
     public void dataDownloadFailed() {
+        //TODO handle this better
         Toast.makeText(getActivity(), "Failed to load data, none or slow internet connection", Toast.LENGTH_LONG).show();
     }
 
@@ -105,12 +108,29 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
         }
 
         @Override
-        public void onLoadMoreResults(boolean b) {
+        public void onLoadMoreResults(final boolean b, String dateAndTime) {
             //Load earlier
+            String date = TimeAndDateConverter.getDate(dateAndTime);
+            String time = TimeAndDateConverter.formatTime(dateAndTime);
+            SearchJourneysTask task = new SearchJourneysTask();
+            task.setDataDownloadListener(new SearchJourneysTask.DataDownloadListener() {
+                @Override
+                public void dataDownloadedSuccessfully(Object data) {
+                    ArrayList<Journey> journeys = (ArrayList<Journey>) data;
+                    swipeRefreshLayout.setRefreshing(false);
+                    resultListAdapter.addJourneys(journeys, b);
+                }
+
+                @Override
+                public void dataDownloadFailed() {
+                    //TODO handle this better
+                    Toast.makeText(getActivity(), "Failed to load data, none or slow internet connection", Toast.LENGTH_LONG).show();
+                }
+            });
             if (b) {
-
+                task.execute(Constants.getURLPreviousResults(fromStation.getStationId(), toStation.getStationId(), date, time, ResultListAdapter.NBR_ITEMS_PER_LOAD));
             } else { //Load later
-
+                task.execute(Constants.getURL(fromStation.getStationId(), toStation.getStationId(), date, time, ResultListAdapter.NBR_ITEMS_PER_LOAD));
             }
 
         }
