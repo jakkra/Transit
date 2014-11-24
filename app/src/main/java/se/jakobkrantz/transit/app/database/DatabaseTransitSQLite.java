@@ -102,13 +102,14 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
 
     public void addStationsToRecent(List<Station> stations) {
         if (stations != null) {
-            Log.d("DATABASE stations.size()", stations.size() + "");
             SQLiteDatabase db = getWritableDatabase();
             for (int i = 0; i < stations.size(); i++) {
                 try {
                     db.insertOrThrow(TABLE_NAME_RECENT, null, stationToContentValues(stations.get(i)));
                 } catch (SQLException e) {
-
+                    ContentValues cv = new ContentValues();
+                    cv.put(COLUMN_TIME_SEARCHED, getDateTime());
+                    db.update(TABLE_NAME_RECENT, cv, COLUMN_STATION_ID + " = ?", new String[]{Integer.toString(stations.get(i).getStationId())});
                 }
             }
 
@@ -120,22 +121,38 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
         addJourney(s, TABLE_RECENT_JOURNEY_SEARCH);
     }
 
-    public void addStationFavPair(SimpleJourney s) {
-        addJourney(s, TABLE_NAME_FAVOURITES);
+    /**
+     * @param s SimpleJourney to add as favourite
+     * @return true if it was added, false if it was already a favourite. In this case last time used was updated to now.
+     */
+    public boolean addStationFavPair(SimpleJourney s) {
+        return addJourney(s, TABLE_NAME_FAVOURITES);
 
     }
 
-    private void addJourney(SimpleJourney s, String table) {
-        Station s1 = s.getFromStation();
-        Station s2 = s.getToStation();
+    private boolean addJourney(SimpleJourney s, String table) {
+        Log.d(s.getFromStation() + " to: " + s.getToStation(), table);
+        boolean wasAdded = false;
         SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = stationToContentValues(s1);
-        values.put(COLUMN_STATION_NAME1, s2.getStationName());
-        values.put(COLUMN_STATION_ID1, s2.getStationId());
-        values.put(COLUMN_LONG1, s2.getLongitude());
-        values.put(COLUMN_LATITUDE1, s2.getLatitude());
-        values.put(COLUMN_STATION_TYPE1, s2.getType());
-        db.insert(table, null, values);
+        Cursor cursor = db.query(table, null, COLUMN_STATION_NAME + " = ? AND " + COLUMN_STATION_NAME1 + " = ?", new String[]{s.getFromStation().getStationName(), s.getToStation().getStationName()}, null, null, null, "1");
+        if (cursor.getCount() < 1) {
+            Station s1 = s.getFromStation();
+            Station s2 = s.getToStation();
+            ContentValues values = stationToContentValues(s1);
+            values.put(COLUMN_STATION_NAME1, s2.getStationName());
+            values.put(COLUMN_STATION_ID1, s2.getStationId());
+            values.put(COLUMN_LONG1, s2.getLongitude());
+            values.put(COLUMN_LATITUDE1, s2.getLatitude());
+            values.put(COLUMN_STATION_TYPE1, s2.getType());
+            db.insert(table, null, values);
+            wasAdded = true;
+        } else {
+            ContentValues cv = new ContentValues();
+            cv.put(COLUMN_TIME_SEARCHED, getDateTime());
+            db.update(table, cv, COLUMN_STATION_NAME + " = ? AND " + COLUMN_STATION_NAME1 + " = ?", new String[]{s.getFromStation().getStationName(), s.getToStation().getStationName()});
+        }
+        return wasAdded;
+
     }
 
     public void deleteFavouriteJourney(SimpleJourney j) {
@@ -169,6 +186,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_NAME_RECENT, null, COLUMN_STATION_NAME + " = ? ", new String[]{stationName}, null, null, null, "1");
+
         if (cursor != null) {
             cursor.moveToFirst();
         }
@@ -234,6 +252,46 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
      */
     public List<SimpleJourney> getRecentJourneys(int howMany) {
         return getFavouriteJourneys(howMany, TABLE_RECENT_JOURNEY_SEARCH);
+    }
+
+    //TODO DOES NOT WORK?
+    public SimpleJourney getSimpleJourneyFromRecentOrFavs(String from, String to) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_NAME_FAVOURITES, null, COLUMN_STATION_NAME + " = ? AND " + COLUMN_STATION_NAME1 + " = ?", new String[]{from, to}, null, null, null, "1");
+        if (cursor.getCount() < 1) {
+            cursor = db.query(TABLE_RECENT_JOURNEY_SEARCH, null, COLUMN_STATION_NAME + " = ? AND " + COLUMN_STATION_NAME1 + " = ?", new String[]{from, to}, null, null, null, "1");
+        }
+        if (cursor.getCount() < 1) {
+            return null;
+        }
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        Station s1 = new Station();
+        Station s2 = new Station();
+
+        s1.setStationId(cursor.getInt(0));
+        s2.setStationId(cursor.getInt(1));
+
+        s1.setStationName(cursor.getString(2));
+        s2.setStationName(cursor.getString(3));
+
+        s1.setLatitude(Double.parseDouble(cursor.getString(4)));
+        s2.setLatitude(Double.parseDouble(cursor.getString(5)));
+
+        s1.setLongitude(Double.parseDouble(cursor.getString(6)));
+        s2.setLongitude(Double.parseDouble(cursor.getString(7)));
+
+        s1.setType(cursor.getString(8));
+        s2.setType(cursor.getString(9));
+
+        s1.setTimeSearched(cursor.getString(10));
+        s2.setTimeSearched(cursor.getString(10));
+
+
+        db.close();
+        return new SimpleJourney(s1, s2);
+
     }
 
 

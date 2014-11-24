@@ -69,7 +69,6 @@ public class ResultListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 mess += r.getSummary() + "\n";
             }
             result.timeBetween.setText(j.getDepDateTime() + " - " + j.getArrDateTime());
-            result.message.setText(mess);
             result.timeToArrival.setText(j.getStartStation() + " om" + TimeAndDateConverter.timeToDeparture(j.getArrDateTime()));
             result.timeBetween.setText(TimeAndDateConverter.formatTime(j.getDepDateTime()) + " - " + TimeAndDateConverter.formatTime(j.getArrDateTime()));
             result.nbrDepTime.setText("Tid " + TimeAndDateConverter.getTravelTimeinMinutes(j.getDepDateTime(), j.getArrDateTime()));

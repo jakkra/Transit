@@ -108,7 +108,7 @@ public class FavouriteListAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void addFavourite(SimpleJourney simpleJourney) {
         simpleJourneys.add(headerFavourite, simpleJourney);
         if (simpleJourneys.size() > nbrItemsShow) {
-            listener.onFavouriteItemAdded(recentSearches.remove(nbrItemsShow));
+            listener.onFavouriteItemAdded(simpleJourneys.remove(nbrItemsShow));
             notifyItemRemoved(headerRecent - 1);
         }
         updateRecentHeaderPos();
