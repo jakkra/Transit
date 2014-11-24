@@ -44,7 +44,7 @@ public class SearchJourneysTask extends AsyncTask<String, Void, ArrayList<Journe
     }
     @Override
     protected ArrayList<Journey> doInBackground(String... params) {
-        Log.d("URL", params[0]);
+//        Log.d("URL", params[0]);
         try {
             URL url = new URL(params[0]);
             xmlR.parse(new InputSource(url.openStream()));

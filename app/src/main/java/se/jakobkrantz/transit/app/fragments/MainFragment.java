@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.*;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -115,45 +114,47 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle b = getArguments();
-                if(b == null){
-                    b = new Bundle();
+                if (fromStation.getText().length() > 1 && toStation.getText().length() > 1) {
+
+                    Bundle b = getArguments();
+                    if (b == null) {
+                        b = new Bundle();
+                    }
+                    List<Station> recentSearches = new ArrayList<Station>();
+                    SimpleJourney s = null;
+
+                    s = database.getSimpleJourneyFromRecentOrFavs(fromStation.getText().toString(), toStation.getText().toString());
+
+                    if (s == null) {
+                        recentSearches.add(new Station(b.getString(FROM_STATION), Integer.parseInt(b.getString(FROM_STATION_ID)), Double.parseDouble(b.getString(FROM_STATION_LAT)), Double.parseDouble(b.getString(FROM_STATION_LONG)), b.getString(FROM_STATION_TYPE)));
+                        recentSearches.add(new Station(b.getString(TO_STATION), Integer.parseInt(b.getString(TO_STATION_ID)), Double.parseDouble(b.getString(TO_STATION_LAT)), Double.parseDouble(b.getString(TO_STATION_LONG)), b.getString(TO_STATION_TYPE)));
+                        s = new SimpleJourney(recentSearches.get(0), recentSearches.get(1));
+                    } else {
+                        b = new Bundle();
+                        Station s1 = s.getFromStation();
+                        Station s2 = s.getToStation();
+                        b.putString(MainFragment.FROM_STATION, s1.getStationName());
+                        b.putString(MainFragment.FROM_STATION_ID, Integer.toString(s1.getStationId()));
+                        b.putString(MainFragment.FROM_STATION_LONG, Double.toString(s1.getLongitude()));
+                        b.putString(MainFragment.FROM_STATION_LAT, Double.toString(s1.getLatitude()));
+                        b.putString(MainFragment.FROM_STATION_TYPE, s1.getType());
+                        b.putString(MainFragment.FROM_STATION_SEARCHED, s1.getTimeSearched());
+
+                        b.putString(MainFragment.TO_STATION, s2.getStationName());
+                        b.putString(MainFragment.TO_STATION_ID, Integer.toString(s2.getStationId()));
+                        b.putString(MainFragment.TO_STATION_LONG, Double.toString(s2.getLongitude()));
+                        b.putString(MainFragment.TO_STATION_LAT, Double.toString(s2.getLatitude()));
+                        b.putString(MainFragment.TO_STATION_TYPE, s2.getType());
+                        b.putString(MainFragment.TO_STATION_SEARCHED, s2.getTimeSearched());
+                    }
+
+
+                    database.addRecentJourneySearch(s);
+                    database.addStationsToRecent(recentSearches);
+                    favListAdapter.addRecentJourney(s);
+                    ((MainActivity) getActivity()).replaceFragment(MainActivity.FragmentTypes.SEARCH_RESULT, b);
+
                 }
-                List<Station> recentSearches = new ArrayList<Station>();
-                SimpleJourney s;
-                s = database.getSimpleJourneyFromRecentOrFavs(fromStation.getText().toString(), toStation.getText().toString());
-
-                if (s == null) {
-                    recentSearches.add(new Station(b.getString(FROM_STATION), Integer.parseInt(b.getString(FROM_STATION_ID)), Double.parseDouble(b.getString(FROM_STATION_LAT)), Double.parseDouble(b.getString(FROM_STATION_LONG)), b.getString(FROM_STATION_TYPE)));
-                    recentSearches.add(new Station(b.getString(TO_STATION), Integer.parseInt(b.getString(TO_STATION_ID)), Double.parseDouble(b.getString(TO_STATION_LAT)), Double.parseDouble(b.getString(TO_STATION_LONG)), b.getString(TO_STATION_TYPE)));
-                    s = new SimpleJourney(recentSearches.get(0), recentSearches.get(1));
-                    Log.d("Not in database using args to get ", s.getFromStation() + " to" + s.getToStation());
-                } else {
-                    b = new Bundle();
-                    Station s1 = s.getFromStation();
-                    Station s2 = s.getToStation();
-                    b.putString(MainFragment.FROM_STATION, s1.getStationName());
-                    b.putString(MainFragment.FROM_STATION_ID, Integer.toString(s1.getStationId()));
-                    b.putString(MainFragment.FROM_STATION_LONG, Double.toString(s1.getLongitude()));
-                    b.putString(MainFragment.FROM_STATION_LAT, Double.toString(s1.getLatitude()));
-                    b.putString(MainFragment.FROM_STATION_TYPE, s1.getType());
-                    b.putString(MainFragment.FROM_STATION_SEARCHED, s1.getTimeSearched());
-
-                    b.putString(MainFragment.TO_STATION, s2.getStationName());
-                    b.putString(MainFragment.TO_STATION_ID, Integer.toString(s2.getStationId()));
-                    b.putString(MainFragment.TO_STATION_LONG, Double.toString(s2.getLongitude()));
-                    b.putString(MainFragment.TO_STATION_LAT, Double.toString(s2.getLatitude()));
-                    b.putString(MainFragment.TO_STATION_TYPE, s2.getType());
-                    b.putString(MainFragment.TO_STATION_SEARCHED, s2.getTimeSearched());
-                }
-
-
-                database.addRecentJourneySearch(s);
-                database.addStationsToRecent(recentSearches);
-                favListAdapter.addRecentJourney(s);
-                ((MainActivity) getActivity()).replaceFragment(MainActivity.FragmentTypes.SEARCH_RESULT, b);
-
-
             }
         });
         fillStationsText(getArguments());
@@ -171,6 +172,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
 
     @Override
     public void onClick(View v) {
+
         Bundle args = getArguments();
         if (args == null) args = new Bundle();
         if (v.getId() == R.id.text_view_from_station) args.putString(SOURCE, SOURCE_FROM_STATION);
@@ -180,11 +182,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
         args.putString(MainFragment.TO_STATION, toStation.getText().toString());
 
         ((MainActivity) getActivity()).replaceFragment(MainActivity.FragmentTypes.SEARCH_STATION, args);
-
-//        SearchStationsTask task = new SearchStationsTask(textView);
-//        String station = stationInput.getText().toString().replace(" ", "%20");
-//        task.execute("http://www.labs.skanetrafiken.se/v2.2/querystation.asp?inpPointfr=" +station);
-
     }
 
     @Override
@@ -227,9 +224,12 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         // Save the current article selection in case we need to recreate the fragment
-        outState.putString(MainFragment.TO_STATION, toStation.getText().toString());
-        outState.putString(MainFragment.FROM_STATION, fromStation.getText().toString());
+        if (fromStation.getText().length() > 1 && toStation.getText().length() > 1) {
 
+            outState.putString(MainFragment.TO_STATION, toStation.getText().toString());
+            outState.putString(MainFragment.FROM_STATION, fromStation.getText().toString());
+
+        }
     }
 
     @Override
@@ -269,12 +269,17 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
     @Override
     public void dataDownloadedSuccessfully(Object data) {
         progressBar.setVisibility(View.GONE);
-        List<Journey> journeyList = (List<Journey>) data;
-        Journey j = journeyList.get(0);
-        dep.setText(TimeAndDateConverter.formatTime(j.getDepDateTime()));
-        arr.setText(TimeAndDateConverter.formatTime(j.getArrDateTime()));
-        transportType.setText(j.getRouteLinks().get(0).getTransportModeName() + " " + j.getRouteLinks().get(0).getLineNbr());
 
+        List<Journey> journeyList = (List<Journey>) data;
+        if (journeyList.size() > 0) {
+            Journey j = journeyList.get(0);
+            dep.setText(TimeAndDateConverter.formatTime(j.getDepDateTime()));
+            arr.setText(TimeAndDateConverter.formatTime(j.getArrDateTime()));
+            transportType.setText(j.getRouteLinks().get(0).getTransportModeName() + " " + j.getRouteLinks().get(0).getLineNbr());
+        } else {
+            //TODO show better message if no routes found.
+            Toast.makeText(getActivity(), "No Journeys found", Toast.LENGTH_SHORT);
+        }
     }
 
     @Override

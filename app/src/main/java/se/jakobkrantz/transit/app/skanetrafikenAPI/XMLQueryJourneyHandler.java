@@ -9,7 +9,6 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.util.ArrayList;
 
 public class XMLQueryJourneyHandler extends DefaultHandler {
-    String elementValue = null;
     boolean elementOn = false;
     private ArrayList<Journey> journeys;
     private Journey t;
@@ -19,10 +18,16 @@ public class XMLQueryJourneyHandler extends DefaultHandler {
     private boolean isOnRouteLinksElement;
     private boolean isOnLineElement;
     private boolean isOnPriceZoneElement;
+    private StringBuilder sb;
+
+    public XMLQueryJourneyHandler() {
+        sb = new StringBuilder();
+    }
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attribute) {
         elementOn = true;
+        sb.delete(0, sb.length());
         if (localName.equals("Journeys")) {
             journeys = new ArrayList<Journey>();
         } else if (localName.equals("Journey")) {
@@ -49,101 +54,101 @@ public class XMLQueryJourneyHandler extends DefaultHandler {
         elementOn = false;
         //Journey
         if (localName.equals("SequenceNo")) {
-            t.setSequenceNbr(elementValue);
+            t.setSequenceNbr(sb.toString());
         } else if (localName.equals("DepDateTime") && !isOnRouteLinksElement) {
-            t.setDepDateTime(elementValue);
+            t.setDepDateTime(sb.toString());
         } else if (localName.equals("ArrDateTime") && !isOnRouteLinksElement) {
-            t.setArrDateTime(elementValue);
+            t.setArrDateTime(sb.toString());
         } else if (localName.equals("DepWalkDist")) {
-            t.setDepWalkDist(elementValue);
+            t.setDepWalkDist(sb.toString());
         } else if (localName.equals("ArrWalkDist")) {
-            t.setArrWalkDist(elementValue);
+            t.setArrWalkDist(sb.toString());
         } else if (localName.equals("NoOfChanges")) {
-            t.setNbrOfChanges(elementValue);
+            t.setNbrOfChanges(sb.toString());
         } else if (localName.equals("Guaranteed")) {
-            t.setGuaranteed(elementValue);
+            t.setGuaranteed(sb.toString());
         } else if (localName.equals("CO2factor")) {
-            t.setCO2Factor(elementValue);
+            t.setCO2Factor(sb.toString());
         } else if (localName.equals("NoOfZones")) {
-            t.setNbrOfZones(elementValue);
+            t.setNbrOfZones(sb.toString());
         } else if (localName.equals("JourneyKey")) {
-            t.setJourneyKey(elementValue);
+            t.setJourneyKey(sb.toString());
 
             //RouteLink start
         } else if (localName.equals("RouteLinkKey")) {
-            r.setRouteLinkKey(elementValue);
+            r.setRouteLinkKey(sb.toString());
         } else if (localName.equals("DepDateTime") && isOnRouteLinksElement) {
-            r.setDepDateTime(elementValue);
+            r.setDepDateTime(sb.toString());
         } else if (localName.equals("DepIsTimingPoint")) {
-            r.setDepIsTimingPoint(elementValue);
+            r.setDepIsTimingPoint(sb.toString());
         } else if (localName.equals("ArrDateTime") && isOnRouteLinksElement) {
-            r.setArrDateTime(elementValue);
+            r.setArrDateTime(sb.toString());
         } else if (localName.equals("ArrIsTimingPoint")) {
-            r.setArrIsTimingPoint(elementValue);
+            r.setArrIsTimingPoint(sb.toString());
         } else if (localName.equals("CallTrip")) {
-            r.setCallTrip(elementValue);
+            r.setCallTrip(sb.toString());
         } else if (localName.equals("DepTimeDeviation")) {
-            r.setDepTimeDeviation(elementValue);
+            r.setDepTimeDeviation(sb.toString());
         } else if (localName.equals("DepDeviationAffect")) {
-            r.setDepDeviationAffect(elementValue);
+            r.setDepDeviationAffect(sb.toString());
         } else if (localName.equals("ArrTimeDeviation")) {
-            r.setArrTimeDeviation(elementValue);
+            r.setArrTimeDeviation(sb.toString());
         } else if (localName.equals("ArrDeviationAffect")) {
-            r.setArrDeviationAffect(elementValue);
+            r.setArrDeviationAffect(sb.toString());
         } else if (localName.equals("Id") && !isOnPriceZoneElement) {
-            tempStation.setStationId(Integer.parseInt(elementValue));
+            tempStation.setStationId(Integer.parseInt(sb.toString()));
         } else if (localName.equals("Name") && !isOnLineElement) {
-            tempStation.setStationName(elementValue);
+            tempStation.setStationName(sb.toString());
         } else if (localName.equals("StopPoint")) {
-            tempStation.setStopPoint(elementValue);
+            tempStation.setStopPoint(sb.toString());
 
             //Line
         } else if (localName.equals("Name") && isOnLineElement) {
-            r.setLineName(elementValue);
+            r.setLineName(sb.toString());
         } else if (localName.equals("No")) {
-            r.setLineNbr(elementValue);
+            r.setLineNbr(sb.toString());
         } else if (localName.equals("RunNo")) {
-            r.setRunNbr(elementValue);
+            r.setRunNbr(sb.toString());
         } else if (localName.equals("LineTypeId")) {
-            r.setLineTypeId(elementValue);
+            r.setLineTypeId(sb.toString());
         } else if (localName.equals("LineTypeName")) {
-            r.setLineTypeName(elementValue);
+            r.setLineTypeName(sb.toString());
         } else if (localName.equals("TransportModeId")) {
-            r.setTransportMode(elementValue);
+            r.setTransportMode(sb.toString());
         } else if (localName.equals("TransportModeName")) {
-            r.setTransportModeName(elementValue);
+            r.setTransportModeName(sb.toString());
         } else if (localName.equals("TrainNo")) {
-            r.setTrainNbr(elementValue);
+            r.setTrainNbr(sb.toString());
         } else if (localName.equals("Towards")) {
-            r.setTowardDirection(elementValue);
+            r.setTowardDirection(sb.toString());
         } else if (localName.equals("OperatorId")) {
-            r.setOperatorId(elementValue);
+            r.setOperatorId(sb.toString());
         } else if (localName.equals("OperatorName")) {
-            r.setOperatorName(elementValue);
+            r.setOperatorName(sb.toString());
         } else if (localName.equals("Text")) {
-            r.setText(elementValue);
+            r.setText(sb.toString());
         } else if (localName.equals("PublicNote")) {
-            r.setPublicNote(elementValue);
+            r.setPublicNote(sb.toString());
         } else if (localName.equals("Header")) {
-            r.setHeader(elementValue);
+            r.setHeader(sb.toString());
         } else if (localName.equals("Summary")) {
-            r.setSummary(elementValue);
+            r.setSummary(sb.toString());
         } else if (localName.equals("ShortText")) {
-            r.setShortText(elementValue);
+            r.setShortText(sb.toString());
 
         } else if (localName.equals("DepTimeDeviation")) {
-            r.setDepTimeDeviation(elementValue);
+            r.setDepTimeDeviation(sb.toString());
         } else if (localName.equals("ArrTimeDeviation")) {
-            r.setArrTimeDeviation(elementValue);
+            r.setArrTimeDeviation(sb.toString());
         } else if (localName.equals("Accessibility")) {
-            r.setAccessibility(elementValue);
+            r.setAccessibility(sb.toString());
 
 
             //Done with RouteLink
         } else if (localName.equals("Distance")) {
-            t.setDistance(elementValue);
+            t.setDistance(sb.toString());
         } else if (localName.equals("CO2value")) {
-            t.setCO2value(elementValue);
+            t.setCO2value(sb.toString());
 
         } else if (localName.equals("From")) {
             r.setFromStation(tempStation);
@@ -167,9 +172,9 @@ public class XMLQueryJourneyHandler extends DefaultHandler {
 
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
+        //StringBuilder because the parser splits elements over multiple character arrays.
         if (elementOn) {
-            elementValue = new String(ch, start, length);
-            elementOn = false;
+            sb.append(ch, start, length);
         }
     }
 

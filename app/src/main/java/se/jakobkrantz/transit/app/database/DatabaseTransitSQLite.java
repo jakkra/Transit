@@ -8,7 +8,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Station;
 
 import java.text.SimpleDateFormat;
@@ -131,7 +130,6 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
     }
 
     private boolean addJourney(SimpleJourney s, String table) {
-        Log.d(s.getFromStation() + " to: " + s.getToStation(), table);
         boolean wasAdded = false;
         SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.query(table, null, COLUMN_STATION_NAME + " = ? AND " + COLUMN_STATION_NAME1 + " = ?", new String[]{s.getFromStation().getStationName(), s.getToStation().getStationName()}, null, null, null, "1");

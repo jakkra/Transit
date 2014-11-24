@@ -2,7 +2,6 @@ package se.jakobkrantz.transit.app.skanetrafikenAPI;/*
  * Created by krantz on 14-11-20.
  */
 
-import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,7 +17,6 @@ public class TimeAndDateConverter{
      * @return String in format HH:MM
      * */
     public static String formatTime(String dateTimeString){
-        Log.e("format this time: ", dateTimeString);
         String formattedTime= "";
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         Date date =null;

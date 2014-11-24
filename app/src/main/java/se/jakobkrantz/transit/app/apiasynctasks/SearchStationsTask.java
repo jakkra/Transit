@@ -3,8 +3,7 @@ package se.jakobkrantz.transit.app.apiasynctasks;/*
  */
 
 import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.TextView;
+
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -17,7 +16,6 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 public class SearchStationsTask extends AsyncTask<String, Void, ArrayList<Station>> {
     private XMLQueryStationHandler xmlStationHandler;

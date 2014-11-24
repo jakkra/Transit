@@ -25,6 +25,7 @@ public class Journey {
     public List<RouteLink> getRouteLinks() {
         return routeLinks;
     }
+
     public void setRouteLinks(List<RouteLink> routeLinks) {
         this.routeLinks = routeLinks;
     }
@@ -42,7 +43,7 @@ public class Journey {
     }
 
     public String getDepDateTime() {
-        return depDateTime;
+        return routeLinks.get(0).getDepDateTime();
     }
 
     public void setArrDateTime(String arrDateTime) {
@@ -50,7 +51,7 @@ public class Journey {
     }
 
     public String getArrDateTime() {
-        return arrDateTime;
+        return routeLinks.get(routeLinks.size() - 1).getArrDateTime();
     }
 
     public void setDepWalkDist(String depWalkDist) {
@@ -131,7 +132,7 @@ public class Journey {
     }
 
     public Station getEndStation() {
-        return routeLinks.get(routeLinks.size()-1).getToStation();
+        return routeLinks.get(routeLinks.size() - 1).getToStation();
     }
 
     public String toString() {

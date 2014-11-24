@@ -15,7 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.adapters.ResultListAdapter;
-import se.jakobkrantz.transit.app.adapters.ViewHolderClickListener;
 import se.jakobkrantz.transit.app.apiasynctasks.SearchJourneysTask;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Constants;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Journey;
@@ -24,7 +23,7 @@ import se.jakobkrantz.transit.app.skanetrafikenAPI.Station;
 import java.util.ArrayList;
 
 
-public class ResultFragment extends Fragment implements SearchJourneysTask.DataDownloadListener, ViewHolderClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class ResultFragment extends Fragment implements SearchJourneysTask.DataDownloadListener, SwipeRefreshLayout.OnRefreshListener {
     private static final int SEARCH_RESULT_COUNT = 6;
 
     private Station fromStation;
@@ -41,6 +40,7 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
         Bundle b = getArguments();
         fromStation = new Station(b.getString(MainFragment.FROM_STATION), Integer.parseInt(b.getString(MainFragment.FROM_STATION_ID)), Double.parseDouble(b.getString(MainFragment.FROM_STATION_LAT)), Double.parseDouble(b.getString(MainFragment.FROM_STATION_LONG)), b.getString(MainFragment.FROM_STATION_TYPE));
         toStation = new Station(b.getString(MainFragment.TO_STATION), Integer.parseInt(b.getString(MainFragment.TO_STATION_ID)), Double.parseDouble(b.getString(MainFragment.TO_STATION_LAT)), Double.parseDouble(b.getString(MainFragment.TO_STATION_LONG)), b.getString(MainFragment.TO_STATION_TYPE));
+
     }
 
     @Override
@@ -78,13 +78,8 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
         ArrayList<Journey> journeys = (ArrayList<Journey>) data;
         swipeRefreshLayout.setRefreshing(false);
         if (resultListAdapter == null) {
-            View.OnClickListener l = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getActivity(), "ResultFragment received click", Toast.LENGTH_SHORT).show();
-                }
-            };
-            resultListAdapter = new ResultListAdapter(journeys, l);
+
+            resultListAdapter = new ResultListAdapter(journeys, new ResultListListener());
             recycleView.setAdapter(resultListAdapter);
         } else {
             resultListAdapter.addJourneys(journeys);
@@ -96,14 +91,30 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
         Toast.makeText(getActivity(), "Failed to load data, none or slow internet connection", Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public void onViewClick(View caller, int position) {
-        //TODO tell activity to open new fragment with more data if needed
-        Toast.makeText(getActivity(), "Result item clicked", Toast.LENGTH_SHORT).show();
-    }
+    private class ResultListListener implements ResultListAdapter.OnResultItemClicked {
+        @Override
+        public void onResultClicked(Journey j) {
+            Toast.makeText(getActivity(), "Result item clicked " + j.getStartStation() + " -> " + j.getEndStation(), Toast.LENGTH_LONG).show();
 
-    @Override
-    public void onViewLongClick(View caller, int position) {
+        }
+
+        @Override
+        public void onResultLongClickListener(Journey j) {
+            Toast.makeText(getActivity(), "Result item long click " + j.getStartStation() + " -> " + j.getEndStation(), Toast.LENGTH_LONG).show();
+
+        }
+
+        @Override
+        public void onLoadMoreResults(boolean b) {
+            //Load earlier
+            if (b) {
+
+            } else { //Load later
+
+            }
+
+        }
+
 
     }
 }

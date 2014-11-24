@@ -19,35 +19,41 @@ import java.util.List;
 public class ResultListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int LOAD_MORE_HOLDER = 0;
     private static final int ITEM_HOLDER = 1;
-    private View.OnClickListener listener;
     private ArrayList<Journey> journeys;
+    private OnResultItemClicked listener;
 
 
-    public ResultListAdapter(ArrayList<Journey> journeys, View.OnClickListener listener) {
+    public ResultListAdapter(ArrayList<Journey> journeys, OnResultItemClicked listener) {
         this.journeys = journeys;
         this.listener = listener;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        ViewHolderClickListener l = new ViewHolderClickListener() {
+            @Override
+            public void onViewClick(View caller, int position) {
+                if (position == 0) {
+                    listener.onLoadMoreResults(true);
+                } else if (position == journeys.size() + 1) {
+                    listener.onLoadMoreResults(false);
+                } else {
+                    listener.onResultClicked(journeys.get(position - 1));
+                }
+            }
+
+            @Override
+            public void onViewLongClick(View caller, int position) {
+
+            }
+        };
         if (viewType == ITEM_HOLDER) {
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.result_list_item, viewGroup, false);
-            ViewHolderClickListener l = new ViewHolderClickListener() {
-                @Override
-                public void onViewClick(View caller, int position) {
-                    listener.onClick(caller);
-                }
-
-                @Override
-                public void onViewLongClick(View caller, int position) {
-                    listener.onClick(caller);
-                }
-            };
             return new ViewHolderResult(v, l);
 
         } else if (viewType == LOAD_MORE_HOLDER) {
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.result_load_more_header, viewGroup, false);
-            return new ViewHolderLoadHeader(v);
+            return new ViewHolderLoadHeader(v, l);
 
 
         } else {
@@ -77,7 +83,7 @@ public class ResultListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             TextView header = ((ViewHolderLoadHeader) viewHolder).loadMore;
             if (i == 0) {
                 header.setText(R.string.load_earlier);
-            } else if (i == journeys.size() - 1) {
+            } else if (i == journeys.size() + 1) {
                 header.setText(R.string.load_later);
             }
         }
@@ -103,12 +109,16 @@ public class ResultListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     }
 
-    private class ViewHolderLoadHeader extends RecyclerView.ViewHolder {
-        public TextView loadMore;
+    public static interface OnResultItemClicked {
+        public void onResultClicked(Journey j);
 
-        public ViewHolderLoadHeader(View v) {
-            super(v);
-            loadMore = (TextView) v.findViewById(R.id.res_load_more);
-        }
+        public void onResultLongClickListener(Journey j);
+
+        /**
+         * @param b true if load earlier result, false if load later results
+         */
+        public void onLoadMoreResults(boolean b);
     }
+
+
 }
