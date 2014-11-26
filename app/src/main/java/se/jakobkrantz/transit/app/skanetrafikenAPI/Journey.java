@@ -2,6 +2,9 @@ package se.jakobkrantz.transit.app.skanetrafikenAPI;/*
  * Created by krantz on 14-11-19.
  */
 
+import android.util.Log;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Journey {
@@ -22,52 +25,133 @@ public class Journey {
     private String CO2value; // CO2 value in kg/person/km
 
 
+    public String getTotalTravelTime() {
+        if (routeLinks.size() > 0) {
+            return TimeAndDateConverter.getTravelTimeinMinutes(routeLinks.get(0).getDepDateTime(), routeLinks.get(routeLinks.size() - 1).getArrDateTime());
+        } else {
+            return "";
+        }
+    }
+
+    public void printMessages() {
+        for (RouteLink r : routeLinks) {
+            Log.d(r.getFromStation().toString(), "Header: " + r.getHeader() + "\n" + "Public note: " + r.getPublicNote() + "\n" + "shortText: " + r.getShortText() + "\n" + "Summary: " + r.getSummary() + "\n" + "Text: " + r.getText());
+        }
+    }
+
+    public String getSmartMessage() {
+        String message = "";
+        String publicMess = "";
+        for (RouteLink r : routeLinks) {
+            message = r.getPublicNote();
+            if (message != null) {
+                message += "\n" + r.getSummary();
+            } else {
+                message = r.getSummary();
+            }
+            if (message != null) {
+                return message;
+            } else {
+                return "";
+            }
 
 
+        }
+//            message = r.getHeader();
+//            publicMess = r.getPublicNote() + " : ";
+//            if (message == null && message.length() < 4) {
+//                message += "\n" + r.getShortText();
+//            } else {
+//                message += " " + r.getShortText();
+//            }
+//            if (message.length() < 4) {
+//                message += "\n" + r.getPublicNote();
+//            }
+//
+//        }
+        return publicMess + "\n" + message;
+    }
 
+    public String getTimeToDep() {
+        if (routeLinks.size() > 0) {
+            return TimeAndDateConverter.timeToDeparture(routeLinks.get(0).getDepDateTime());
+        } else {
+            return "";
+        }
+    }
 
+    public String getDeviationDepTime() {
+        if (routeLinks.size() > 0) {
+            String time = routeLinks.get(0).getDepTimeDeviation();
+            if (time == null) {
+                return "0";
+            } else {
+                return time;
+            }
+        } else {
+            return "0";
+        }
+    }
 
+    public String getDeviationArrTime() {
+        if (routeLinks.size() > 0) {
+            String time = routeLinks.get(0).getArrTimeDeviation();
+            if (time == null) {
+                return "0";
+            } else {
+                return time;
+            }
+        } else {
+            return "0";
+        }
+    }
 
+    public String getNbrChanges() {
+        return (routeLinks.size() - 1) + "";
+    }
 
+    public List<String> getChangeNbrs() {
+        List<String> l = new ArrayList<String>();
+        for (RouteLink r : routeLinks) {
+            l.add(r.getLineNbr());
+        }
+        return l;
+    }
 
+    public List<Integer> getLineTypes() {
+        List<Integer> l = new ArrayList<Integer>();
+        if (routeLinks.size() > 0) {
+            for (RouteLink r : routeLinks) {
+                l.add(r.getLineTypeId());
+            }
+        }
+        return l;
+    }
 
+    public int getFirstRouteLineId() {
+        if (routeLinks.size() > 0) {
+            return routeLinks.get(0).getLineTypeId();
+        } else {
+            return -1;
+        }
+    }
 
+    public String getFirstRouteTransportName() {
+        if (routeLinks.size() > 0) {
+            return routeLinks.get(0).getTransportModeName();
+        } else {
+            return "";
+        }
+    }
 
+    public String getFirstRouteLineNbr() {
+        if (routeLinks.size() > 0) {
+            return routeLinks.get(0).getLineNbr();
+        } else {
+            return "";
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
 
     public List<RouteLink> getRouteLinks() {
         return routeLinks;
@@ -76,9 +160,11 @@ public class Journey {
     public void setRouteLinks(List<RouteLink> routeLinks) {
         this.routeLinks = routeLinks;
     }
+
     public void setSequenceNbr(String sequenceNbr) {
         this.sequenceNbr = sequenceNbr;
     }
+
     public String getSequenceNbr() {
         return sequenceNbr;
     }

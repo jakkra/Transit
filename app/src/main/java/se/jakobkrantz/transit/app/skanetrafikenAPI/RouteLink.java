@@ -3,17 +3,40 @@ package se.jakobkrantz.transit.app.skanetrafikenAPI;/*
  */
 
 
+import android.util.Log;
+
 /**
  * Used in Journey class, each Journey consists of 1 or more RouteLinks.
  * For example one Journey from A to B has 3 bus/train changes, it will have 3 RouteLinks. One for each part of the Journey.
  */
 public class RouteLink {
 
+    //TravelTypes
+//    public static String STADSBUSS = "1";
+//    public static String REGIONBUSS = "2";
+    public static final int TRAIN = 4;
+    public static final int FERRY = 8;
+    public static final int BUS = 16;
+
+    //LineTypes
+    public static final int PENDELN = 1;
+    public static final int REGIONBUSS = 2;
+    public static final int SKÅNE_EXPRESSEN = 4;
+    public static final int STADSBUSS = 8;
+    public static final int KRÖSATÅG = 16;
+    public static final int PÅGATÅG_EXPRESS = 32;
+    public static final int PÅGATÅGEN = 64;
+    public static final int TÅGBUSS = 128;
+    public static final int ÖRESUNDSTÅG = 256;
+
+    public static final int KOMMERSIELL_TRAFIK = 512;
+    public static final int FÄRJEFÖRBINDELSE = 1024;
+
     private String lineNbr; //Line's number
     private String runNbr; //Line's run number
-    private String lineTypeId; //Reference to one line type in line types collection defined by transport authority. All available line types and ids can be retreved from GetMeansOfTransport function
+    private int lineTypeId; //Reference to one line type in line types collection defined by transport authority. All available line types and ids can be retreved from GetMeansOfTransport function
     private String lineTypeName; //Line type name
-    private String transportMode; //Reference to one TransportMode in modes collection defined by transport authority. All available TransportModes and ids can be retreved from GetMeansOfTransport function
+    private int transportMode; //Reference to one TransportMode in modes collection defined by transport authority. All available TransportModes and ids can be retreved from GetMeansOfTransport function
     private String transportModeName; //Transport mode name
     private String trainNbr; //Additional info about train number if route link's line type is train
     private String towardDirection; //Destination text
@@ -73,13 +96,19 @@ public class RouteLink {
                 "-------RouteLink end---------";
     }
 
+    public String getLineNbr() {
+        if (transportMode == TRAIN) {
+            Log.d("Journey", "is Train");
+            return trainNbr;
+        } else {
+            return lineNbr;
+        }
+    }
+
     public void setLineNbr(String lineNbr) {
         this.lineNbr = lineNbr;
     }
 
-    public String getLineNbr() {
-        return lineNbr;
-    }
 
     public void setRunNbr(String runNbr) {
         this.runNbr = runNbr;
@@ -90,10 +119,12 @@ public class RouteLink {
     }
 
     public void setLineTypeId(String lineTypeId) {
-        this.lineTypeId = lineTypeId;
+        if (lineTypeId != null && !lineTypeId.equals("")) {
+            this.lineTypeId = Integer.parseInt(lineTypeId);
+        }
     }
 
-    public String getLineTypeId() {
+    public int getLineTypeId() {
         return lineTypeId;
     }
 
@@ -106,10 +137,12 @@ public class RouteLink {
     }
 
     public void setTransportMode(String transportMode) {
-        this.transportMode = transportMode;
+        if (transportMode != null && !transportMode.equals("")) {
+            this.transportMode = Integer.parseInt(transportMode);
+        }
     }
 
-    public String getTransportMode() {
+    public int getTransportMode() {
         return transportMode;
     }
 

@@ -25,12 +25,12 @@ public class ViewHolderResult extends RecyclerView.ViewHolder implements View.On
         super(view);
         this.view = view;
         this.listener = listener;
-        timeToArrival = (TextView) view.findViewById(R.id.time_to_arr);
+        timeToArrival = (TextView) view.findViewById(R.id.transport_name_nbr);
         timeBetween = (TextView) view.findViewById(R.id.time_between);
         nbrDepTime = (TextView) view.findViewById(R.id.nbr_dep_time);
         message = (TextView) view.findViewById(R.id.message);
         transferIcons = new ArrayList<ImageView>();
-        ImageView iv = (ImageView) view.findViewById(R.id.imageView);
+        ImageView iv = (ImageView) view.findViewById(R.id.imageView7);
         transferIcons.add(iv);
         iv = (ImageView) view.findViewById(R.id.imageView1);
         transferIcons.add(iv);
