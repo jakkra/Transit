@@ -9,7 +9,7 @@
 
     <RelativeLayout
             android:layout_width="match_parent"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorDividerBackground"
             android:layout_height="match_parent">
 
         <!--android:background="@drawable/listitem_selector"-->
@@ -24,7 +24,7 @@
                 android:layout_height="100dp"
                 android:layout_centerInParent="true"
                 android:textSize="16sp"
-                android:textColor="@color/white"
+                android:textColor="@color/listDividerTextColor"
                 />
 
 

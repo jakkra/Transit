@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#ffab0049</color>
-    <color name="colorPrimaryDark">#FF1693EC</color>
-    <color name="colorPrimaryDarkMore">#ff1688de</color>
+    <color name="colorPrimary">#ff39a1d6</color>
+    <color name="colorPrimaryDark">#ffe4e4e4</color>
+    <color name="colorPrimaryDarkMore">#ff10639e</color>
 
     <color name="colorSecondary">@color/material_deep_teal_200</color>
     <color name="colorSecondaryDark">#FF1693EC</color>
 
-    <color name="white">#ffe3e3e3</color>
+    <color name="colorDividerBackground">#ff83bb16</color>
+
+    <color name="white">#ff6d6d6e</color>
+    <color name="red">#ff6e1d1d</color>
+
+    <color name="listDividerTextColor">#ffe4e4e4</color>
+
     <drawable name="colorFavPressed">#FF1661B5</drawable>
 
     <color name="resultListTextColor">#ff6d6d6e</color>

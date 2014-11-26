@@ -12,6 +12,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/search_station"
+            android:textColorHint="@color/colorDividerBackground"
+            android:textColor="@color/colorDividerBackground"
+
             android:layout_gravity="center"
             android:hint="@string/edit_text_search_hint"
             android:background="@drawable/abc_edit_text_material"

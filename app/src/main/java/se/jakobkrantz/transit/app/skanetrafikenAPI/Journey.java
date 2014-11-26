@@ -22,6 +22,53 @@ public class Journey {
     private String CO2value; // CO2 value in kg/person/km
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public List<RouteLink> getRouteLinks() {
         return routeLinks;
     }
@@ -29,11 +76,9 @@ public class Journey {
     public void setRouteLinks(List<RouteLink> routeLinks) {
         this.routeLinks = routeLinks;
     }
-
     public void setSequenceNbr(String sequenceNbr) {
         this.sequenceNbr = sequenceNbr;
     }
-
     public String getSequenceNbr() {
         return sequenceNbr;
     }

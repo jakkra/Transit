@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
-                android:layout_height="match_parent" android:padding="10dp"
+                android:layout_height="match_parent"
                 android:background="@color/colorPrimaryDark">
 
 
@@ -18,13 +18,19 @@
 
     <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
               android:id="@+id/text_view_from_station"
+              android:textColorHint="@color/white"
+              android:textColor="@color/white"
               android:background="@drawable/abc_edit_text_material"
               android:hint="@string/edit_text_search_from" android:paddingTop="5dp" android:textSize="22sp"
               android:layout_above="@+id/text_view_to_station" android:layout_alignParentLeft="true"
               android:layout_alignParentStart="true"/>
     <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:textColor="@color/white"
+
               android:id="@+id/text_view_to_station" android:background="@drawable/abc_edit_text_material"
               android:hint="@string/edit_text_search_to" android:paddingTop="5dp" android:textSize="22sp"
+              android:textColorHint="@color/white"
+
               android:layout_above="@+id/button" android:layout_alignParentLeft="true"
               android:layout_alignParentStart="true"/>
     <Button
@@ -45,24 +51,31 @@
               android:layout_alignParentStart="true" android:padding="5dp"/>
 
         <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/abc_ic_commit_search_api_mtrl_alpha"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/bus28"
                 android:id="@+id/imageView"
-                android:contentDescription="TEMPTEST" android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true" android:layout_alignParentEnd="true"/>
+                android:contentDescription="TEMPTEST"
+                android:layout_toEndOf="@+id/transport_type" android:layout_alignTop="@+id/imageView3"
+                android:layout_toRightOf="@+id/transport_type"/>
 
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_departure"
+                android:textColor="@color/white"
+
+
                 android:id="@+id/label_arrival"
                 android:layout_above="@+id/label_departure" android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" android:textSize="18sp"/>
+                android:layout_alignParentStart="true" android:textSize="18sp"
+                />
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_arrival"
+                android:textColor="@color/white"
+
                 android:id="@+id/label_departure"
                 android:layout_centerVertical="true" android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" android:textSize="18sp"/>
@@ -70,11 +83,15 @@
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                   android:id="@+id/dep_time"
                   android:textSize="17sp"
+                  android:textColor="@color/white"
+
                   android:layout_above="@+id/label_departure"
                   android:layout_toRightOf="@+id/label_arrival" android:layout_toEndOf="@+id/label_arrival"/>
 
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                   android:id="@+id/arr_time"
+                  android:textColor="@color/white"
+
                   android:layout_toEndOf="@+id/label_departure"
                   android:layout_alignBaseline="@+id/label_departure" android:layout_alignBottom="@+id/label_departure"
                   android:layout_toRightOf="@+id/label_departure" android:textSize="17sp"/>
@@ -82,23 +99,52 @@
                 style="@android:style/Widget.ProgressBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/progressBar" android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"/>
+                android:id="@+id/progressBar"
+                android:layout_centerVertical="true" android:layout_toLeftOf="@+id/imageView"
+                android:layout_toStartOf="@+id/imageView"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:id="@+id/transport_type" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
                 android:textSize="18sp" android:textStyle="bold"/>
         <TextView
                 android:layout_width="wrap_content"
+                android:textColor="@color/white"
+
                 android:layout_height="wrap_content"
                 android:id="@+id/short_message" android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"/>
+                android:layout_centerHorizontal="true" android:textSize="12sp"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
+
                 android:id="@+id/travel_time" android:layout_alignParentTop="true" android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" android:textStyle="bold" android:textSize="16sp"/>
+        <ImageView android:layout_width="10dp" android:layout_height="10dp" android:src="@drawable/next"
+                   android:id="@+id/imageView2" android:contentDescription="TEMPTEST"
+                   android:layout_toEndOf="@+id/transport_type"
+                   android:layout_centerVertical="true" android:layout_toRightOf="@+id/transport_type"
+                   android:layout_marginLeft="22dp"/>
+        <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/train20"
+                   android:id="@+id/imageView3" android:contentDescription="TEMPTEST"
+                   android:layout_toEndOf="@+id/imageView2"
+                   android:layout_alignBottom="@+id/label_departure" android:layout_toRightOf="@+id/imageView2"/>
+        <ImageView android:layout_width="15dp" android:layout_height="15dp" android:src="@drawable/m_specials"
+                   android:id="@+id/imageView5" android:contentDescription="TEMPTEST"
+                   android:layout_toEndOf="@+id/imageView3"
+                   android:layout_alignTop="@+id/imageView2" android:layout_toRightOf="@+id/imageView3"
+                   android:layout_marginLeft="17dp"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="2 min"
+                android:textColor="@color/red"
+                android:id="@+id/delay_time"
+                android:layout_toEndOf="@+id/imageView5" android:layout_alignTop="@+id/imageView5"
+                android:layout_toRightOf="@+id/imageView5" android:layout_marginLeft="7dp"/>
 
     </RelativeLayout>
     <Button

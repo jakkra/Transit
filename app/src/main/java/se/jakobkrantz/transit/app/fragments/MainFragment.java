@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainFragment extends Fragment implements View.OnClickListener, FavouriteListAdapter.OnItemChangeListener, SearchJourneysTask.DataDownloadListener {
-    //TODO Change to enum
+    //TODO Change to enum and move to MainActivity instead
     public static final String SOURCE = "source";
     public static final String SOURCE_TO_STATION = "sourcetostation";
     public static final String SOURCE_FROM_STATION = "sourcefromstation";
@@ -43,6 +43,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
     public static final String TO_STATION_LAT = "tostatlat";
     public static final String TO_STATION_TYPE = "tostattype";
     public static final String TO_STATION_SEARCHED = "tostatsearch";
+
     public static final int NBR_OF_LIST_ITEM_TO_SHOW = 10;
 
     private TextView fromStation;
@@ -103,21 +104,27 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
         favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle b = getArguments();
-                Station s1 = new Station(b.getString(FROM_STATION), Integer.parseInt(b.getString(FROM_STATION_ID)), Double.parseDouble(b.getString(FROM_STATION_LAT)), Double.parseDouble(b.getString(FROM_STATION_LONG)), b.getString(FROM_STATION_TYPE));
-                Station s2 = new Station(b.getString(TO_STATION), Integer.parseInt(b.getString(TO_STATION_ID)), Double.parseDouble(b.getString(TO_STATION_LAT)), Double.parseDouble(b.getString(TO_STATION_LONG)), b.getString(TO_STATION_TYPE));
-                SimpleJourney s = new SimpleJourney(s1, s2);
-                if (database.addStationFavPair(s)) {
-                    favListAdapter.addFavourite(s);
+                //TODO bug if click on recent search, it is displayed in search fields and then clear recent search and search/add to favs. Solved by: When clicking on menuItem clear searches, just clear the search fields. Also move MenuItems from activity to this fragment
+                if (fromStation.getText().length() > 1 && toStation.getText().length() > 1) {
+                    SimpleJourney s = database.getSimpleJourneyFromRecentOrFavs(fromStation.getText().toString(), toStation.getText().toString());
+                    if (s == null) {
+                        Bundle b = getArguments();
+                        Station s1 = new Station(b.getString(FROM_STATION), Integer.parseInt(b.getString(FROM_STATION_ID)), Double.parseDouble(b.getString(FROM_STATION_LAT)), Double.parseDouble(b.getString(FROM_STATION_LONG)), b.getString(FROM_STATION_TYPE));
+                        Station s2 = new Station(b.getString(TO_STATION), Integer.parseInt(b.getString(TO_STATION_ID)), Double.parseDouble(b.getString(TO_STATION_LAT)), Double.parseDouble(b.getString(TO_STATION_LONG)), b.getString(TO_STATION_TYPE));
+                        s = new SimpleJourney(s1, s2);
+                    }
+                    if (database.addStationFavPair(s)) {
+                        favListAdapter.addFavourite(s);
+                    }
+
                 }
-
-
             }
         });
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO Click on a favourite, edit one of the search fields and then search = > crash. Because the journey isn't in the database Solve by not adding click to the searchfield. Instedad to see mote results on that journey click on the cards below the list
                 if (fromStation.getText().length() > 1 && toStation.getText().length() > 1) {
 
                     Bundle b = getArguments();
@@ -125,9 +132,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
                         b = new Bundle();
                     }
                     List<Station> recentSearches = new ArrayList<Station>();
-                    SimpleJourney s = null;
-
-                    s = database.getSimpleJourneyFromRecentOrFavs(fromStation.getText().toString(), toStation.getText().toString());
+                    SimpleJourney s = database.getSimpleJourneyFromRecentOrFavs(fromStation.getText().toString(), toStation.getText().toString());
 
                     if (s == null) {
                         recentSearches.add(new Station(b.getString(FROM_STATION), Integer.parseInt(b.getString(FROM_STATION_ID)), Double.parseDouble(b.getString(FROM_STATION_LAT)), Double.parseDouble(b.getString(FROM_STATION_LONG)), b.getString(FROM_STATION_TYPE)));

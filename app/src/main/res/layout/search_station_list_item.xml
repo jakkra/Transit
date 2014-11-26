@@ -17,10 +17,11 @@
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:clickable="false"
+            android:textColor="@color/white"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:textSize="18sp" android:id="@+id/station" android:gravity="center"
-            android:textColor="#d8e2ec" android:textStyle="bold" android:typeface="normal"
+            android:textStyle="bold" android:typeface="normal"
             android:layout_weight="3.11"/>
 
 

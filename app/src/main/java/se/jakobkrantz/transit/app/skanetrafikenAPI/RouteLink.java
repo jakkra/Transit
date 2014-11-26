@@ -3,6 +3,10 @@ package se.jakobkrantz.transit.app.skanetrafikenAPI;/*
  */
 
 
+/**
+ * Used in Journey class, each Journey consists of 1 or more RouteLinks.
+ * For example one Journey from A to B has 3 bus/train changes, it will have 3 RouteLinks. One for each part of the Journey.
+ */
 public class RouteLink {
 
     private String lineNbr; //Line's number
@@ -30,14 +34,14 @@ public class RouteLink {
     private String depDeviationAffect; //Describes how departure time deviation affects the journey.
     private String arrDeviationAffect; //Describes how arrival time deviation affects the journey.
 
-    //Notes
+    //Notes and comments
     private String publicNote;
     private String text; //FootNote's text
     private String header;
     private String summary;
     private String shortText;
 
-
+    //Used to debug
     public String toString() {
         return "\n-------RouteLink start---------\n" +
                 "From station: " + getFromStation() + "\n" +

@@ -336,7 +336,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DATABASE_CREATE_TABLE_RECENT);
         db.execSQL(DATABASE_CREATE_TABLE_FAVOURITES);
-
+        db.execSQL(DATABASE_CREATE_TABLE_RECENT_JOURNEY_SEARCH);
     }
 
 
