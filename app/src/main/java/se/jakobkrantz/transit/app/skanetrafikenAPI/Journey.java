@@ -35,41 +35,34 @@ public class Journey {
 
     public void printMessages() {
         for (RouteLink r : routeLinks) {
-            Log.d(r.getFromStation().toString(), "Header: " + r.getHeader() + "\n" + "Public note: " + r.getPublicNote() + "\n" + "shortText: " + r.getShortText() + "\n" + "Summary: " + r.getSummary() + "\n" + "Text: " + r.getText());
+            Log.d(r.getFromStation().toString(), "Header: \n" + r.getHeader() + "\n" + "Public note: " + r.getPublicNote() + "\n" + "shortText: " + r.getShortText() + "\n" + "Summary: " + r.getSummary() + "\n" + "Text: " + r.getText());
+//            if(r.getTransportMode() == RouteLink.TRAIN){
+//                Log.d("" ,"\nLine nbr: " + r.getLineName() + " \n Line nbr" + r.getLineNbr() + " \n operator name " + r.getOperatorName() + "\n runNbr: " + r.getRunNbr() + "\n Train NBR: " + r.getTrainNbr() + "\n " + r.getTransportModeName());
+//            }
         }
     }
 
+
+
     public String getSmartMessage() {
         String message = "";
-        String publicMess = "";
+        String text = "";
         for (RouteLink r : routeLinks) {
-            message = r.getPublicNote();
-            if (message != null) {
-                message += "\n" + r.getSummary();
-            } else {
+            if (r.getSummary() != null) {
                 message = r.getSummary();
             }
-            if (message != null) {
-                return message;
-            } else {
-                return "";
-            }
-
-
         }
-//            message = r.getHeader();
-//            publicMess = r.getPublicNote() + " : ";
-//            if (message == null && message.length() < 4) {
-//                message += "\n" + r.getShortText();
-//            } else {
-//                message += " " + r.getShortText();
-//            }
-//            if (message.length() < 4) {
-//                message += "\n" + r.getPublicNote();
-//            }
-//
-//        }
-        return publicMess + "\n" + message;
+
+        for (RouteLink r : routeLinks) {
+            if (r.getText() != null) {
+                text = r.getText();
+            }
+        }
+        if (message.equals("") || message.length() < 2) {
+            return text;
+        } else {
+            return message + "\n" + text;
+        }
     }
 
     public String getTimeToDep() {
@@ -80,16 +73,38 @@ public class Journey {
         }
     }
 
+    public int deviationType() {
+        if (routeLinks.size() > 0) {
+            int diff = 0;
+            String time = routeLinks.get(0).getDepTimeDeviation();
+            if (time != null) {
+                diff = Integer.parseInt(time);
+                if (diff == 0) {
+                    return RouteLink.IN_TIME;
+                } else if (diff < 0) {
+                    return RouteLink.EARLY;
+                } else if (diff > 0) {
+                    return RouteLink.LATE;
+                }
+            }
+
+
+        }
+        return RouteLink.UNKNOWN_DEVIATION;
+
+    }
+
     public String getDeviationDepTime() {
         if (routeLinks.size() > 0) {
             String time = routeLinks.get(0).getDepTimeDeviation();
             if (time == null) {
-                return "0";
+                return "";
             } else {
-                return time;
+                if(time.equals("0")) return "i tid";
+                return time + " min ";
             }
         } else {
-            return "0";
+            return "";
         }
     }
 
@@ -97,12 +112,12 @@ public class Journey {
         if (routeLinks.size() > 0) {
             String time = routeLinks.get(0).getArrTimeDeviation();
             if (time == null) {
-                return "0";
+                return "";
             } else {
-                return time;
+                return time + " min ";
             }
         } else {
-            return "0";
+            return "";
         }
     }
 

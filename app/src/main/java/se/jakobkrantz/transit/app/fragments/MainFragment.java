@@ -2,6 +2,9 @@ package se.jakobkrantz.transit.app.fragments;/*
  * Created by krantz on 14-11-17.
  */
 
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -89,6 +92,14 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
     @Override
     public void onStart() {
         super.onStart();
+        Bundle b = getArguments();
+        if (b != null) {
+            fromStation.setText(b.getString(FROM_STATION));
+            toStation.setText(b.getString(TO_STATION));
+        }
+
+
+
         fromStation.setOnClickListener(this);
         toStation.setOnClickListener(this);
 
@@ -225,7 +236,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
         super.onSaveInstanceState(outState);
         // Save the current article selection in case we need to recreate the fragment
         if (fromStation.getText().length() > 1 && toStation.getText().length() > 1) {
-
             outState.putString(MainFragment.TO_STATION, toStation.getText().toString());
             outState.putString(MainFragment.FROM_STATION, fromStation.getText().toString());
 
@@ -287,6 +297,5 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
 
 
     }
-
 
 }

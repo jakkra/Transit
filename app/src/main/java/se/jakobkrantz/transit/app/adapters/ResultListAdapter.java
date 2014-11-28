@@ -70,30 +70,8 @@ public class ResultListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if (viewHolder instanceof ViewHolderResult) {
             ViewHolderResult result = ((ViewHolderResult) viewHolder);
             Journey j = journeys.get(i - 1);
-            List<RouteLink> links = journeys.get(i - 1).getRouteLinks();
-            String route = "";
-            String mess = "";
-            boolean inTime = false;
-            //TODO move those methods and calculations inside Journey or helper class
-            for (RouteLink r : links) {
-                route += r.getLineName() + " " + r.getLineNbr() + " -> ";
-                mess += r.getSummary() + "\n";
-                if (r.getDepTimeDeviation() != null) if (r.getDepTimeDeviation().equals("0")) inTime = true;
-            }
-            result.timeBetween.setText(j.getDepDateTime() + " - " + j.getArrDateTime());
-            String travelTime = TimeAndDateConverter.timeToDeparture(j.getArrDateTime());
-            String depIn = "";
-            if (travelTime.contains("-")) {
-                depIn = "Passerat";
-            } else {
-                depIn = "Avgår från " + j.getStartStation() + " om " + TimeAndDateConverter.timeToDeparture(j.getDepDateTime()) + " min ";
-            }
+            ((ViewHolderResult) viewHolder).fillUIHelper.updateUI(j);
 
-            result.timeToArrival.setText(depIn);
-            result.timeBetween.setText(TimeAndDateConverter.formatTime(j.getDepDateTime()) + " - " + TimeAndDateConverter.formatTime(j.getArrDateTime()));
-            String arrInTime = "";
-            if (inTime) arrInTime = "I tid";
-            result.nbrDepTime.setText(TimeAndDateConverter.getTravelTimeinMinutes(j.getDepDateTime(), j.getArrDateTime()) + " min ");
 
         } else if (viewHolder instanceof ViewHolderLoadHeader) {
             TextView header = ((ViewHolderLoadHeader) viewHolder).loadMore;

@@ -3,6 +3,7 @@ package se.jakobkrantz.transit.app.fragments;/*
  */
 
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,7 +21,7 @@ public class FillUIHelper {
     private TextView nbrDepTime; //Time to departure
     private TextView message;
     private TextView timeToDep;
-    private TextView nbrChanges;
+    //    private TextView nbrChanges;
     private TextView delayMin;
     private ImageView firstPicType;
     private ImageView clock;
@@ -39,10 +40,10 @@ public class FillUIHelper {
         nbrDepTime = (TextView) v.findViewById(R.id.nbr_dep_time);
         message = (TextView) v.findViewById(R.id.message);
         timeToDep = (TextView) v.findViewById(R.id.time_to_dep);
-        nbrChanges = (TextView) v.findViewById(R.id.nbr_changes);
+//        nbrChanges = (TextView) v.findViewById(R.id.nbr_changes);
         delayMin = (TextView) v.findViewById(R.id.delay_min);
         clock = (ImageView) v.findViewById(R.id.iw_clock);
-        clock.setPadding(11,11,11,11);
+        clock.setPadding(11, 11, 11, 11);
         firstPicType = (ImageView) v.findViewById(R.id.iw_first_bus_type);
 
         routeNbrs.add((TextView) v.findViewById(R.id.textView4));
@@ -66,19 +67,35 @@ public class FillUIHelper {
     }
 
     public void updateUI(Journey j) {
+        for (ImageView iw : routePics){
+            iw.setImageDrawable(null);
+        }
+        for (TextView tw : routeNbrs){
+            tw.setText("");
+        }
         transportNameNbr.setText(j.getFirstRouteTransportName() + " " + j.getFirstRouteLineNbr());
         timeBetween.setText(TimeAndDateConverter.formatTime(j.getDepDateTime()) + " - " + TimeAndDateConverter.formatTime(j.getArrDateTime()));
         nbrDepTime.setText(j.getTotalTravelTime() + " min ");
+        String smartMessage = j.getSmartMessage();
+        if (smartMessage.length() > 80) {
+            message.setTextSize(TypedValue.COMPLEX_UNIT_SP, 9);
+        } else {
+            message.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+        }
         message.setText(j.getSmartMessage());
         timeToDep.setText(" om " + j.getTimeToDep() + " min ");
-        delayMin.setText(j.getDeviationDepTime() + " min ");
-        nbrChanges.setText(j.getNbrChanges() + " byten ");
+
+
+        delayMin.setText(j.getDeviationDepTime());
+//        nbrChanges.setText(j.getNbrChanges() + " byten ");
         firstPicType.setImageResource(getDrawableFromLineType(j.getFirstRouteLineId()));
-        if (Integer.parseInt(j.getDeviationDepTime()) > 0) {
-            clock.setImageResource(R.drawable.ic_clock_red);
+
+        if (j.deviationType() != RouteLink.UNKNOWN_DEVIATION) {
+            clock.setImageResource(getDrawableFromDeviation(j.deviationType()));
         } else {
-            clock.setImageResource(R.drawable.ic_clock_green);
+            clock.setImageDrawable(null);
         }
+
         List<String> lineNbrs = j.getChangeNbrs();
         List<Integer> lineTypes = j.getLineTypes();
         for (int i = 0; i < lineTypes.size(); i++) {
@@ -93,9 +110,22 @@ public class FillUIHelper {
             for (int i = 0; i < lineTypes.size(); i++) {
                 if (i != (lineTypes.size() - 1)) {
                     routePics.get(1 + 2 * i).setImageResource(R.drawable.ic_next);
-                    routePics.get(1 + 2 * i).setPadding(20,20,20,20);
+                    routePics.get(1 + 2 * i).setPadding(20, 20, 20, 20);
                 }
             }
+        }
+    }
+
+    private int getDrawableFromDeviation(int devType) {
+        switch (devType) {
+            case RouteLink.IN_TIME:
+                return R.drawable.ic_clock_green;
+            case RouteLink.EARLY:
+                return R.drawable.ic_clock_blue;
+            case RouteLink.LATE:
+                return R.drawable.ic_clock_red;
+            default:
+                return R.drawable.ic_clock_yellow;
         }
     }
 

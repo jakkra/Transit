@@ -30,7 +30,6 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recycleView;
     private ResultListAdapter resultListAdapter;
-    private ProgressBar progressBar;
 
 
     @Override

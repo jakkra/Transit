@@ -5,12 +5,18 @@
     <color name="colorPrimaryDarkMore">#ff10639e</color>
 
     <color name="colorSecondary">@color/material_deep_teal_200</color>
-    <color name="colorSecondaryDark">#FF1693EC</color>
+    <color name="colorSecondaryDark">#ff166fc2</color>
 
     <color name="colorDividerBackground">#ff83bb16</color>
+    <color name="colorDividerBackgroundDarker">#ff567d10</color>
 
-    <color name="white">#ff6d6d6e</color>
+
+    <color name="text_gray">#ff6d6d6e</color>
     <color name="red">#ff6e1d1d</color>
+    <color name="white">#fffbffff</color>
+
+    <color name="dark_grey">#ff474649</color>
+
 
     <color name="listDividerTextColor">#ffe4e4e4</color>
 

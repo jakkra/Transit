@@ -32,6 +32,13 @@ public class RouteLink {
     public static final int KOMMERSIELL_TRAFIK = 512;
     public static final int FÄRJEFÖRBINDELSE = 1024;
 
+    public static final int IN_TIME = 22;
+    public static final int LATE = 24;
+    public static final int EARLY = 26;
+    public static final int UNKNOWN_DEVIATION = 28;
+
+
+
     private String lineNbr; //Line's number
     private String runNbr; //Line's run number
     private int lineTypeId; //Reference to one line type in line types collection defined by transport authority. All available line types and ids can be retreved from GetMeansOfTransport function
@@ -98,7 +105,6 @@ public class RouteLink {
 
     public String getLineNbr() {
         if (transportMode == TRAIN) {
-            Log.d("Journey", "is Train");
             return trainNbr;
         } else {
             return lineNbr;
