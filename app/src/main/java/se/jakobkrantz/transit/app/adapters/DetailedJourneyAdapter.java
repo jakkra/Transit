@@ -43,15 +43,21 @@ public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         if (viewHolder instanceof PositionViewHolder) {
-            RouteLink r = journey.getRouteLinks().get(i / 2);
+            Log.d("onBindPos i = ", i + "");
             PositionViewHolder holder = ((PositionViewHolder) viewHolder);
             if (i != 0) {
-                holder.depTime.setText(journey.getRouteLinks().get((i / 2) - 1).getArrDateTime()); //Change to just HH:mm
+                holder.arrTime.setText(TimeAndDateConverter.formatTime(journey.getRouteLinks().get(calculateArrivalIndex(i)).getArrDateTime())); //Change to just HH:mm
             }
-            holder.depTime.setText(TimeAndDateConverter.formatTime(r.getDepDateTime()));
-            holder.position.setText(r.getFromStation().toString());
+
+            if (i != getItemCount() -1) {
+                RouteLink r = journey.getRouteLinks().get(calculateArrivalIndex(i) + 1);
+                holder.depTime.setText(TimeAndDateConverter.formatTime(r.getDepDateTime()));
+                holder.position.setText(r.getFromStation().toString());
+            }
         } else if (viewHolder instanceof TransportViewHolder) {
-            RouteLink r = journey.getRouteLinks().get(i / 2);
+            Log.d("onBindTrans i = ", i + "");
+
+            RouteLink r = journey.getRouteLinks().get(calculateDepartureIndex(i));
             TransportViewHolder holder = ((TransportViewHolder) viewHolder);
             holder.lineNameNbr.setText(r.getTransportModeName() + " " + r.getLineNbr());
             holder.towards.setText("mot " + r.getTowardDirection());
@@ -60,7 +66,7 @@ public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 note = r.getPublicNote();
             }
             if (r.getText() != null) {
-                if(note.length() < 5){
+                if (note.length() < 5) {
                     note += r.getText();
                 } else {
                     note += "\n" + r.getText();
@@ -71,6 +77,27 @@ public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         }
 
+
+    }
+
+    private static int calculateDepartureIndex(int i) {
+        return calculateArrivalIndex(i - 1);
+
+    }
+
+    private static int calculateArrivalIndex(int i) {
+        int j = 1;
+        int index = 0;
+        while (j <= i) {
+
+            if (i == j) {
+                return index;
+            }
+            index++;
+            j += 2;
+        }
+        Log.e("calculateArrivalIndex DetailedJourneyAdapter", "Should never log this!");
+        return 0;
 
     }
 
@@ -85,6 +112,6 @@ public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public int getItemCount() {
-        return Integer.parseInt(journey.getNbrChanges()) * 2 +2; //should be +3
+        return Integer.parseInt(journey.getNbrChanges()) * 2 + 3; //should be +3
     }
 }
