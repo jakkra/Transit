@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+
+              android:layout_height="match_parent">
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
+                  android:orientation="vertical"
+                  android:background="@color/colorPrimary"
+                  android:layout_weight="80">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Från Hmm to herpderp"
+                android:id="@+id/textView" android:layout_gravity="center_horizontal"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="20 min"
+                android:id="@+id/textView2" android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_weight="20"
+            android:layout_height="match_parent" android:layout_gravity="center_horizontal">
+        <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/refresh_container"
+                android:background="@color/resultListBackground"
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/detailed_recycle_view"
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

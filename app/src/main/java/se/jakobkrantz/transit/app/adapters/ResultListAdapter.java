@@ -11,11 +11,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Journey;
-import se.jakobkrantz.transit.app.skanetrafikenAPI.RouteLink;
-import se.jakobkrantz.transit.app.skanetrafikenAPI.TimeAndDateConverter;
+import se.jakobkrantz.transit.app.viewholders.ViewHolderLoadHeader;
+import se.jakobkrantz.transit.app.viewholders.ViewHolderResult;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ResultListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int NBR_ITEMS_PER_LOAD = 6;

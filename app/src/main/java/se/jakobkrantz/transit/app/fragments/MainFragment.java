@@ -2,9 +2,6 @@ package se.jakobkrantz.transit.app.fragments;/*
  * Created by krantz on 14-11-17.
  */
 
-import android.content.Context;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -24,27 +21,13 @@ import se.jakobkrantz.transit.app.database.SimpleJourney;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Constants;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Journey;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Station;
+import se.jakobkrantz.transit.app.utils.BundleConstants;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainFragment extends Fragment implements View.OnClickListener, FavouriteListAdapter.OnItemChangeListener, SearchJourneysTask.DataDownloadListener {
     //TODO Change to enum and move to MainActivity instead
-    public static final String SOURCE = "source";
-    public static final String SOURCE_TO_STATION = "sourcetostation";
-    public static final String SOURCE_FROM_STATION = "sourcefromstation";
-    public static final String FROM_STATION = "fromstation";
-    public static final String FROM_STATION_ID = "fromstatid";
-    public static final String FROM_STATION_LONG = "fromstatlong";
-    public static final String FROM_STATION_LAT = "fromstatlat";
-    public static final String FROM_STATION_TYPE = "fromstattype";
-    public static final String FROM_STATION_SEARCHED = "fromstatsearchedtime";
-    public static final String TO_STATION = "tostation";
-    public static final String TO_STATION_ID = "tostattid";
-    public static final String TO_STATION_LONG = "tostatlong";
-    public static final String TO_STATION_LAT = "tostatlat";
-    public static final String TO_STATION_TYPE = "tostattype";
-    public static final String TO_STATION_SEARCHED = "tostatsearch";
 
     public static final int NBR_OF_LIST_ITEM_TO_SHOW = 10;
 
@@ -84,8 +67,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
         listView.setHasFixedSize(true);
         listView.setAdapter(favListAdapter);
         listView.setItemAnimator(new DefaultItemAnimator());
-
-
         return view;
     }
 
@@ -94,8 +75,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
         super.onStart();
         Bundle b = getArguments();
         if (b != null) {
-            fromStation.setText(b.getString(FROM_STATION));
-            toStation.setText(b.getString(TO_STATION));
+            fromStation.setText(b.getString(BundleConstants.FROM_STATION));
+            toStation.setText(b.getString(BundleConstants.TO_STATION));
         }
 
 
@@ -111,8 +92,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
                     SimpleJourney s = database.getSimpleJourneyFromRecentOrFavs(fromStation.getText().toString(), toStation.getText().toString());
                     if (s == null) {
                         Bundle b = getArguments();
-                        Station s1 = new Station(b.getString(FROM_STATION), Integer.parseInt(b.getString(FROM_STATION_ID)), Double.parseDouble(b.getString(FROM_STATION_LAT)), Double.parseDouble(b.getString(FROM_STATION_LONG)), b.getString(FROM_STATION_TYPE));
-                        Station s2 = new Station(b.getString(TO_STATION), Integer.parseInt(b.getString(TO_STATION_ID)), Double.parseDouble(b.getString(TO_STATION_LAT)), Double.parseDouble(b.getString(TO_STATION_LONG)), b.getString(TO_STATION_TYPE));
+                        Station s1 = new Station(b.getString(BundleConstants.FROM_STATION), Integer.parseInt(b.getString(BundleConstants.FROM_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LONG)), b.getString(BundleConstants.FROM_STATION_TYPE));
+                        Station s2 = new Station(b.getString(BundleConstants.TO_STATION), Integer.parseInt(b.getString(BundleConstants.TO_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LONG)), b.getString(BundleConstants.TO_STATION_TYPE));
                         s = new SimpleJourney(s1, s2);
                     }
                     if (database.addStationFavPair(s)) {
@@ -137,26 +118,26 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
                     SimpleJourney s = database.getSimpleJourneyFromRecentOrFavs(fromStation.getText().toString(), toStation.getText().toString());
 
                     if (s == null) {
-                        recentSearches.add(new Station(b.getString(FROM_STATION), Integer.parseInt(b.getString(FROM_STATION_ID)), Double.parseDouble(b.getString(FROM_STATION_LAT)), Double.parseDouble(b.getString(FROM_STATION_LONG)), b.getString(FROM_STATION_TYPE)));
-                        recentSearches.add(new Station(b.getString(TO_STATION), Integer.parseInt(b.getString(TO_STATION_ID)), Double.parseDouble(b.getString(TO_STATION_LAT)), Double.parseDouble(b.getString(TO_STATION_LONG)), b.getString(TO_STATION_TYPE)));
+                        recentSearches.add(new Station(b.getString(BundleConstants.FROM_STATION), Integer.parseInt(b.getString(BundleConstants.FROM_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LONG)), b.getString(BundleConstants.FROM_STATION_TYPE)));
+                        recentSearches.add(new Station(b.getString(BundleConstants.TO_STATION), Integer.parseInt(b.getString(BundleConstants.TO_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LONG)), b.getString(BundleConstants.TO_STATION_TYPE)));
                         s = new SimpleJourney(recentSearches.get(0), recentSearches.get(1));
                     } else {
                         b = new Bundle();
                         Station s1 = s.getFromStation();
                         Station s2 = s.getToStation();
-                        b.putString(MainFragment.FROM_STATION, s1.getStationName());
-                        b.putString(MainFragment.FROM_STATION_ID, Integer.toString(s1.getStationId()));
-                        b.putString(MainFragment.FROM_STATION_LONG, Double.toString(s1.getLongitude()));
-                        b.putString(MainFragment.FROM_STATION_LAT, Double.toString(s1.getLatitude()));
-                        b.putString(MainFragment.FROM_STATION_TYPE, s1.getType());
-                        b.putString(MainFragment.FROM_STATION_SEARCHED, s1.getTimeSearched());
+                        b.putString(BundleConstants.FROM_STATION, s1.getStationName());
+                        b.putString(BundleConstants.FROM_STATION_ID, Integer.toString(s1.getStationId()));
+                        b.putString(BundleConstants.FROM_STATION_LONG, Double.toString(s1.getLongitude()));
+                        b.putString(BundleConstants.FROM_STATION_LAT, Double.toString(s1.getLatitude()));
+                        b.putString(BundleConstants.FROM_STATION_TYPE, s1.getType());
+                        b.putString(BundleConstants.FROM_STATION_SEARCHED, s1.getTimeSearched());
 
-                        b.putString(MainFragment.TO_STATION, s2.getStationName());
-                        b.putString(MainFragment.TO_STATION_ID, Integer.toString(s2.getStationId()));
-                        b.putString(MainFragment.TO_STATION_LONG, Double.toString(s2.getLongitude()));
-                        b.putString(MainFragment.TO_STATION_LAT, Double.toString(s2.getLatitude()));
-                        b.putString(MainFragment.TO_STATION_TYPE, s2.getType());
-                        b.putString(MainFragment.TO_STATION_SEARCHED, s2.getTimeSearched());
+                        b.putString(BundleConstants.TO_STATION, s2.getStationName());
+                        b.putString(BundleConstants.TO_STATION_ID, Integer.toString(s2.getStationId()));
+                        b.putString(BundleConstants.TO_STATION_LONG, Double.toString(s2.getLongitude()));
+                        b.putString(BundleConstants.TO_STATION_LAT, Double.toString(s2.getLatitude()));
+                        b.putString(BundleConstants.TO_STATION_TYPE, s2.getType());
+                        b.putString(BundleConstants.TO_STATION_SEARCHED, s2.getTimeSearched());
                     }
 
 
@@ -174,8 +155,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
 
     private void fillStationsText(Bundle args) {
         if (args != null) {
-            String from = args.getString(FROM_STATION);
-            String to = args.getString(TO_STATION);
+            String from = args.getString(BundleConstants.FROM_STATION);
+            String to = args.getString(BundleConstants.TO_STATION);
             if (from != null) fromStation.setText(from);
             if (to != null) toStation.setText(to);
         }
@@ -186,11 +167,11 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
 
         Bundle args = getArguments();
         if (args == null) args = new Bundle();
-        if (v.getId() == R.id.text_view_from_station) args.putString(SOURCE, SOURCE_FROM_STATION);
-        if (v.getId() == R.id.text_view_to_station) args.putString(SOURCE, SOURCE_TO_STATION);
+        if (v.getId() == R.id.text_view_from_station) args.putString(BundleConstants.SOURCE, BundleConstants.SOURCE_FROM_STATION);
+        if (v.getId() == R.id.text_view_to_station) args.putString(BundleConstants.SOURCE, BundleConstants.SOURCE_TO_STATION);
 
-        args.putString(MainFragment.FROM_STATION, fromStation.getText().toString());
-        args.putString(MainFragment.TO_STATION, toStation.getText().toString());
+        args.putString(BundleConstants.FROM_STATION, fromStation.getText().toString());
+        args.putString(BundleConstants.TO_STATION, toStation.getText().toString());
 
         ((MainActivity) getActivity()).replaceFragment(MainActivity.FragmentTypes.SEARCH_STATION, args);
     }
@@ -236,8 +217,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
         super.onSaveInstanceState(outState);
         // Save the current article selection in case we need to recreate the fragment
         if (fromStation.getText().length() > 1 && toStation.getText().length() > 1) {
-            outState.putString(MainFragment.TO_STATION, toStation.getText().toString());
-            outState.putString(MainFragment.FROM_STATION, fromStation.getText().toString());
+            outState.putString(BundleConstants.TO_STATION, toStation.getText().toString());
+            outState.putString(BundleConstants.FROM_STATION, fromStation.getText().toString());
 
         }
     }

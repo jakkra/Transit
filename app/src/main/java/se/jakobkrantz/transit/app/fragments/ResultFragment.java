@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.adapters.ResultListAdapter;
@@ -20,6 +19,7 @@ import se.jakobkrantz.transit.app.skanetrafikenAPI.Constants;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Journey;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Station;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.TimeAndDateConverter;
+import se.jakobkrantz.transit.app.utils.BundleConstants;
 
 import java.util.ArrayList;
 
@@ -30,14 +30,15 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recycleView;
     private ResultListAdapter resultListAdapter;
+    private OnDetailedJourneySelectedListener listener;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle b = getArguments();
-        fromStation = new Station(b.getString(MainFragment.FROM_STATION), Integer.parseInt(b.getString(MainFragment.FROM_STATION_ID)), Double.parseDouble(b.getString(MainFragment.FROM_STATION_LAT)), Double.parseDouble(b.getString(MainFragment.FROM_STATION_LONG)), b.getString(MainFragment.FROM_STATION_TYPE));
-        toStation = new Station(b.getString(MainFragment.TO_STATION), Integer.parseInt(b.getString(MainFragment.TO_STATION_ID)), Double.parseDouble(b.getString(MainFragment.TO_STATION_LAT)), Double.parseDouble(b.getString(MainFragment.TO_STATION_LONG)), b.getString(MainFragment.TO_STATION_TYPE));
+        fromStation = new Station(b.getString(BundleConstants.FROM_STATION), Integer.parseInt(b.getString(BundleConstants.FROM_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LONG)), b.getString(BundleConstants.FROM_STATION_TYPE));
+        toStation = new Station(b.getString(BundleConstants.TO_STATION), Integer.parseInt(b.getString(BundleConstants.TO_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LONG)), b.getString(BundleConstants.TO_STATION_TYPE));
 
     }
 
@@ -93,10 +94,17 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
         Toast.makeText(getActivity(), "Failed to load data, none or slow internet connection", Toast.LENGTH_LONG).show();
     }
 
+    public void setOnJourneySelectedListener(OnDetailedJourneySelectedListener listener) {
+        this.listener = listener;
+    }
+
     private class ResultListListener implements ResultListAdapter.OnResultItemClicked {
         @Override
         public void onResultClicked(Journey j) {
-            Toast.makeText(getActivity(), "Result item clicked " + j.getStartStation() + " -> " + j.getEndStation(), Toast.LENGTH_LONG).show();
+            if (listener != null) {
+                listener.onJourneySelected(Integer.toString(fromStation.getStationId()), Integer.toString(toStation.getStationId()), TimeAndDateConverter.getDate(j.getDepDateTime()), TimeAndDateConverter.formatTime(j.getDepDateTime()));
+            }
+//            Toast.makeText(getActivity(), "Result item clicked " + j.getStartStation() + " -> " + j.getEndStation(), Toast.LENGTH_LONG).show();
 
         }
 
@@ -136,4 +144,6 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
 
 
     }
+
+
 }

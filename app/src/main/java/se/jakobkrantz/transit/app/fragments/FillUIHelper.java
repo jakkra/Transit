@@ -46,8 +46,8 @@ public class FillUIHelper {
         clock.setPadding(11, 11, 11, 11);
         firstPicType = (ImageView) v.findViewById(R.id.iw_first_bus_type);
 
-        routeNbrs.add((TextView) v.findViewById(R.id.textView4));
-        routeNbrs.add((TextView) v.findViewById(R.id.textView5));
+        routeNbrs.add((TextView) v.findViewById(R.id.stop_view));
+        routeNbrs.add((TextView) v.findViewById(R.id.note_view));
         routeNbrs.add((TextView) v.findViewById(R.id.textView7));
         routeNbrs.add((TextView) v.findViewById(R.id.textView8));
         routeNbrs.add((TextView) v.findViewById(R.id.textView9));
@@ -57,7 +57,7 @@ public class FillUIHelper {
         routePics.add((ImageView) v.findViewById(R.id.imageView2));
         routePics.add((ImageView) v.findViewById(R.id.imageView3));
         routePics.add((ImageView) v.findViewById(R.id.imageView4));
-        routePics.add((ImageView) v.findViewById(R.id.imageView5));
+        routePics.add((ImageView) v.findViewById(R.id.circleView));
         routePics.add((ImageView) v.findViewById(R.id.imageView6));
         routePics.add((ImageView) v.findViewById(R.id.imageView7));
         routePics.add((ImageView) v.findViewById(R.id.imageView8));
@@ -116,7 +116,7 @@ public class FillUIHelper {
         }
     }
 
-    private int getDrawableFromDeviation(int devType) {
+    public static int getDrawableFromDeviation(int devType) {
         switch (devType) {
             case RouteLink.IN_TIME:
                 return R.drawable.ic_clock_green;
@@ -129,7 +129,7 @@ public class FillUIHelper {
         }
     }
 
-    private int getDrawableFromLineType(int lineType) {
+    public static int getDrawableFromLineType(int lineType) {
         switch (lineType) {
             case RouteLink.PENDELN:
                 return R.drawable.ic_bus_region;

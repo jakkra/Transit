@@ -1,4 +1,4 @@
-package se.jakobkrantz.transit.app.adapters;/*
+package se.jakobkrantz.transit.app.viewholders;/*
  * Created by krantz on 14-11-21.
  */
 
@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 import se.jakobkrantz.transit.app.R;
+import se.jakobkrantz.transit.app.adapters.ViewHolderClickListener;
 
 // Provide a reference to the views for each data item
 // Complex data items may need more than one view per item, and

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="150dp" android:paddingLeft="10dp" android:paddingRight="10dp">
+    <View
+            android:layout_width="3dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:layout_marginLeft="60dp" android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" android:id="@+id/view"/>
+    <ImageView
+            android:layout_width="35dp"
+            android:src="@drawable/ic_bus_local"
+            android:layout_height="35dp"
+            android:id="@+id/transport_image"
+            android:layout_centerVertical="true" android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" android:layout_marginLeft="10dp"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"                android:textColor="@color/resultListTextColor"
+
+            android:id="@+id/bus_name" android:layout_above="@+id/transport_image" android:layout_toRightOf="@+id/view"
+            android:layout_toEndOf="@+id/view" android:layout_marginLeft="20dp"/>
+    <TextView
+            android:layout_width="wrap_content"                android:textColor="@color/resultListTextColor"
+
+            android:layout_height="wrap_content"
+            android:id="@+id/towards_view" android:layout_centerVertical="true" android:layout_alignLeft="@+id/bus_name"
+            android:layout_alignStart="@+id/bus_name"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"                android:textColor="@color/resultListTextColor"
+
+            android:text="Läge D"
+            android:id="@+id/stop_view"
+            android:layout_toRightOf="@+id/bus_name"
+            android:layout_toEndOf="@+id/bus_name"
+            android:textSize="12sp" android:layout_above="@+id/bus_name" android:layout_alignLeft="@+id/bus_name"
+            android:layout_alignStart="@+id/bus_name"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"                android:textColor="@color/resultListTextColor"
+
+            android:id="@+id/note_view"
+            android:layout_toEndOf="@+id/view"
+            android:layout_toRightOf="@+id/view"
+            android:textSize="12sp" android:textIsSelectable="false"
+            android:layout_below="@+id/towards_view" android:layout_alignLeft="@+id/towards_view"
+            android:layout_alignStart="@+id/towards_view"/>
+
+
+</RelativeLayout>

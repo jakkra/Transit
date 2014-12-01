@@ -1,4 +1,4 @@
-package se.jakobkrantz.transit.app.adapters;/*
+package se.jakobkrantz.transit.app.viewholders;/*
  * Created by krantz on 14-11-24.
  */
 
@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 import se.jakobkrantz.transit.app.R;
+import se.jakobkrantz.transit.app.adapters.ViewHolderClickListener;
 
 public class ViewHolderLoadHeader extends RecyclerView.ViewHolder implements View.OnClickListener {
     private final View v;

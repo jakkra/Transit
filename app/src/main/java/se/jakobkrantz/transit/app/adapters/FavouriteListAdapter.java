@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.database.SimpleJourney;
+import se.jakobkrantz.transit.app.viewholders.ViewHolderItem;
 
 import java.util.List;
 

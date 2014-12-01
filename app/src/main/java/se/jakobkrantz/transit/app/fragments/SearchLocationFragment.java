@@ -22,6 +22,7 @@ import se.jakobkrantz.transit.app.apiasynctasks.SearchStationsTask;
 import se.jakobkrantz.transit.app.database.DatabaseTransitSQLite;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Constants;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Station;
+import se.jakobkrantz.transit.app.utils.BundleConstants;
 
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class SearchLocationFragment extends Fragment implements ListView.OnItemC
     @Override
     public void onStart() {
         super.onStart();
-        List<Station> stations = database.getRecentStations(10);
+        List<Station> stations = database.getRecentStations(20);
         searchFragmentListAdapter = new SearchFragmentListAdapter(getActivity(), stations);
         searchView.addTextChangedListener(this);
         listView.setAdapter(searchFragmentListAdapter);
@@ -78,25 +79,25 @@ public class SearchLocationFragment extends Fragment implements ListView.OnItemC
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
         Bundle args = getArguments();
-        String source = args.getString(MainFragment.SOURCE);
+        String source = args.getString(BundleConstants.SOURCE);
         Station s = ((Station) searchFragmentListAdapter.getItem(position));
-        if (source.equals(MainFragment.SOURCE_FROM_STATION)) {
+        if (source.equals(BundleConstants.SOURCE_FROM_STATION)) {
 
-            args.putString(MainFragment.FROM_STATION, s.getStationName());
-            args.putString(MainFragment.FROM_STATION_ID, Integer.toString(s.getStationId()));
-            args.putString(MainFragment.FROM_STATION_LONG, Double.toString(s.getLongitude()));
-            args.putString(MainFragment.FROM_STATION_LAT, Double.toString(s.getLatitude()));
-            args.putString(MainFragment.FROM_STATION_TYPE, s.getType());
-            args.putString(MainFragment.FROM_STATION_SEARCHED, s.getTimeSearched());
+            args.putString(BundleConstants.FROM_STATION, s.getStationName());
+            args.putString(BundleConstants.FROM_STATION_ID, Integer.toString(s.getStationId()));
+            args.putString(BundleConstants.FROM_STATION_LONG, Double.toString(s.getLongitude()));
+            args.putString(BundleConstants.FROM_STATION_LAT, Double.toString(s.getLatitude()));
+            args.putString(BundleConstants.FROM_STATION_TYPE, s.getType());
+            args.putString(BundleConstants.FROM_STATION_SEARCHED, s.getTimeSearched());
 
-        } else if (source.equals(MainFragment.SOURCE_TO_STATION)) {
+        } else if (source.equals(BundleConstants.SOURCE_TO_STATION)) {
 
-            args.putString(MainFragment.TO_STATION, s.getStationName());
-            args.putString(MainFragment.TO_STATION_ID, Integer.toString(s.getStationId()));
-            args.putString(MainFragment.TO_STATION_LONG, Double.toString(s.getLongitude()));
-            args.putString(MainFragment.TO_STATION_LAT, Double.toString(s.getLatitude()));
-            args.putString(MainFragment.TO_STATION_TYPE, s.getType());
-            args.putString(MainFragment.TO_STATION_SEARCHED, s.getTimeSearched());
+            args.putString(BundleConstants.TO_STATION, s.getStationName());
+            args.putString(BundleConstants.TO_STATION_ID, Integer.toString(s.getStationId()));
+            args.putString(BundleConstants.TO_STATION_LONG, Double.toString(s.getLongitude()));
+            args.putString(BundleConstants.TO_STATION_LAT, Double.toString(s.getLatitude()));
+            args.putString(BundleConstants.TO_STATION_TYPE, s.getType());
+            args.putString(BundleConstants.TO_STATION_SEARCHED, s.getTimeSearched());
         }
 
         callBack.onStationSelected(args); //Changed to adpter.getPos(positon) will return string station

@@ -1,4 +1,4 @@
-package se.jakobkrantz.transit.app.adapters;/*
+package se.jakobkrantz.transit.app.viewholders;/*
  * Created by krantz on 14-11-23.
  */
 
@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import se.jakobkrantz.transit.app.R;
+import se.jakobkrantz.transit.app.adapters.ViewHolderClickListener;
 import se.jakobkrantz.transit.app.fragments.FillUIHelper;
 
 import java.util.ArrayList;
