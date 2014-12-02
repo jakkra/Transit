@@ -17,15 +17,18 @@ import se.jakobkrantz.transit.app.adapters.DetailedJourneyAdapter;
 import se.jakobkrantz.transit.app.apiasynctasks.SearchJourneysTask;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Constants;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Journey;
+import se.jakobkrantz.transit.app.skanetrafikenAPI.TimeAndDateConverter;
 import se.jakobkrantz.transit.app.utils.BundleConstants;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class DetailedJourneyFragment extends Fragment implements SearchJourneysTask.DataDownloadListener, SwipeRefreshLayout.OnRefreshListener {
     private Journey journey;
     private DetailedJourneyAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recycleView;
+    private FillDetailedHeaderHelper uiFiller;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,7 @@ public class DetailedJourneyFragment extends Fragment implements SearchJourneysT
         View view = inflater.inflate(R.layout.detailed_journey_fragment, container, false);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_container);
         recycleView = (RecyclerView) view.findViewById(R.id.detailed_recycle_view);
+        uiFiller = new FillDetailedHeaderHelper(view);
         return view;
     }
 
@@ -56,18 +60,31 @@ public class DetailedJourneyFragment extends Fragment implements SearchJourneysT
         int startId = Integer.parseInt(args.getString(BundleConstants.FROM_STATION_ID));
         int endId = Integer.parseInt(args.getString(BundleConstants.TO_STATION_ID));
 
+
+        //TODO make nicer :p
+        //Somehow searching with the specific time does not return journeys for that exact departure time, we need to remove one minute from the journey time we want to search for.
+        Calendar cal = TimeAndDateConverter.parseCalendarString(args.getString(BundleConstants.DEP_DATE) + "T" + args.getString(BundleConstants.DEP_TIME) + ":00");
+        cal.add(Calendar.MINUTE, -1);
+        String dayOfMonth = Integer.toString(cal.get(Calendar.DAY_OF_MONTH));
+        if (dayOfMonth.length() < 2) {
+            dayOfMonth = 0 + dayOfMonth;
+        }
+        String date = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + dayOfMonth;
+        String time = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
+
+
         SearchJourneysTask task = new SearchJourneysTask();
         task.setDataDownloadListener(this);
-        task.execute(Constants.getURL(startId, endId, args.getString(BundleConstants.DEP_DATE), args.getString(BundleConstants.DEP_TIME), 1));
-
+        task.execute(Constants.getURL(startId, endId, date, time, 1));
     }
+
 
     @Override
     public void dataDownloadedSuccessfully(Object data) {
         ArrayList<Journey> journeys = (ArrayList<Journey>) data;
-
         if (journeys.size() > 0) {
             journey = journeys.get(0);
+            uiFiller.updateUI(journey);
 
             if (adapter == null) {
                 adapter = new DetailedJourneyAdapter(journey);

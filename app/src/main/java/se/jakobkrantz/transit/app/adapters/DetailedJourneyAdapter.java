@@ -46,21 +46,35 @@ public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             Log.d("onBindPos i = ", i + "");
             PositionViewHolder holder = ((PositionViewHolder) viewHolder);
             if (i != 0) {
-                holder.arrTime.setText(TimeAndDateConverter.formatTime(journey.getRouteLinks().get(calculateArrivalIndex(i)).getArrDateTime())); //Change to just HH:mm
+                holder.arrTime.setText(TimeAndDateConverter.formatTime(journey.getRouteLinks().get(calculateArrivalIndex(i)).getArrDateTime()));
+
             }
 
-            if (i != getItemCount() -1) {
-                RouteLink r = journey.getRouteLinks().get(calculateArrivalIndex(i) + 1);
-                holder.depTime.setText(TimeAndDateConverter.formatTime(r.getDepDateTime()));
+            if (i != getItemCount() - 1) {
+                holder.depTime.setText(TimeAndDateConverter.formatTime(journey.getRouteLinks().get(calculateDepartureIndex(i)).getDepDateTime()));
+
+            }
+
+            if (i != getItemCount() - 1) {
+                RouteLink r = journey.getRouteLinks().get(calculateDepartureIndex(i));
                 holder.position.setText(r.getFromStation().toString());
+            } else {
+                RouteLink r = journey.getRouteLinks().get(calculateArrivalIndex(i));
+                holder.position.setText(r.getToStation().toString());
             }
         } else if (viewHolder instanceof TransportViewHolder) {
+            int index = calculateDepartureIndex(i - 1);
             Log.d("onBindTrans i = ", i + "");
 
-            RouteLink r = journey.getRouteLinks().get(calculateDepartureIndex(i));
+            RouteLink r = journey.getRouteLinks().get(index);
             TransportViewHolder holder = ((TransportViewHolder) viewHolder);
             holder.lineNameNbr.setText(r.getTransportModeName() + " " + r.getLineNbr());
             holder.towards.setText("mot " + r.getTowardDirection());
+            if (!r.isTrain()) {
+                holder.stopIDView.setText("Läge " + r.getStartPoint());
+            }
+            holder.clock.setImageResource(FillUIHelper.getDrawableFromDeviation(r.deviationType()));
+            holder.delayTime.setText(r.getDeviationDepTimeToString());
             String note = "";
             if (r.getPublicNote() != null) {
                 note = r.getPublicNote();
@@ -74,18 +88,17 @@ public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }
             holder.noteView.setText(note);
             holder.transportImage.setImageResource(FillUIHelper.getDrawableFromLineType(r.getLineTypeId()));
-
+//
         }
 
 
     }
 
-    private static int calculateDepartureIndex(int i) {
-        return calculateArrivalIndex(i - 1);
 
-    }
 
     private static int calculateArrivalIndex(int i) {
+        if (i == 0) return 0;
+        i--;
         int j = 1;
         int index = 0;
         while (j <= i) {
@@ -96,9 +109,13 @@ public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             index++;
             j += 2;
         }
-        Log.e("calculateArrivalIndex DetailedJourneyAdapter", "Should never log this!");
         return 0;
 
+    }
+
+    private static int calculateDepartureIndex(int i) {
+        if (i == 0) return 0;
+        return calculateArrivalIndex(i) + 1;
     }
 
     @Override

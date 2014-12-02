@@ -9,17 +9,121 @@
     <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
                   android:orientation="vertical"
                   android:background="@color/colorPrimary"
-                  android:layout_weight="80">
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Från Hmm to herpderp"
-                android:id="@+id/textView" android:layout_gravity="center_horizontal"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="20 min"
-                android:id="@+id/textView2" android:layout_gravity="center_horizontal"/>
+                  android:layout_weight="85">
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:paddingLeft="5dp" android:paddingTop="5dp"
+                android:paddingRight="5dp">
+
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:id="@+id/time_between"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" android:textSize="22sp"/>
+            <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+
+                    android:id="@+id/imageView1"
+                    android:layout_above="@+id/arrival_time" android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/white"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/nbr_dep_time"
+                    android:textStyle="bold"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true" android:layout_alignParentEnd="true"
+                    android:textSize="20sp"/>
+            <View style="@style/DividerDetailed"
+                  android:padding="5dp"
+                  android:layout_alignParentBottom="true" android:layout_alignParentLeft="true"
+                  android:layout_alignParentStart="true" android:id="@+id/arrival_time" android:paddingLeft="20dp"
+                  android:paddingRight="20dp"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:id="@+id/time_to_dep" android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" android:textSize="20dp"/>
+
+
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:textColor="@color/white"
+                      android:id="@+id/stop_view"
+                      android:layout_alignTop="@+id/imageView1" android:layout_toRightOf="@+id/imageView1"
+                      android:layout_toEndOf="@+id/imageView1"/>
+            <ImageView android:layout_width="25dp" android:layout_height="25dp"
+                       android:id="@+id/imageView2"
+                       android:layout_toEndOf="@+id/stop_view" android:layout_above="@+id/arrival_time"
+                       android:layout_toRightOf="@+id/stop_view"/>
+            <ImageView android:layout_width="25dp" android:layout_height="25dp"
+                       android:id="@+id/imageView3"
+                       android:layout_above="@+id/arrival_time" android:layout_toRightOf="@+id/imageView2"
+                       android:layout_toEndOf="@+id/imageView2"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:textColor="@color/white"
+                      android:id="@+id/note_view"
+                      android:layout_toEndOf="@+id/imageView3"
+                      android:layout_alignTop="@+id/imageView3" android:layout_toRightOf="@+id/imageView3"/>
+            <ImageView android:layout_width="25dp" android:layout_height="25dp"
+                       android:id="@+id/imageView4"
+                       android:layout_toEndOf="@+id/note_view"
+                       android:layout_alignTop="@+id/note_view" android:layout_toRightOf="@+id/note_view"/>
+            <ImageView android:layout_width="25dp" android:layout_height="25dp"
+                       android:id="@+id/circleView"
+                       android:layout_toEndOf="@+id/imageView4"
+                       android:layout_above="@+id/arrival_time" android:layout_toRightOf="@+id/imageView4"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:textColor="@color/white"
+                      android:id="@+id/textView7"
+                      android:layout_toEndOf="@+id/circleView"
+                      android:layout_alignTop="@+id/circleView" android:layout_toRightOf="@+id/circleView"/>
+            <ImageView android:layout_width="25dp" android:layout_height="25dp"
+                       android:id="@+id/imageView6" android:layout_toEndOf="@+id/textView7"
+                       android:layout_above="@+id/arrival_time" android:layout_toRightOf="@+id/textView7"/>
+            <ImageView android:layout_width="25dp" android:layout_height="25dp"
+                       android:id="@+id/imageView7" android:layout_toEndOf="@+id/imageView6"
+                       android:layout_above="@+id/arrival_time" android:layout_toRightOf="@+id/imageView6"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:textColor="@color/white"
+                      android:id="@+id/textView8"
+                      android:layout_toEndOf="@+id/imageView7"
+                      android:layout_alignTop="@+id/imageView7" android:layout_toRightOf="@+id/imageView7"/>
+            <ImageView android:layout_width="25dp" android:layout_height="25dp"
+                       android:id="@+id/imageView8" android:layout_toEndOf="@+id/textView8"
+                       android:layout_above="@+id/arrival_time" android:layout_toRightOf="@+id/textView8"/>
+            <ImageView android:layout_width="25dp" android:layout_height="25dp"
+                       android:id="@+id/imageView9" android:layout_toEndOf="@+id/imageView8"
+                       android:layout_above="@+id/arrival_time" android:layout_toRightOf="@+id/imageView8"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:textColor="@color/white"
+                      android:id="@+id/textView9"
+                      android:layout_toEndOf="@+id/imageView9"
+                      android:layout_alignBottom="@+id/textView8" android:layout_toRightOf="@+id/imageView9"/>
+            <ImageView android:layout_width="25dp" android:layout_height="25dp"
+                       android:id="@+id/imageView10" android:layout_toEndOf="@+id/textView9"
+                       android:layout_above="@+id/arrival_time" android:layout_toRightOf="@+id/textView9"/>
+            <ImageView android:layout_width="25dp" android:layout_height="25dp"
+                       android:id="@+id/imageView11" android:layout_toEndOf="@+id/imageView10"
+                       android:layout_above="@+id/arrival_time" android:layout_toRightOf="@+id/imageView10"/>
+
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:textColor="@color/white"
+                      android:id="@+id/textView10"
+                      android:layout_toEndOf="@+id/imageView11"
+                      android:layout_alignTop="@+id/imageView11" android:layout_toRightOf="@+id/imageView11"/>
+
+        </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout

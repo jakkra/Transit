@@ -21,7 +21,6 @@ public class FillUIHelper {
     private TextView nbrDepTime; //Time to departure
     private TextView message;
     private TextView timeToDep;
-    //    private TextView nbrChanges;
     private TextView delayMin;
     private ImageView firstPicType;
     private ImageView clock;
@@ -40,7 +39,6 @@ public class FillUIHelper {
         nbrDepTime = (TextView) v.findViewById(R.id.nbr_dep_time);
         message = (TextView) v.findViewById(R.id.message);
         timeToDep = (TextView) v.findViewById(R.id.time_to_dep);
-//        nbrChanges = (TextView) v.findViewById(R.id.nbr_changes);
         delayMin = (TextView) v.findViewById(R.id.delay_min);
         clock = (ImageView) v.findViewById(R.id.iw_clock);
         clock.setPadding(11, 11, 11, 11);
@@ -87,7 +85,6 @@ public class FillUIHelper {
 
 
         delayMin.setText(j.getDeviationDepTime());
-//        nbrChanges.setText(j.getNbrChanges() + " byten ");
         firstPicType.setImageResource(getDrawableFromLineType(j.getFirstRouteLineId()));
 
         if (j.deviationType() != RouteLink.UNKNOWN_DEVIATION) {
@@ -125,7 +122,7 @@ public class FillUIHelper {
             case RouteLink.LATE:
                 return R.drawable.ic_clock_red;
             default:
-                return R.drawable.ic_clock_yellow;
+                return 0;
         }
     }
 

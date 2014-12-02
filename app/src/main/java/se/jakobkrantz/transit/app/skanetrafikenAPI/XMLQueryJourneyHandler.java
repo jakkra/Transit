@@ -2,6 +2,7 @@ package se.jakobkrantz.transit.app.skanetrafikenAPI;/*
  * Created by krantz on 14-11-20.
  */
 
+import android.util.Log;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -99,8 +100,7 @@ public class XMLQueryJourneyHandler extends DefaultHandler {
             tempStation.setStationId(Integer.parseInt(sb.toString()));
         } else if (localName.equals("Name") && !isOnLineElement) {
             tempStation.setStationName(sb.toString());
-        } else if (localName.equals("StopPoint")) {
-            tempStation.setStopPoint(sb.toString());
+
 
             //Line
         } else if (localName.equals("Name") && isOnLineElement) {
@@ -142,8 +142,13 @@ public class XMLQueryJourneyHandler extends DefaultHandler {
             r.setArrTimeDeviation(sb.toString());
         } else if (localName.equals("Accessibility")) {
             r.setAccessibility(sb.toString());
-
-
+        } else if (localName.equals("StopPoint")) {
+            Log.d("StopPoint: ", sb.toString());
+            if (r.getStartPoint() == null) {
+                r.setStartPoint(sb.toString());
+            } else {
+                r.setStopPoint(sb.toString());
+            }
             //Done with RouteLink
         } else if (localName.equals("Distance")) {
             t.setDistance(sb.toString());
@@ -152,10 +157,8 @@ public class XMLQueryJourneyHandler extends DefaultHandler {
 
         } else if (localName.equals("From")) {
             r.setFromStation(tempStation);
-            //routeLinks.get(routeLinks.size() - 1).setFromStation(tempStation);
         } else if (localName.equals("To")) {
             r.setToStation(tempStation);
-//            routeLinks.get(routeLinks.size() - 1).setToStation(tempStation);
         } else if (localName.equals("Line")) {
             isOnLineElement = false;
         } else if (localName.equals("PriceZones")) {

@@ -3,8 +3,6 @@ package se.jakobkrantz.transit.app.skanetrafikenAPI;/*
  */
 
 
-import android.util.Log;
-
 /**
  * Used in Journey class, each Journey consists of 1 or more RouteLinks.
  * For example one Journey from A to B has 3 bus/train changes, it will have 3 RouteLinks. One for each part of the Journey.
@@ -38,7 +36,6 @@ public class RouteLink {
     public static final int UNKNOWN_DEVIATION = 28;
 
 
-
     private String lineNbr; //Line's number
     private String runNbr; //Line's run number
     private int lineTypeId; //Reference to one line type in line types collection defined by transport authority. All available line types and ids can be retreved from GetMeansOfTransport function
@@ -63,6 +60,8 @@ public class RouteLink {
     private Station toStation; // to station, can be an middle point
     private String depDeviationAffect; //Describes how departure time deviation affects the journey.
     private String arrDeviationAffect; //Describes how arrival time deviation affects the journey.
+    private String startPoint; // dep startPoint, eg "Läge D"
+    private String stopPoint; // arrival stopPoint -||-
 
     //Notes and comments
     private String publicNote;
@@ -109,6 +108,44 @@ public class RouteLink {
         } else {
             return lineNbr;
         }
+    }
+
+    public int deviationType() {
+        int diff = 0;
+        String time = getDepTimeDeviation();
+        if (time != null) {
+            diff = Integer.parseInt(time);
+            if (diff == 0) {
+                return RouteLink.IN_TIME;
+            } else if (diff < 0) {
+                return RouteLink.EARLY;
+            } else if (diff > 0) {
+                return RouteLink.LATE;
+            }
+        }
+        return RouteLink.UNKNOWN_DEVIATION;
+
+    }
+
+    public String getDeviationDepTimeToString() {
+        String time = getDepTimeDeviation();
+        if (time == null) {
+            return "";
+        } else {
+            if (time.equals("0")) return "i tid";
+            return time + " min ";
+        }
+
+    }
+
+    public String getDeviationArrTimeToString() {
+        String time = getArrTimeDeviation();
+        if (time == null) {
+            return "";
+        } else {
+            return time + " min ";
+        }
+
     }
 
     public void setLineNbr(String lineNbr) {
@@ -350,5 +387,25 @@ public class RouteLink {
 
     public String getShortText() {
         return shortText;
+    }
+
+    public String getStopPoint() {
+        return stopPoint;
+    }
+
+    public void setStopPoint(String stopPoint) {
+        this.stopPoint = stopPoint;
+    }
+
+    public String getStartPoint() {
+        return startPoint;
+    }
+
+    public void setStartPoint(String startPoint) {
+        this.startPoint = startPoint;
+    }
+
+    public boolean isTrain() {
+        return transportMode == TRAIN;
     }
 }

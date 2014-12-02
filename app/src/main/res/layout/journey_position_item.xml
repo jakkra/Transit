@@ -21,22 +21,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/arrivall_time"
+            android:textSize="17sp"
             android:textColor="@color/resultListTextColor"
             android:layout_above="@+id/circleView" android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:textColor="@color/resultListTextColor"
+            android:textSize="17sp"
 
             android:id="@+id/dep_time" android:layout_below="@+id/circleView" android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"/>
     <TextView
             android:layout_width="wrap_content" android:textColor="@color/resultListTextColor"
+            android:textSize="20sp"
 
             android:layout_height="wrap_content"
-            android:id="@+id/position" android:layout_alignBottom="@+id/circleView"
-            android:layout_toRightOf="@+id/circleView" android:layout_toEndOf="@+id/circleView"
-            android:layout_marginLeft="22dp"/>
+            android:id="@+id/position"
+            android:layout_toEndOf="@+id/circleView"
+            android:layout_marginLeft="23dp" android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/circleView"/>
 
 
 </RelativeLayout>
