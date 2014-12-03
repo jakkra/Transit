@@ -73,12 +73,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
     @Override
     public void onStart() {
         super.onStart();
-        Bundle b = getArguments();
-        if (b != null) {
-            fromStation.setText(b.getString(BundleConstants.FROM_STATION));
-            toStation.setText(b.getString(BundleConstants.TO_STATION));
-        }
-
 
 
         fromStation.setOnClickListener(this);
@@ -149,6 +143,15 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
                 }
             }
         });
+
+        List<SimpleJourney> j = database.getRecentJourneys(1);
+        if (j.size() > 0) {
+            SearchJourneysTask task = new SearchJourneysTask();
+            task.setDataDownloadListener(this);
+            task.execute(Constants.getURL(j.get(0).getFromStation().getStationId(), j.get(0).getToStation().getStationId(), 1));
+            fromStation.setText(j.get(0).getFromStation().toString());
+            toStation.setText(j.get(0).getToStation().toString());
+        }
         fillStationsText(getArguments());
     }
 
@@ -167,8 +170,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
 
         Bundle args = getArguments();
         if (args == null) args = new Bundle();
-        if (v.getId() == R.id.text_view_from_station) args.putString(BundleConstants.SOURCE, BundleConstants.SOURCE_FROM_STATION);
-        if (v.getId() == R.id.text_view_to_station) args.putString(BundleConstants.SOURCE, BundleConstants.SOURCE_TO_STATION);
+        if (v.getId() == R.id.text_view_from_station)
+            args.putString(BundleConstants.SOURCE, BundleConstants.SOURCE_FROM_STATION);
+        if (v.getId() == R.id.text_view_to_station)
+            args.putString(BundleConstants.SOURCE, BundleConstants.SOURCE_TO_STATION);
 
         args.putString(BundleConstants.FROM_STATION, fromStation.getText().toString());
         args.putString(BundleConstants.TO_STATION, toStation.getText().toString());

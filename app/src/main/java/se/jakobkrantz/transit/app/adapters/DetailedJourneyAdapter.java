@@ -47,10 +47,9 @@ public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             PositionViewHolder holder = ((PositionViewHolder) viewHolder);
             if (i != 0) {
                 holder.arrTime.setText(TimeAndDateConverter.formatTime(journey.getRouteLinks().get(calculateArrivalIndex(i)).getArrDateTime()));
-
             }
 
-            if (i != getItemCount() - 1) {
+            if (i != getItemCount()-1) {
                 holder.depTime.setText(TimeAndDateConverter.formatTime(journey.getRouteLinks().get(calculateDepartureIndex(i)).getDepDateTime()));
 
             }
@@ -64,7 +63,6 @@ public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }
         } else if (viewHolder instanceof TransportViewHolder) {
             int index = calculateDepartureIndex(i - 1);
-            Log.d("onBindTrans i = ", i + "");
 
             RouteLink r = journey.getRouteLinks().get(index);
             TransportViewHolder holder = ((TransportViewHolder) viewHolder);

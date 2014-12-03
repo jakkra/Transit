@@ -2,7 +2,6 @@ package se.jakobkrantz.transit.app.skanetrafikenAPI;/*
  * Created by krantz on 14-11-20.
  */
 
-import android.util.Log;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -143,7 +142,6 @@ public class XMLQueryJourneyHandler extends DefaultHandler {
         } else if (localName.equals("Accessibility")) {
             r.setAccessibility(sb.toString());
         } else if (localName.equals("StopPoint")) {
-            Log.d("StopPoint: ", sb.toString());
             if (r.getStartPoint() == null) {
                 r.setStartPoint(sb.toString());
             } else {

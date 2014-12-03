@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +67,13 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
         task.execute(Constants.getURL(fromStation.getStationId(), toStation.getStationId(), Constants.getCurrentDate(), Constants.getCurrentTime(), ResultListAdapter.NBR_ITEMS_PER_LOAD));
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(BundleConstants.FROM_STATION_ID, fromStation.getStationId());
+        outState.putInt(BundleConstants.TO_STATION_ID, toStation.getStationId());
+    }
+
     /**
      * Reloads {SEARCH_RESULT_COUNT} results in the list. If the list contains more, they are removed totally.
      */
@@ -85,6 +93,9 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
             recycleView.setAdapter(resultListAdapter);
         } else {
             resultListAdapter.setJourneys(journeys);
+            //Fragment reopened, means recycleView is initialised again
+            recycleView.setAdapter(resultListAdapter);
+
         }
     }
 
