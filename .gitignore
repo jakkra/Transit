@@ -19,6 +19,8 @@ gen/
 # Ignore gradle files
 .gradle/
 build/
+gradle/
+.gradle/\
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -38,5 +40,10 @@ Thumbs.db
 # Intellij IDEA (see https://intellij-support.jetbrains.com/entries/23393067)
 .idea/workspace.xml
 .idea/tasks.xml
+.idea/
+.idea
+.idea/\
+.iml/
+.iml
 .idea/datasources.xml
 .idea/dataSources.ids

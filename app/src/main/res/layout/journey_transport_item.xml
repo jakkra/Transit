@@ -4,6 +4,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="150dp" android:paddingLeft="10dp" android:paddingRight="10dp">
+
     <View
             android:layout_width="3dp"
             android:layout_height="wrap_content"
@@ -62,6 +63,5 @@
             android:textColor="@color/resultListTextColor"
             android:id="@+id/delay_time_detailed" android:layout_alignBottom="@+id/clock_detailed"
             android:layout_toRightOf="@+id/clock_detailed" android:layout_toEndOf="@+id/clock_detailed"/>
-
 
 </RelativeLayout>
