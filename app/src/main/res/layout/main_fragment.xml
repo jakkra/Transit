@@ -32,14 +32,14 @@
               android:hint="@string/edit_text_search_to" android:paddingTop="5dp" android:textSize="22sp"
               android:textColorHint="@color/colorPrimary"
 
-              android:layout_above="@+id/button" android:layout_alignParentLeft="true"
+              android:layout_above="@+id/gcmButton" android:layout_alignParentLeft="true"
               android:layout_alignParentStart="true"/>
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/search_journey_button_text"
             android:background="@drawable/btn_main_fragment_selector"
-            android:id="@+id/button" android:layout_gravity="center_horizontal"
+            android:id="@+id/gcmButton" android:layout_gravity="center_horizontal"
             android:layout_alignParentBottom="true" android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" android:layout_toRightOf="@+id/favourite_button"
             android:layout_toEndOf="@+id/favourite_button"/>

@@ -55,7 +55,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
         View view = inflater.inflate(R.layout.main_fragment, container, false);
         toStation = (TextView) view.findViewById(R.id.text_view_to_station);
         fromStation = (TextView) view.findViewById(R.id.text_view_from_station);
-        searchButton = (Button) view.findViewById(R.id.button);
+        searchButton = (Button) view.findViewById(R.id.gcmButton);
         favButton = (Button) view.findViewById(R.id.favourite_button);
         listView = (RecyclerView) view.findViewById(R.id.listView);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);

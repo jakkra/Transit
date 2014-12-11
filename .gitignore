@@ -21,6 +21,10 @@ gen/
 build/
 gradle/
 .gradle/\
+gradlew*
+settings.gradle
+gradlew.bat
+
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -43,7 +47,8 @@ Thumbs.db
 .idea/
 .idea
 .idea/\
-.iml/
-.iml
+*.iml/
+*.iml/\
+*.iml
 .idea/datasources.xml
 .idea/dataSources.ids
