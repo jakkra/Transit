@@ -1,4 +1,4 @@
-package se.jakobkrantz.transit.app.fragments;/*
+package se.jakobkrantz.transit.app.searching.fragments;/*
  * Created by krantz on 14-11-17.
  */
 

@@ -9,9 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.adapters.ViewHolderClickListener;
-import se.jakobkrantz.transit.app.fragments.FillUIHelper;
+import se.jakobkrantz.transit.app.searching.fragments.FillUIHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ViewHolderResult extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {

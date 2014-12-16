@@ -1,14 +1,13 @@
-package se.jakobkrantz.transit.app.drawer;/*
+package se.jakobkrantz.transit.app.base;/*
  * Created by krantz on 14-11-17.
  */
 
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import se.jakobkrantz.transit.app.MainActivity;
+import se.jakobkrantz.transit.app.searching.MainActivity;
 import se.jakobkrantz.transit.app.reporting.ReportActivity;
 
 public class DrawerListClickListener implements ListView.OnItemClickListener {
@@ -16,9 +15,10 @@ public class DrawerListClickListener implements ListView.OnItemClickListener {
     private final DrawerLayout layout;
     private String[] drawerLabels;
     private String title;
-    private MainActivity activity;
+    private BaseActivity activity;
+    private int lastPosition;
 
-    public DrawerListClickListener(MainActivity activity, ListView drawerList, DrawerLayout layout, String[] drawerLabels) {
+    public DrawerListClickListener(BaseActivity activity, ListView drawerList, DrawerLayout layout, String[] drawerLabels) {
         this.activity = activity;
         this.drawerList = drawerList;
         this.layout = layout;
@@ -31,22 +31,30 @@ public class DrawerListClickListener implements ListView.OnItemClickListener {
     }
 
     private void selectItem(int position) {
-        // Create a new fragment and specify the planet to show based on position
-        Fragment fragment = null;
+        if (position == lastPosition) {
+            layout.closeDrawer(drawerList);
+            return;
+        }
+        lastPosition = position;
 
+        Intent intent;
         switch (position) {
             case 0:
-                activity.replaceFragment(MainActivity.FragmentTypes.SEARCH_JOURNEY_FROM_TO, null);
+                intent = new Intent(activity.getBaseContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                activity.startActivity(intent);
                 break;
             case 1:
-                Intent intent = new Intent(activity, ReportActivity.class);
+                intent = new Intent(activity.getBaseContext(), ReportActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 activity.startActivity(intent);
                 break;
             default:
-                activity.replaceFragment(MainActivity.FragmentTypes.DUMMY, null);
+                intent = new Intent(activity.getBaseContext(), ReportActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                activity.startActivity(intent);
                 break;
         }
-
 
         // Highlight the selected item, update the title, and close the drawer
         drawerList.setItemChecked(position, true);

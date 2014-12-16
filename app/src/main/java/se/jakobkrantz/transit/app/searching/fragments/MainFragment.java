@@ -1,4 +1,4 @@
-package se.jakobkrantz.transit.app.fragments;/*
+package se.jakobkrantz.transit.app.searching.fragments;/*
  * Created by krantz on 14-11-17.
  */
 
@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import se.jakobkrantz.transit.app.MainActivity;
+import se.jakobkrantz.transit.app.searching.MainActivity;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.adapters.FavouriteListAdapter;
 import se.jakobkrantz.transit.app.apiasynctasks.SearchJourneysTask;

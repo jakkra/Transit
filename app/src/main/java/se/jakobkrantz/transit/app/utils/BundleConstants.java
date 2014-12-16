@@ -21,8 +21,5 @@ public class BundleConstants {
     public static final String DEP_DATE = "depdate";
     public static final String DEP_TIME = "deltime";
 
-    public  enum Gcm{
-        REGISTER, UNREGISTER, MESSAGE
-    }
 
 }

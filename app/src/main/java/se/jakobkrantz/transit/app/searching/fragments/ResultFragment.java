@@ -1,4 +1,4 @@
-package se.jakobkrantz.transit.app.fragments;/*
+package se.jakobkrantz.transit.app.searching.fragments;/*
  * Created by krantz on 14-11-22.
  */
 
@@ -8,7 +8,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
