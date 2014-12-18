@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import se.jakobkrantz.transit.app.searching.MainActivity;
+import se.jakobkrantz.transit.app.searching.SearchActivity;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.adapters.FavouriteListAdapter;
 import se.jakobkrantz.transit.app.apiasynctasks.SearchJourneysTask;
@@ -26,7 +26,7 @@ import se.jakobkrantz.transit.app.utils.BundleConstants;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainFragment extends Fragment implements View.OnClickListener, FavouriteListAdapter.OnItemChangeListener, SearchJourneysTask.DataDownloadListener {
+public class MainSearchFragment extends Fragment implements View.OnClickListener, FavouriteListAdapter.OnItemChangeListener, SearchJourneysTask.DataDownloadListener {
     //TODO Change to enum and move to MainActivity instead
 
     public static final int NBR_OF_LIST_ITEM_TO_SHOW = 10;
@@ -138,7 +138,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
                     database.addRecentJourneySearch(s);
                     database.addStationsToRecent(recentSearches);
                     favListAdapter.addRecentJourney(s);
-                    ((MainActivity) getActivity()).replaceFragment(MainActivity.FragmentTypes.SEARCH_RESULT, b);
+                    ((SearchActivity) getActivity()).replaceFragment(SearchActivity.FragmentTypes.SEARCH_RESULT, b);
 
                 }
             }
@@ -178,7 +178,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, Favo
         args.putString(BundleConstants.FROM_STATION, fromStation.getText().toString());
         args.putString(BundleConstants.TO_STATION, toStation.getText().toString());
 
-        ((MainActivity) getActivity()).replaceFragment(MainActivity.FragmentTypes.SEARCH_STATION, args);
+        ((SearchActivity) getActivity()).replaceFragment(SearchActivity.FragmentTypes.SEARCH_STATION, args);
     }
 
     @Override

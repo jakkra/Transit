@@ -1,4 +1,6 @@
-package se.jakobkrantz.transit.app.reporting.fragments;/*
+package se.jakobkrantz.transit.app.reporting.fragments;
+
+/*
  * Created by krantz on 14-12-16.
  */
 
@@ -13,20 +15,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.NumberPicker;
+import android.widget.Spinner;
+import at.markushi.ui.CircleButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import se.jakobkrantz.transit.app.R;
-import se.jakobkrantz.transit.app.utils.GcmConstants;
 import se.jakobkrantz.transit.app.reporting.ReportActivity;
+import se.jakobkrantz.transit.app.utils.GcmConstants;
 
 import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ReportFragment extends Fragment implements View.OnClickListener{
+import static se.jakobkrantz.transit.app.R.id.gcmButton;
+
+public class ReportFragment extends Fragment implements View.OnClickListener {
     public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "0";
@@ -36,34 +43,46 @@ public class ReportFragment extends Fragment implements View.OnClickListener{
      * Substitute you own sender ID here. This is the project number you got
      * from the API Console, as described in "Getting Started."
      */
-    String SENDER_ID = "24223089278";
+    private String SENDER_ID = "24223089278";
 
-    GoogleCloudMessaging gcm;
-    AtomicInteger msgId = new AtomicInteger();
-    Context context;
+    private GoogleCloudMessaging gcm;
+    private AtomicInteger msgId = new AtomicInteger();
+    private Context context;
 
-    String regid;
+    private String regid;
 
-    private Button sendButton;
-    private TextView messageToSend;
+    private CircleButton sendButton;
+    private Spinner disturbanceType;
+    private EditText disturbanceNote;
+    private NumberPicker minutePicker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.activity_report, container, false);
-        sendButton = (Button) view.findViewById(R.id.gcmButton);
-        messageToSend = (TextView) view.findViewById(R.id.gcmTextSend);
+        View view = inflater.inflate(R.layout.fragment_report, container, false);
+        sendButton = (CircleButton) view.findViewById(gcmButton);
+        disturbanceType = (Spinner) view.findViewById(R.id.spinner);
+        disturbanceNote = (EditText) view.findViewById(R.id.disturbance_note);
+        minutePicker = (NumberPicker) view.findViewById(R.id.minutePicker);
+
+        minutePicker.setMinValue(0);
+        minutePicker.setMaxValue(60);
+        minutePicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.disturbance_types, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        disturbanceType.setAdapter(adapter);
+
         sendButton.setOnClickListener(this);
         context = getActivity();
 
         // Check device for Play Services APK. If check succeeds, proceed with GCM registration.
         if (checkPlayServices()) {
-            Log.i("gcm", "play servicees OK");
+            Log.i("gcm", "play services OK");
             gcm = GoogleCloudMessaging.getInstance(getActivity());
             regid = getRegistrationId(context);
             if (regid.isEmpty()) {
                 Log.i("gcm", "new user, reg");
-
                 registerInBackground();
             }
         } else {
@@ -195,7 +214,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener{
     private SharedPreferences getGcmPreferences(Context context) {
         // This sample app persists the registration ID in shared preferences, but
         // how you store the regID in your app is up to you.
-        return context.getSharedPreferences(ReportActivity.class.getSimpleName(),Context.MODE_PRIVATE);
+        return context.getSharedPreferences(ReportActivity.class.getSimpleName(), Context.MODE_PRIVATE);
     }
 
     @Override

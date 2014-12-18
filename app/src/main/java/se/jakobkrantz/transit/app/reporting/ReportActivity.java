@@ -18,7 +18,6 @@ public class ReportActivity extends BaseActivity {
         ReportFragment fragment = new ReportFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(null).commit();
 
-
     }
 
 

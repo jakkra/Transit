@@ -12,6 +12,8 @@
 
 
     <color name="text_gray">#ff6d6d6e</color>
+    <color name="text_hint_gray">#ffa6a6a7</color>
+
     <color name="red">#ff6e1d1d</color>
     <color name="white">#fffbffff</color>
 

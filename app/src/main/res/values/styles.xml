@@ -9,6 +9,15 @@
         <item name="android:actionBarItemBackground">@color/colorPrimary</item>
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+        <!-- For the resting Spinner style -->
+        <item name="android:spinnerItemStyle">
+            @style/spinnerItemStyle
+        </item>
+
+        <!-- For each individual Spinner list item once clicked on -->
+        <!--<item name="android:spinnerDropDownItemStyle">-->
+            <!--@style/spinnerDropDownItemStyle-->
+        <!--</item>-->
     </style>
 
     <style name="ToolBarStyle" parent="Widget.AppCompat.Toolbar">
@@ -45,6 +54,15 @@
         <item name="android:paddingRight">5dp</item>
         <item name="android:background">@color/colorPrimary</item>
     </style>
+<!--Layout ff report spinner item -->
+    <style name="spinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
+        <item name="android:padding">10dp</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:textColor">@color/red</item>
+    </style>
+
+
 </resources>
 
 

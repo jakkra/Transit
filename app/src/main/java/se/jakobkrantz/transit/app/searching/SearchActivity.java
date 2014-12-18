@@ -9,7 +9,7 @@ import se.jakobkrantz.transit.app.searching.fragments.*;
 import se.jakobkrantz.transit.app.utils.BundleConstants;
 
 
-public class MainActivity extends BaseActivity implements SearchLocationFragment.StationSelectedListener, OnDetailedJourneySelectedListener {
+public class SearchActivity extends BaseActivity implements SearchLocationFragment.StationSelectedListener, OnDetailedJourneySelectedListener {
     public enum FragmentTypes {
         SEARCH_STATION, SEARCH_JOURNEY_FROM_TO, SEARCH_RESULT, DETAILED_JOURNEY, DUMMY
     }
@@ -26,7 +26,7 @@ public class MainActivity extends BaseActivity implements SearchLocationFragment
     public void replaceFragment(FragmentTypes searchStation, Bundle args) {
         switch (searchStation) {
             case SEARCH_JOURNEY_FROM_TO:
-                MainFragment fragment = new MainFragment();
+                MainSearchFragment fragment = new MainSearchFragment();
                 fragment.setArguments(args);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(null).commit();
                 break;

@@ -44,7 +44,6 @@ public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         if (viewHolder instanceof PositionViewHolder) {
-            Log.d("onBindPos i = ", i + "");
             PositionViewHolder holder = ((PositionViewHolder) viewHolder);
             if (i != 0) {
                 holder.arrTime.setText(TimeAndDateConverter.formatTime(journey.getRouteLinks().get(calculateArrivalIndex(i)).getArrDateTime()));

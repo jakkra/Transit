@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark">
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:textColor="@color/resultListTextColor"
+              android:textSize="25sp"
+              android:textAppearance="?android:attr/textAppearanceLarge" android:text="@string/disturbance_type"
+              android:id="@+id/textView"
+              android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
+              android:layout_alignParentStart="true" android:padding="5dp"/>
+    <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:prompt="@string/report_spinner_prompt"
+            android:id="@+id/spinner" android:layout_gravity="center_horizontal" android:spinnerMode="dropdown"
+            android:layout_below="@+id/textView"/>
+
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:inputType="textMultiLine"
+            android:hint="@string/report_note"
+            android:textColorHint="@color/text_hint_gray"
+            android:textColor="@color/resultListTextColor"
+            android:textColorHighlight="@color/resultListTextColor"
+            android:textColorLink="@color/resultListTextColor"
+            android:ems="10"
+            android:id="@+id/disturbance_note"
+            android:layout_above="@+id/gcmButton" android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+
+
+    <at.markushi.ui.CircleButton
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:id="@+id/gcmButton"
+            android:src="@drawable/ic_plus"
+            app:cb_color="#99CC00"
+            app:cb_pressedRingWidth="8dip" android:layout_gravity="right"
+            android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:textColor="@color/resultListTextColor" android:textSize="25sp"
+              android:textAppearance="?android:attr/textAppearanceLarge" android:text="@string/disturbance_minutes"
+              android:id="@+id/textView2"
+              android:padding="5dp" android:layout_below="@+id/spinner" android:layout_centerHorizontal="true"/>
+    <NumberPicker
+            android:id="@+id/minutePicker"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView2" android:layout_centerHorizontal="true"/>
+</RelativeLayout>

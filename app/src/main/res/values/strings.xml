@@ -16,16 +16,30 @@
     <string name="rec_header">Senaste sökningar</string>
     <string name="clear_searches">Rensa sökningar</string>
     <string name="clear_favourites">Rensa favoriter</string>
-    <string name="label_arrival">Ankomst: </string>
-    <string name="label_departure">Avgår: </string>
+    <string name="label_arrival">Ankomst:</string>
+    <string name="label_departure">Avgår:</string>
     <string name="load_earlier">Tidigare</string>
     <string name="load_later">Senare</string>
     <string name="passed">Passerat</string>
+    <string name="disturbance_type">Välj typ av störning</string>
+    <string name="report_note">Notering (valfri)</string>
+    <string name="report_spinner_prompt">Välj störningstyp</string>
+    <string name="disturbance_minutes">Approximerad försening (min)</string>
+
     <string-array name="drawer_labels">
         <item>Sök</item>
         <item>Stationer</item>
         <item>shit</item>
         <item>More shit</item>
         <item>Settings</item>
+    </string-array>
+
+    <string-array name="disturbance_types">
+        <item>Krock</item>
+        <item>Kö</item>
+        <item>Oväder</item>
+        <item>Allmänt slött</item>
+        <item>Dåligt väglag</item>
+        <item>Annat…</item>
     </string-array>
 </resources>

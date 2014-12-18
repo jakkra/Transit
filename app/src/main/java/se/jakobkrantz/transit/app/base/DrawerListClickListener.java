@@ -4,11 +4,12 @@ package se.jakobkrantz.transit.app.base;/*
 
 import android.content.Intent;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import se.jakobkrantz.transit.app.searching.MainActivity;
 import se.jakobkrantz.transit.app.reporting.ReportActivity;
+import se.jakobkrantz.transit.app.searching.SearchActivity;
 
 public class DrawerListClickListener implements ListView.OnItemClickListener {
     private final ListView drawerList;
@@ -31,16 +32,19 @@ public class DrawerListClickListener implements ListView.OnItemClickListener {
     }
 
     private void selectItem(int position) {
-        if (position == lastPosition) {
-            layout.closeDrawer(drawerList);
-            return;
-        }
-        lastPosition = position;
+//        if (position == lastPosition) {
+//            Log.d("pos","" + position);
+//            drawerList.setItemChecked(position, true);
+//
+//            layout.closeDrawer(drawerList);
+//            return;
+//        }
+//        lastPosition = position;
 
         Intent intent;
         switch (position) {
             case 0:
-                intent = new Intent(activity.getBaseContext(), MainActivity.class);
+                intent = new Intent(activity.getBaseContext(), SearchActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 activity.startActivity(intent);
                 break;
