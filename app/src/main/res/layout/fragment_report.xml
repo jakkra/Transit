@@ -20,6 +20,25 @@
             android:id="@+id/spinner" android:layout_gravity="center_horizontal" android:spinnerMode="dropdown"
             android:layout_below="@+id/textView"/>
 
+    <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+              android:id="@+id/report_from_station"
+              android:textColorHint="@color/colorPrimary"
+              android:textColor="@color/colorPrimary"
+              android:background="@drawable/abc_edit_text_material"
+              android:hint="@string/report_from_station" android:paddingTop="5dp" android:textSize="22sp"
+              android:layout_below="@+id/minutePicker" android:layout_alignParentLeft="true"
+              android:layout_alignParentStart="true"/>
+
+    <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+              android:id="@+id/report_to_station"
+              android:textColorHint="@color/colorPrimary"
+              android:textColor="@color/colorPrimary"
+              android:background="@drawable/abc_edit_text_material"
+              android:hint="@string/report_to_station" android:paddingTop="5dp" android:textSize="22sp"
+
+              android:layout_below="@+id/report_from_station" android:layout_alignParentLeft="true"
+              android:layout_alignParentStart="true"/>
+
     <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,8 +51,8 @@
             android:textColorLink="@color/resultListTextColor"
             android:ems="10"
             android:id="@+id/disturbance_note"
-            android:layout_above="@+id/gcmButton" android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
+            android:layout_below="@+id/report_to_station" android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
 
 
     <at.markushi.ui.CircleButton

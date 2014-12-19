@@ -25,6 +25,8 @@
     <string name="report_note">Notering (valfri)</string>
     <string name="report_spinner_prompt">Välj störningstyp</string>
     <string name="disturbance_minutes">Approximerad försening (min)</string>
+    <string name="report_from_station">Välj start station</string>
+    <string name="report_to_station">Slut station</string>
 
     <string-array name="drawer_labels">
         <item>Sök</item>

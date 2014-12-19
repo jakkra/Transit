@@ -1,7 +1,9 @@
-package se.jakobkrantz.transit.app.searching.fragments;/*
+package se.jakobkrantz.transit.app.searching.fragments;
+/*
  * Created by krantz on 14-11-17.
  */
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import se.jakobkrantz.transit.app.base.FragmentEventListener;
 import se.jakobkrantz.transit.app.searching.SearchActivity;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.adapters.FavouriteListAdapter;
@@ -31,6 +34,7 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
 
     public static final int NBR_OF_LIST_ITEM_TO_SHOW = 10;
 
+    private FragmentEventListener eventListener;
     private TextView fromStation;
     private TextView toStation;
     private Button searchButton;
@@ -138,7 +142,7 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
                     database.addRecentJourneySearch(s);
                     database.addStationsToRecent(recentSearches);
                     favListAdapter.addRecentJourney(s);
-                    ((SearchActivity) getActivity()).replaceFragment(SearchActivity.FragmentTypes.SEARCH_RESULT, b);
+                    eventListener.onEvent(SearchActivity.FragmentTypes.SEARCH_RESULT, b);
 
                 }
             }
@@ -170,15 +174,16 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
 
         Bundle args = getArguments();
         if (args == null) args = new Bundle();
-        if (v.getId() == R.id.text_view_from_station)
+        if (v.getId() == R.id.text_view_from_station) {
             args.putString(BundleConstants.SOURCE, BundleConstants.SOURCE_FROM_STATION);
-        if (v.getId() == R.id.text_view_to_station)
+        } if (v.getId() == R.id.text_view_to_station) {
             args.putString(BundleConstants.SOURCE, BundleConstants.SOURCE_TO_STATION);
+        }
 
         args.putString(BundleConstants.FROM_STATION, fromStation.getText().toString());
         args.putString(BundleConstants.TO_STATION, toStation.getText().toString());
 
-        ((SearchActivity) getActivity()).replaceFragment(SearchActivity.FragmentTypes.SEARCH_STATION, args);
+        eventListener.onEvent(SearchActivity.FragmentTypes.SEARCH_STATION, args);
     }
 
     @Override
@@ -280,8 +285,19 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
     public void dataDownloadFailed() {
         progressBar.setVisibility(View.GONE);
         Toast.makeText(getActivity(), "Failed to load data, none or slow internet connection", Toast.LENGTH_LONG).show();
+    }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
 
+        // This makes sure that the container activity has implemented
+        // the listener interface. If not, it throws an exception.
+        try {
+            eventListener = (FragmentEventListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement StationSelectedListener");
+        }
     }
 
 }

@@ -5,26 +5,25 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import se.jakobkrantz.transit.app.base.BaseActivity;
 import se.jakobkrantz.transit.app.R;
+import se.jakobkrantz.transit.app.base.FragmentEventListener;
 import se.jakobkrantz.transit.app.searching.fragments.*;
 import se.jakobkrantz.transit.app.utils.BundleConstants;
 
 
-public class SearchActivity extends BaseActivity implements SearchLocationFragment.StationSelectedListener, OnDetailedJourneySelectedListener {
-    public enum FragmentTypes {
-        SEARCH_STATION, SEARCH_JOURNEY_FROM_TO, SEARCH_RESULT, DETAILED_JOURNEY, DUMMY
-    }
+public class SearchActivity extends BaseActivity implements SearchLocationFragment.StationSelectedListener, OnDetailedJourneySelectedListener, FragmentEventListener {
+
 
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        replaceFragment(FragmentTypes.SEARCH_JOURNEY_FROM_TO, null);
+        onEvent(FragmentTypes.SEARCH_JOURNEY_FROM_TO, null);
     }
 
     //Should not be called by fragments, should instead be called by listeners implemented in this activity.
-    public void replaceFragment(FragmentTypes searchStation, Bundle args) {
-        switch (searchStation) {
+    public void onEvent(FragmentTypes fragmentEvent, Bundle args) {
+        switch (fragmentEvent) {
             case SEARCH_JOURNEY_FROM_TO:
                 MainSearchFragment fragment = new MainSearchFragment();
                 fragment.setArguments(args);
@@ -57,7 +56,7 @@ public class SearchActivity extends BaseActivity implements SearchLocationFragme
 
     @Override
     public void onStationSelected(Bundle args) {
-        replaceFragment(FragmentTypes.SEARCH_JOURNEY_FROM_TO, args);
+        onEvent(FragmentTypes.SEARCH_JOURNEY_FROM_TO, args);
     }
 
     @Override
@@ -67,7 +66,7 @@ public class SearchActivity extends BaseActivity implements SearchLocationFragme
         args.putString(BundleConstants.TO_STATION_ID, toStationId);
         args.putString(BundleConstants.DEP_DATE, depDate);
         args.putString(BundleConstants.DEP_TIME, depTime);
-        replaceFragment(FragmentTypes.DETAILED_JOURNEY, args);
+        onEvent(FragmentTypes.DETAILED_JOURNEY, args);
     }
 
     @Override
@@ -76,6 +75,7 @@ public class SearchActivity extends BaseActivity implements SearchLocationFragme
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
 
 
 }

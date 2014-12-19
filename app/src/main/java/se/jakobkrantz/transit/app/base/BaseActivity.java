@@ -12,6 +12,11 @@ import se.jakobkrantz.transit.app.R;
 
 
 public class BaseActivity extends ActionBarActivity {
+
+    public enum FragmentTypes {
+        SEARCH_STATION, SEARCH_JOURNEY_FROM_TO, SEARCH_RESULT, DETAILED_JOURNEY, DUMMY
+    }
+
     private ListView drawerList;
     private DrawerLayout drawerLayout;
     private String[] drawerListText;

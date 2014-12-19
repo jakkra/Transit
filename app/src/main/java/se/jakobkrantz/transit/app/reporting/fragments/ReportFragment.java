@@ -4,6 +4,7 @@ package se.jakobkrantz.transit.app.reporting.fragments;
  * Created by krantz on 14-12-16.
  */
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -15,16 +16,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.NumberPicker;
-import android.widget.Spinner;
+import android.widget.*;
 import at.markushi.ui.CircleButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import se.jakobkrantz.transit.app.R;
+import se.jakobkrantz.transit.app.base.BaseActivity;
+import se.jakobkrantz.transit.app.base.FragmentEventListener;
 import se.jakobkrantz.transit.app.reporting.ReportActivity;
+import se.jakobkrantz.transit.app.utils.BundleConstants;
 import se.jakobkrantz.transit.app.utils.GcmConstants;
 
 import java.io.IOException;
@@ -55,40 +56,62 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
     private Spinner disturbanceType;
     private EditText disturbanceNote;
     private NumberPicker minutePicker;
+    private TextView fromStation;
+    private TextView toStation;
+    private FragmentEventListener eventListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_report, container, false);
-        sendButton = (CircleButton) view.findViewById(gcmButton);
-        disturbanceType = (Spinner) view.findViewById(R.id.spinner);
-        disturbanceNote = (EditText) view.findViewById(R.id.disturbance_note);
-        minutePicker = (NumberPicker) view.findViewById(R.id.minutePicker);
-
-        minutePicker.setMinValue(0);
-        minutePicker.setMaxValue(60);
-        minutePicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.disturbance_types, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        disturbanceType.setAdapter(adapter);
-
-        sendButton.setOnClickListener(this);
-        context = getActivity();
-
-        // Check device for Play Services APK. If check succeeds, proceed with GCM registration.
         if (checkPlayServices()) {
+            // Check device for Play Services APK. If check succeeds, proceed with GCM registration.
             Log.i("gcm", "play services OK");
-            gcm = GoogleCloudMessaging.getInstance(getActivity());
+            context = getActivity();
+            gcm = GoogleCloudMessaging.getInstance(context);
+
             regid = getRegistrationId(context);
             if (regid.isEmpty()) {
                 Log.i("gcm", "new user, reg");
                 registerInBackground();
             }
+            View view = inflater.inflate(R.layout.fragment_report, container, false);
+            sendButton = (CircleButton) view.findViewById(gcmButton);
+            disturbanceType = (Spinner) view.findViewById(R.id.spinner);
+            disturbanceNote = (EditText) view.findViewById(R.id.disturbance_note);
+            fromStation = (TextView) view.findViewById(R.id.report_from_station);
+            toStation = (TextView) view.findViewById(R.id.report_to_station);
+            fromStation.setOnClickListener(this);
+            toStation.setOnClickListener(this);
+
+
+            minutePicker = (NumberPicker) view.findViewById(R.id.minutePicker);
+            minutePicker.setMinValue(0);
+            minutePicker.setMaxValue(60);
+            minutePicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.disturbance_types, android.R.layout.simple_spinner_item);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            disturbanceType.setAdapter(adapter);
+
+            sendButton.setOnClickListener(this);
+
+            fillStationsText(getArguments());
+
+            return view;
+
         } else {
             Log.i("GCM ReportActivity", "No valid Google Play Services APK found.");
+            return inflater.inflate(R.layout.fragment_no_play_services, container, false);
         }
-        return view;
+    }
+
+    private void fillStationsText(Bundle args) {
+        if (args != null) {
+            String from = args.getString(BundleConstants.FROM_STATION);
+            String to = args.getString(BundleConstants.TO_STATION);
+            if (from != null) fromStation.setText(from);
+            if (to != null) toStation.setText(to);
+        }
     }
 
     /**
@@ -140,8 +163,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity());
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(),
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+                GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(), PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
                 Log.i("GCM Activity", "This device is not supported. Please add play services");
                 getActivity().finish();
@@ -212,37 +234,84 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
      * @return Application's {@code SharedPreferences}.
      */
     private SharedPreferences getGcmPreferences(Context context) {
-        // This sample app persists the registration ID in shared preferences, but
-        // how you store the regID in your app is up to you.
         return context.getSharedPreferences(ReportActivity.class.getSimpleName(), Context.MODE_PRIVATE);
     }
 
     @Override
     public void onClick(View v) {
-        new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
 
-                String msg;
-                try {
-                    Bundle data = new Bundle();
-                    data.putString(GcmConstants.ACTION, GcmConstants.ACTION_SET_INTERESTING_LOCATIONS);
-                    data.putString("CITY", "Stockholm");
-                    data.putString(GcmConstants.ACTION_SET_INTERESTING_LOCATIONS, "Testing from client");
-                    String id = UUID.randomUUID().toString();
-                    gcm.send(SENDER_ID + "@gcm.googleapis.com", id, data);
-                    msg = "Sent message";
-                } catch (IOException ex) {
-                    msg = "Error :" + ex.getMessage();
+        if (v.getId() == R.id.report_from_station) {
+            Bundle args = getArguments();
+            if (args == null) {
+                args = new Bundle();
+            }
+            args.putString(BundleConstants.SOURCE, BundleConstants.SOURCE_FROM_STATION);
+            eventListener.onEvent(BaseActivity.FragmentTypes.SEARCH_STATION, args);
+        } else if (v.getId() == R.id.report_to_station) {
+            Bundle args = getArguments();
+            if (args == null) {
+                args = new Bundle();
+            }
+            args.putString(BundleConstants.SOURCE, BundleConstants.SOURCE_TO_STATION);
+            eventListener.onEvent(BaseActivity.FragmentTypes.SEARCH_STATION, args);
+        } else if (v.getId() == R.id.gcmButton) {
+
+            new AsyncTask<Void, Void, String>() {
+                @Override
+                protected String doInBackground(Void... params) {
+                    Bundle args = getArguments();
+
+                    String msg;
+                    try {
+                        Bundle dataToSend = new Bundle();
+                        String fromNbr = null;
+                        String toNbr = null;
+                        if (args != null) {
+                            fromNbr = args.getString(BundleConstants.FROM_STATION_ID);
+                            toNbr = args.getString(BundleConstants.TO_STATION_ID);
+                        }
+                        if (fromNbr == null || toNbr == null) {
+                            Toast.makeText(getActivity(), "Must fill both from and to station", Toast.LENGTH_SHORT).show();
+                            return "error, must fill both from and to field";
+                        }
+
+
+                        dataToSend.putString(GcmConstants.ACTION, GcmConstants.ACTION_REPORT_DISTURBANCE);
+                        dataToSend.putString(GcmConstants.DISTURBANCE_FROM_STATION_NBR, fromNbr);
+                        dataToSend.putString(GcmConstants.DISTURBANCE_TO_STATION_NBR, toNbr);
+                        dataToSend.putString(GcmConstants.DISTURBANCE_APPROX_MINS, Integer.toString(minutePicker.getValue()));
+                        if (!disturbanceNote.getText().equals("")) {
+                            dataToSend.putString(GcmConstants.DISTURBANCE_NOTE, disturbanceNote.getText().toString());
+                        }
+                        String id = UUID.randomUUID().toString();
+                        gcm.send(SENDER_ID + "@gcm.googleapis.com", id, dataToSend);
+                        msg = "Sent message";
+                    } catch (IOException ex) {
+                        msg = "Error :" + ex.getMessage();
+                    }
+                    return msg;
                 }
-                return msg;
-            }
 
-            @Override
-            protected void onPostExecute(String msg) {
-                Log.d("GCM ReportActivity ", msg);
-            }
-        }.execute(null, null, null);
+                @Override
+                protected void onPostExecute(String msg) {
+                    Log.d("GCM ReportActivity ", msg);
+                }
+            }.execute(null, null, null);
 
+        }
+    }
+
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        // This makes sure that the container activity has implemented
+        // the listener interface. If not, it throws an exception.
+        try {
+            eventListener = (FragmentEventListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement StationSelectedListener");
+        }
     }
 }
