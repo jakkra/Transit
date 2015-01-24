@@ -23,6 +23,7 @@ public class MessageIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.d("OnHandelIntent", "Received from server");
         Bundle extras = intent.getExtras();
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
         // The getMessageType() intent parameter must be the intent you received
@@ -46,7 +47,9 @@ public class MessageIntentService extends IntentService {
                 //TODO Stuff
                 sendNotification("GCM Received message: " + extras.getString("TEST_MESSAGE"));
             } else {
-                Log.e("GCM rec unknown message", messageType);
+                if (messageType != null) {
+                    Log.e("GCM rec unknown message", messageType);
+                }
             }
         }
         // Release the wake lock
