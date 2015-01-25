@@ -279,6 +279,8 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
                         dataToSend.putString(GcmConstants.ACTION, GcmConstants.ACTION_REPORT_DISTURBANCE);
                         dataToSend.putString(GcmConstants.DISTURBANCE_FROM_STATION_NBR, fromNbr);
                         dataToSend.putString(GcmConstants.DISTURBANCE_TO_STATION_NBR, toNbr);
+                        dataToSend.putString(GcmConstants.DISTURBANCE_FROM_STATION_NAME, fromStation.getText().toString());
+                        dataToSend.putString(GcmConstants.DISTURBANCE_TO_STATION_NAME, toStation.getText().toString());
                         dataToSend.putString(GcmConstants.DISTURBANCE_APPROX_MINS, Integer.toString(minutePicker.getValue()));
                         if (!disturbanceNote.getText().equals("")) {
                             dataToSend.putString(GcmConstants.DISTURBANCE_NOTE, disturbanceNote.getText().toString());

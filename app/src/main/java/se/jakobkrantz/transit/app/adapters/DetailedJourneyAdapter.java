@@ -49,7 +49,7 @@ public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 holder.arrTime.setText(TimeAndDateConverter.formatTime(journey.getRouteLinks().get(calculateArrivalIndex(i)).getArrDateTime()));
             }
 
-            if (i != getItemCount()-1) {
+            if (i != getItemCount() - 1) {
                 holder.depTime.setText(TimeAndDateConverter.formatTime(journey.getRouteLinks().get(calculateDepartureIndex(i)).getDepDateTime()));
 
             }
@@ -88,11 +88,7 @@ public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             holder.transportImage.setImageResource(FillUIHelper.getDrawableFromLineType(r.getLineTypeId()));
 //
         }
-
-
     }
-
-
 
     private static int calculateArrivalIndex(int i) {
         if (i == 0) return 0;

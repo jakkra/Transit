@@ -33,7 +33,6 @@ public class DetailedJourneyFragment extends Fragment implements SearchJourneysT
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override

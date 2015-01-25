@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import se.jakobkrantz.transit.app.disturbances.DisturbancesActivity;
 import se.jakobkrantz.transit.app.reporting.ReportActivity;
 import se.jakobkrantz.transit.app.searching.SearchActivity;
 
@@ -54,7 +55,7 @@ public class DrawerListClickListener implements ListView.OnItemClickListener {
                 activity.startActivity(intent);
                 break;
             default:
-                intent = new Intent(activity.getBaseContext(), ReportActivity.class);
+                intent = new Intent(activity.getBaseContext(), DisturbancesActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 activity.startActivity(intent);
                 break;

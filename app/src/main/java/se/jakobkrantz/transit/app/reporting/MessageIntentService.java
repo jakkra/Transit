@@ -11,11 +11,13 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import se.jakobkrantz.transit.app.R;
+import se.jakobkrantz.transit.app.searching.SearchActivity;
+import se.jakobkrantz.transit.app.utils.GcmConstants;
 
 public class MessageIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
     private NotificationManager mNotificationManager;
-    NotificationCompat.Builder builder;
 
     public MessageIntentService() {
         super("MessageIntentService");
@@ -23,7 +25,7 @@ public class MessageIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d("OnHandelIntent", "Received from server");
+        Log.i("OnHandelIntent", "Received from server");
         Bundle extras = intent.getExtras();
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
         // The getMessageType() intent parameter must be the intent you received
@@ -42,10 +44,10 @@ public class MessageIntentService extends IntentService {
                 Log.e("GCM message delete type", extras.toString());
                 // If it's a regular GCM message, do some work.
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-                Log.d("GCM Rec ", extras.getString("TEST_MESSAGE"));
                 Log.i("GCM received: ", extras.toString());
                 //TODO Stuff
-                sendNotification("GCM Received message: " + extras.getString("TEST_MESSAGE"));
+
+                sendNotification("Mellan " + extras.getString(GcmConstants.DISTURBANCE_FROM_STATION_NAME + " och " + GcmConstants.DISTURBANCE_TO_STATION_NAME));
             } else {
                 if (messageType != null) {
                     Log.e("GCM rec unknown message", messageType);
@@ -68,12 +70,13 @@ public class MessageIntentService extends IntentService {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setContentTitle("GCM Notification")
+                        .setContentTitle(getString(R.string.delay_reported))
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(msg))
-                        .setContentText(msg);
+                        .setContentText(msg).setSmallIcon(R.drawable.ic_launcher);
 
         mBuilder.setContentIntent(contentIntent);
+        Log.d("Showing", "Notification");
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 }
