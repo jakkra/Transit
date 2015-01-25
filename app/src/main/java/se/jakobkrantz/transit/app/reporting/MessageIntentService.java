@@ -12,6 +12,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import se.jakobkrantz.transit.app.R;
+import se.jakobkrantz.transit.app.disturbances.DisturbancesActivity;
 import se.jakobkrantz.transit.app.searching.SearchActivity;
 import se.jakobkrantz.transit.app.utils.GcmConstants;
 
@@ -45,9 +46,10 @@ public class MessageIntentService extends IntentService {
                 // If it's a regular GCM message, do some work.
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 Log.i("GCM received: ", extras.toString());
+                Log.i("GCM -::-", extras.getString("distFromName"));
                 //TODO Stuff
 
-                sendNotification("Mellan " + extras.getString(GcmConstants.DISTURBANCE_FROM_STATION_NAME + " och " + GcmConstants.DISTURBANCE_TO_STATION_NAME));
+                sendNotification("Mellan " + extras.getString(GcmConstants.DISTURBANCE_FROM_STATION_NAME) + " och " + extras.getString(GcmConstants.DISTURBANCE_TO_STATION_NAME), extras);
             } else {
                 if (messageType != null) {
                     Log.e("GCM rec unknown message", messageType);
@@ -61,12 +63,15 @@ public class MessageIntentService extends IntentService {
     // Put the message into a notification and post it.
     // This is just one simple example of what you might choose to do with
     // a GCM message.
-    private void sendNotification(String msg) {
-        mNotificationManager = (NotificationManager)
-                this.getSystemService(Context.NOTIFICATION_SERVICE);
+    private void sendNotification(String msg, Bundle data) {
+        mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        Intent intent = new Intent(this, DisturbancesActivity.class);
+        intent.putExtras(data);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, ReportActivity.class), 0);
+
+        Log.e("SendNot", data.getString(GcmConstants.DISTURBANCE_FROM_STATION_NAME));
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
@@ -76,7 +81,6 @@ public class MessageIntentService extends IntentService {
                         .setContentText(msg).setSmallIcon(R.drawable.ic_launcher);
 
         mBuilder.setContentIntent(contentIntent);
-        Log.d("Showing", "Notification");
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 }

@@ -32,6 +32,8 @@
 
         <activity android:name=".reporting.ReportActivity"
                   android:screenOrientation="portrait"/>
+        <activity android:name=".disturbances.DisturbancesActivity"
+                  android:screenOrientation="portrait"/>
         <receiver
                 android:name=".reporting.ResponseBroadcastReceiver"
                 android:permission="com.google.android.c2dm.permission.SEND" >

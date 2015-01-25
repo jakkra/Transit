@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
 
-</LinearLayout>
+                android:layout_width="fill_parent"
+              android:layout_height="fill_parent">
+
+
+    <at.markushi.ui.CircleButton
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:id="@+id/disturbance_button"
+            android:src="@drawable/ic_plus"
+            app:cb_color="#99CC00"
+            app:cb_pressedRingWidth="8dip" android:layout_gravity="right"
+            android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/disturbance_info" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+            android:layout_marginTop="144dp"/>
+
+</RelativeLayout>

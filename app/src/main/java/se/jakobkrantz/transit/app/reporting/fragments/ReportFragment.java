@@ -33,9 +33,9 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static se.jakobkrantz.transit.app.R.id.gcmButton;
+import static se.jakobkrantz.transit.app.R.id.spinner;
 
 public class ReportFragment extends Fragment implements View.OnClickListener {
-    public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "0";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -59,12 +59,14 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
     private TextView fromStation;
     private TextView toStation;
     private FragmentEventListener eventListener;
+    private ArrayAdapter<CharSequence> spinnerAdapter;
+
+    private String type;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         if (checkPlayServices()) {
-            // Check device for Play Services APK. If check succeeds, proceed with GCM registration.
             Log.i("gcm", "play services OK");
             context = getActivity();
             gcm = GoogleCloudMessaging.getInstance(context);
@@ -83,15 +85,15 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
             fromStation.setOnClickListener(this);
             toStation.setOnClickListener(this);
 
-
             minutePicker = (NumberPicker) view.findViewById(R.id.minutePicker);
             minutePicker.setMinValue(0);
             minutePicker.setMaxValue(60);
             minutePicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.disturbance_types, android.R.layout.simple_spinner_item);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            disturbanceType.setAdapter(adapter);
+            spinnerAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.disturbance_types, android.R.layout.simple_spinner_item);
+            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            disturbanceType.setAdapter(spinnerAdapter);
+
 
             sendButton.setOnClickListener(this);
 
@@ -282,6 +284,8 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
                         dataToSend.putString(GcmConstants.DISTURBANCE_FROM_STATION_NAME, fromStation.getText().toString());
                         dataToSend.putString(GcmConstants.DISTURBANCE_TO_STATION_NAME, toStation.getText().toString());
                         dataToSend.putString(GcmConstants.DISTURBANCE_APPROX_MINS, Integer.toString(minutePicker.getValue()));
+                        dataToSend.putString(GcmConstants.DISTURBANCE_TYPE, disturbanceType.getSelectedItem().toString());
+
                         if (!disturbanceNote.getText().equals("")) {
                             dataToSend.putString(GcmConstants.DISTURBANCE_NOTE, disturbanceNote.getText().toString());
                         }
@@ -303,13 +307,10 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        // This makes sure that the container activity has implemented
-        // the listener interface. If not, it throws an exception.
         try {
             eventListener = (FragmentEventListener) activity;
         } catch (ClassCastException e) {

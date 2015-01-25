@@ -4,6 +4,7 @@ package se.jakobkrantz.transit.app.utils;/*
 
 public class GcmConstants {
 
+    public static final String DISTURBANCE_TYPE = "distType";
     public static String ACTION = "action";
 
     public static String ACTION_REGISTER = "regUserIdAction";
