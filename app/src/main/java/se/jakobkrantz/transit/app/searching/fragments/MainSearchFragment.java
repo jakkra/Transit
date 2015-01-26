@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.*;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -114,15 +115,24 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
                     }
                     List<Station> recentSearches = new ArrayList<Station>();
                     SimpleJourney s = database.getSimpleJourneyFromRecentOrFavs(fromStation.getText().toString(), toStation.getText().toString());
-
+                    Log.d("b.toString()", b.toString());
+                    Station s1 = s.getFromStation();
+                    Station s2 = s.getToStation();
                     if (s == null) {
                         recentSearches.add(new Station(b.getString(BundleConstants.FROM_STATION), Integer.parseInt(b.getString(BundleConstants.FROM_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LONG)), b.getString(BundleConstants.FROM_STATION_TYPE)));
                         recentSearches.add(new Station(b.getString(BundleConstants.TO_STATION), Integer.parseInt(b.getString(BundleConstants.TO_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LONG)), b.getString(BundleConstants.TO_STATION_TYPE)));
                         s = new SimpleJourney(recentSearches.get(0), recentSearches.get(1));
+                    } else if (s1 == null) {
+                        s1 = new Station(b.getString(BundleConstants.FROM_STATION), Integer.parseInt(b.getString(BundleConstants.FROM_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LONG)), b.getString(BundleConstants.FROM_STATION_TYPE));
+                        recentSearches.add(s1);
+                        recentSearches.add(s.getToStation());
+                    } else if (s2 == null) {
+                        s2 = new Station(b.getString(BundleConstants.TO_STATION), Integer.parseInt(b.getString(BundleConstants.TO_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LONG)), b.getString(BundleConstants.TO_STATION_TYPE));
+                        recentSearches.add(s2);
+                        recentSearches.add(s.getFromStation());
                     } else {
                         b = new Bundle();
-                        Station s1 = s.getFromStation();
-                        Station s2 = s.getToStation();
+
                         b.putString(BundleConstants.FROM_STATION, s1.getStationName());
                         b.putString(BundleConstants.FROM_STATION_ID, Integer.toString(s1.getStationId()));
                         b.putString(BundleConstants.FROM_STATION_LONG, Double.toString(s1.getLongitude()));
@@ -176,7 +186,8 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
         if (args == null) args = new Bundle();
         if (v.getId() == R.id.text_view_from_station) {
             args.putString(BundleConstants.SOURCE, BundleConstants.SOURCE_FROM_STATION);
-        } if (v.getId() == R.id.text_view_to_station) {
+        }
+        if (v.getId() == R.id.text_view_to_station) {
             args.putString(BundleConstants.SOURCE, BundleConstants.SOURCE_TO_STATION);
         }
 

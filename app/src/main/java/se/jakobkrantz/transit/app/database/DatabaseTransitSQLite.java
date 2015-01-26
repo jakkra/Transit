@@ -252,44 +252,84 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
         return getFavouriteJourneys(howMany, TABLE_RECENT_JOURNEY_SEARCH);
     }
 
+    private Station searchTableForStation(SQLiteDatabase db, String table, String station) {
+        Cursor cursor = db.query(table, null, COLUMN_STATION_NAME + " = ?", new String[]{station}, null, null, null, "1");
+        Station s1;
+        if (cursor.getCount() > 0) {
+            s1 = new Station();
+            s1.setStationId(cursor.getInt(0));
+            s1.setStationName(cursor.getString(2));
+            s1.setLatitude(Double.parseDouble(cursor.getString(4)));
+            s1.setLongitude(Double.parseDouble(cursor.getString(6)));
+            s1.setType(cursor.getString(8));
+            s1.setTimeSearched(cursor.getString(10));
+            return s1;
+        } else {
+            cursor = db.query(table, null, COLUMN_STATION_NAME1 + " = ?", new String[]{station}, null, null, null, "1");
+            if (cursor.getCount() > 0) {
+                s1 = new Station();
+                s1.setStationId(cursor.getInt(1));
+                s1.setStationName(cursor.getString(3));
+                s1.setLatitude(Double.parseDouble(cursor.getString(5)));
+                s1.setLongitude(Double.parseDouble(cursor.getString(7)));
+                s1.setType(cursor.getString(9));
+                s1.setTimeSearched(cursor.getString(11));
+                return s1;
+            }
+
+        }
+        return null;
+    }
+
     //TODO DOES NOT WORK?
+
     public SimpleJourney getSimpleJourneyFromRecentOrFavs(String from, String to) {
         SQLiteDatabase db = this.getReadableDatabase();
+
         Cursor cursor = db.query(TABLE_NAME_FAVOURITES, null, COLUMN_STATION_NAME + " = ? AND " + COLUMN_STATION_NAME1 + " = ?", new String[]{from, to}, null, null, null, "1");
         if (cursor.getCount() < 1) {
             cursor = db.query(TABLE_RECENT_JOURNEY_SEARCH, null, COLUMN_STATION_NAME + " = ? AND " + COLUMN_STATION_NAME1 + " = ?", new String[]{from, to}, null, null, null, "1");
         }
-        if (cursor.getCount() < 1) {
-            return null;
+        if (cursor.getCount() > 0) {
+
+            if (cursor != null) {
+                cursor.moveToFirst();
+            }
+            Station s1 = new Station();
+            Station s2 = new Station();
+
+            s1.setStationId(cursor.getInt(0));
+            s2.setStationId(cursor.getInt(1));
+
+            s1.setStationName(cursor.getString(2));
+            s2.setStationName(cursor.getString(3));
+
+            s1.setLatitude(Double.parseDouble(cursor.getString(4)));
+            s2.setLatitude(Double.parseDouble(cursor.getString(5)));
+
+            s1.setLongitude(Double.parseDouble(cursor.getString(6)));
+            s2.setLongitude(Double.parseDouble(cursor.getString(7)));
+
+            s1.setType(cursor.getString(8));
+            s2.setType(cursor.getString(9));
+
+            s1.setTimeSearched(cursor.getString(10));
+            s2.setTimeSearched(cursor.getString(10));
+
+
+            db.close();
+            return new SimpleJourney(s1, s2);
+        } else {
+            Station s1 = searchTableForStation(db, TABLE_NAME_FAVOURITES, from);
+            Station s2 = searchTableForStation(db, TABLE_NAME_FAVOURITES, to);
+            if (s1 == null) {
+                s1 = searchTableForStation(db, TABLE_RECENT_JOURNEY_SEARCH, from);
+            }
+            if (s2 == null) {
+                s2 = searchTableForStation(db, TABLE_RECENT_JOURNEY_SEARCH, to);
+            }
+            return new SimpleJourney(s1, s2);
         }
-        if (cursor != null) {
-            cursor.moveToFirst();
-        }
-        Station s1 = new Station();
-        Station s2 = new Station();
-
-        s1.setStationId(cursor.getInt(0));
-        s2.setStationId(cursor.getInt(1));
-
-        s1.setStationName(cursor.getString(2));
-        s2.setStationName(cursor.getString(3));
-
-        s1.setLatitude(Double.parseDouble(cursor.getString(4)));
-        s2.setLatitude(Double.parseDouble(cursor.getString(5)));
-
-        s1.setLongitude(Double.parseDouble(cursor.getString(6)));
-        s2.setLongitude(Double.parseDouble(cursor.getString(7)));
-
-        s1.setType(cursor.getString(8));
-        s2.setType(cursor.getString(9));
-
-        s1.setTimeSearched(cursor.getString(10));
-        s2.setTimeSearched(cursor.getString(10));
-
-
-        db.close();
-        return new SimpleJourney(s1, s2);
-
     }
 
 
