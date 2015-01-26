@@ -118,35 +118,39 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
                     Log.d("b.toString()", b.toString());
                     Station s1 = s.getFromStation();
                     Station s2 = s.getToStation();
-                    if (s == null) {
+                    if (s.getFromStation() == null && s.getToStation() == null) {
+                        Log.d("CLICK", "S null");
                         recentSearches.add(new Station(b.getString(BundleConstants.FROM_STATION), Integer.parseInt(b.getString(BundleConstants.FROM_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LONG)), b.getString(BundleConstants.FROM_STATION_TYPE)));
                         recentSearches.add(new Station(b.getString(BundleConstants.TO_STATION), Integer.parseInt(b.getString(BundleConstants.TO_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LONG)), b.getString(BundleConstants.TO_STATION_TYPE)));
                         s = new SimpleJourney(recentSearches.get(0), recentSearches.get(1));
                     } else if (s1 == null) {
+                        Log.d("CLICK", "S1 null");
                         s1 = new Station(b.getString(BundleConstants.FROM_STATION), Integer.parseInt(b.getString(BundleConstants.FROM_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LONG)), b.getString(BundleConstants.FROM_STATION_TYPE));
                         recentSearches.add(s1);
                         recentSearches.add(s.getToStation());
+                        s.setFromStation(s1);
                     } else if (s2 == null) {
+                        Log.d("CLICK", "S2 null");
                         s2 = new Station(b.getString(BundleConstants.TO_STATION), Integer.parseInt(b.getString(BundleConstants.TO_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LONG)), b.getString(BundleConstants.TO_STATION_TYPE));
                         recentSearches.add(s2);
                         recentSearches.add(s.getFromStation());
-                    } else {
-                        b = new Bundle();
-
-                        b.putString(BundleConstants.FROM_STATION, s1.getStationName());
-                        b.putString(BundleConstants.FROM_STATION_ID, Integer.toString(s1.getStationId()));
-                        b.putString(BundleConstants.FROM_STATION_LONG, Double.toString(s1.getLongitude()));
-                        b.putString(BundleConstants.FROM_STATION_LAT, Double.toString(s1.getLatitude()));
-                        b.putString(BundleConstants.FROM_STATION_TYPE, s1.getType());
-                        b.putString(BundleConstants.FROM_STATION_SEARCHED, s1.getTimeSearched());
-
-                        b.putString(BundleConstants.TO_STATION, s2.getStationName());
-                        b.putString(BundleConstants.TO_STATION_ID, Integer.toString(s2.getStationId()));
-                        b.putString(BundleConstants.TO_STATION_LONG, Double.toString(s2.getLongitude()));
-                        b.putString(BundleConstants.TO_STATION_LAT, Double.toString(s2.getLatitude()));
-                        b.putString(BundleConstants.TO_STATION_TYPE, s2.getType());
-                        b.putString(BundleConstants.TO_STATION_SEARCHED, s2.getTimeSearched());
+                        s.setToStation(s2);
                     }
+
+                    b = new Bundle();
+                    b.putString(BundleConstants.FROM_STATION, s1.getStationName());
+                    b.putString(BundleConstants.FROM_STATION_ID, Integer.toString(s1.getStationId()));
+                    b.putString(BundleConstants.FROM_STATION_LONG, Double.toString(s1.getLongitude()));
+                    b.putString(BundleConstants.FROM_STATION_LAT, Double.toString(s1.getLatitude()));
+                    b.putString(BundleConstants.FROM_STATION_TYPE, s1.getType());
+                    b.putString(BundleConstants.FROM_STATION_SEARCHED, s1.getTimeSearched());
+
+                    b.putString(BundleConstants.TO_STATION, s2.getStationName());
+                    b.putString(BundleConstants.TO_STATION_ID, Integer.toString(s2.getStationId()));
+                    b.putString(BundleConstants.TO_STATION_LONG, Double.toString(s2.getLongitude()));
+                    b.putString(BundleConstants.TO_STATION_LAT, Double.toString(s2.getLatitude()));
+                    b.putString(BundleConstants.TO_STATION_TYPE, s2.getType());
+                    b.putString(BundleConstants.TO_STATION_SEARCHED, s2.getTimeSearched());
 
 
                     database.addRecentJourneySearch(s);

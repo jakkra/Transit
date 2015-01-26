@@ -6,8 +6,8 @@ import se.jakobkrantz.transit.app.skanetrafikenAPI.Station;
 
 public class SimpleJourney {
 
-    private final Station fromStation;
-    private final Station toStation;
+    private Station fromStation;
+    private Station toStation;
 
     public SimpleJourney(Station fromStation, Station toStation) {
         this.fromStation = fromStation;
@@ -18,12 +18,18 @@ public class SimpleJourney {
         return fromStation;
     }
 
-
     public Station getToStation() {
         return toStation;
     }
 
     public String toString() {
         return fromStation + " -> " + toStation;
+    }
+    public void setFromStation(Station s){
+        this.fromStation = toStation;
+    }
+
+    public void setToStation(Station toStation) {
+        this.toStation = toStation;
     }
 }
