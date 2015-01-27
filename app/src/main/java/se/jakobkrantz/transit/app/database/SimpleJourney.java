@@ -25,8 +25,9 @@ public class SimpleJourney {
     public String toString() {
         return fromStation + " -> " + toStation;
     }
-    public void setFromStation(Station s){
-        this.fromStation = toStation;
+
+    public void setFromStation(Station s) {
+        this.fromStation = s;
     }
 
     public void setToStation(Station toStation) {

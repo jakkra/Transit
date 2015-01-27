@@ -120,14 +120,21 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
                     Station s2 = s.getToStation();
                     if (s.getFromStation() == null && s.getToStation() == null) {
                         Log.d("CLICK", "S null");
-                        recentSearches.add(new Station(b.getString(BundleConstants.FROM_STATION), Integer.parseInt(b.getString(BundleConstants.FROM_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LONG)), b.getString(BundleConstants.FROM_STATION_TYPE)));
-                        recentSearches.add(new Station(b.getString(BundleConstants.TO_STATION), Integer.parseInt(b.getString(BundleConstants.TO_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LONG)), b.getString(BundleConstants.TO_STATION_TYPE)));
-                        s = new SimpleJourney(recentSearches.get(0), recentSearches.get(1));
+                        s1 = new Station(b.getString(BundleConstants.FROM_STATION), Integer.parseInt(b.getString(BundleConstants.FROM_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LONG)), b.getString(BundleConstants.FROM_STATION_TYPE));
+                        s2 = new Station(b.getString(BundleConstants.TO_STATION), Integer.parseInt(b.getString(BundleConstants.TO_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LONG)), b.getString(BundleConstants.TO_STATION_TYPE));
+                        recentSearches.add(s1);
+                        recentSearches.add(s2);
+                        s = new SimpleJourney(s1,s2);
                     } else if (s1 == null) {
                         Log.d("CLICK", "S1 null");
                         s1 = new Station(b.getString(BundleConstants.FROM_STATION), Integer.parseInt(b.getString(BundleConstants.FROM_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LONG)), b.getString(BundleConstants.FROM_STATION_TYPE));
                         recentSearches.add(s1);
+                        Log.d("from dsdjnfk", s1.toString());
+                        Log.d("to dsdjnfk", s.getToStation().toString());
+
                         recentSearches.add(s.getToStation());
+                        recentSearches.add(s1);
+
                         s.setFromStation(s1);
                     } else if (s2 == null) {
                         Log.d("CLICK", "S2 null");
@@ -152,7 +159,7 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
                     b.putString(BundleConstants.TO_STATION_TYPE, s2.getType());
                     b.putString(BundleConstants.TO_STATION_SEARCHED, s2.getTimeSearched());
 
-
+                    Log.d("addRecent call s before", s.getFromStation().toString() + "---->" + s.getToStation().toString());
                     database.addRecentJourneySearch(s);
                     database.addStationsToRecent(recentSearches);
                     favListAdapter.addRecentJourney(s);
@@ -164,6 +171,7 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
 
         List<SimpleJourney> j = database.getRecentJourneys(1);
         if (j.size() > 0) {
+            Log.d("Showing", j.get(0).getFromStation() + " -> " + j.get(0).getToStation());
             SearchJourneysTask task = new SearchJourneysTask();
             task.setDataDownloadListener(this);
             task.execute(Constants.getURL(j.get(0).getFromStation().getStationId(), j.get(0).getToStation().getStationId(), 1));
