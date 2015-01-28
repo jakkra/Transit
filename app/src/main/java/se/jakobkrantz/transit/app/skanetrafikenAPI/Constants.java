@@ -66,6 +66,7 @@ public class Constants {
     public static String getURL(int startStationNumber, int endStationNumber, int nbrResults) {
         String nbrRes = String.valueOf(nbrResults);
         String url = baseURL + queryActionNextURL + pipe + startStationNumber + pipe + midPartURL + pipe + endStationNumber + pipe + "0" + noOfResults + nbrRes;
+        Log.d("URL", url);
         return url;
     }
 

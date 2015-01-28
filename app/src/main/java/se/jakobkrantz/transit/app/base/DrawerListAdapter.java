@@ -31,7 +31,6 @@ public class DrawerListAdapter extends BaseAdapter {
     @Override
     public Object getItem(int position) {
         return labels[position];
-
     }
 
     @Override

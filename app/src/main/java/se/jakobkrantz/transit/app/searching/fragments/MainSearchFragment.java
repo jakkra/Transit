@@ -219,15 +219,18 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                // Do Activity menu item stuff here
                 return true;
             case R.id.action_clear_recent_searches:
                 database.clearRecentJourneySearches();
                 favListAdapter.clearAllSearches();
+                fromStation.setText("");
+                toStation.setText("");
                 return true;
             case R.id.action_clear_favourites:
                 database.clearAllFavourites();
                 favListAdapter.clearAllFavourites();
+                fromStation.setText("");
+                toStation.setText("");
                 return true;
             default:
                 break;
