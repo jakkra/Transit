@@ -4,6 +4,7 @@ package se.jakobkrantz.transit.app.base;/*
 
 import android.content.Intent;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,16 +14,13 @@ import se.jakobkrantz.transit.app.reporting.ReportActivity;
 import se.jakobkrantz.transit.app.searching.SearchActivity;
 
 public class DrawerListClickListener implements ListView.OnItemClickListener {
-    private final ListView drawerList;
     private final DrawerLayout layout;
     private String[] drawerLabels;
     private String title;
     private BaseActivity activity;
-    private int lastPosition;
 
-    public DrawerListClickListener(BaseActivity activity, ListView drawerList, DrawerLayout layout, String[] drawerLabels) {
+    public DrawerListClickListener(BaseActivity activity, DrawerLayout layout, String[] drawerLabels) {
         this.activity = activity;
-        this.drawerList = drawerList;
         this.layout = layout;
         this.drawerLabels = drawerLabels;
     }
@@ -62,9 +60,9 @@ public class DrawerListClickListener implements ListView.OnItemClickListener {
         }
 
         // Highlight the selected item, update the title, and close the drawer
-        drawerList.setItemChecked(position, true);
         setTitle(drawerLabels[position]);
-        layout.closeDrawer(drawerList);
+        layout.closeDrawers();
+        //layout.closeDrawer(drawerList);
     }
 
     public void setTitle(String title) {

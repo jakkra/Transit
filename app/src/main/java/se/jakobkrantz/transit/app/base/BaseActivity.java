@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.widget.ListView;
 import se.jakobkrantz.transit.app.R;
@@ -17,7 +20,7 @@ public class BaseActivity extends ActionBarActivity {
         SEARCH_STATION, SEARCH_JOURNEY_FROM_TO, SEARCH_RESULT, DETAILED_JOURNEY, DUMMY
     }
 
-    private ListView drawerList;
+    private RecyclerView drawerList;
     private DrawerLayout drawerLayout;
     private String[] drawerListText;
     private DrawerListAdapter drawerListAdapter;
@@ -41,11 +44,15 @@ public class BaseActivity extends ActionBarActivity {
         }
         drawerListText = getResources().getStringArray(R.array.drawer_labels);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerList = (ListView) findViewById(R.id.left_drawer);
-        drawerListAdapter = new DrawerListAdapter(getApplicationContext(), drawerListText);
-        drawerListClickListener = new DrawerListClickListener(this, drawerList, drawerLayout, drawerListText);
+        drawerList = (RecyclerView) findViewById(R.id.left_drawer);
+
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        drawerList.setLayoutManager(mLayoutManager);
+        drawerList.setItemAnimator(new DefaultItemAnimator());
+        drawerListAdapter = new DrawerListAdapter(drawerListText, new DrawerListClickListener(this, drawerLayout, drawerListText));
         drawerList.setAdapter(drawerListAdapter);
-        drawerList.setOnItemClickListener(drawerListClickListener);
+
+
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerToggle.setDrawerIndicatorEnabled(true);
         drawerToggle.syncState();

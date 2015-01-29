@@ -1,5 +1,5 @@
-package se.jakobkrantz.transit.app.viewholders;/*
- * Created by krantz on 14-11-24.
+package se.jakobkrantz.transit.app.base;/*
+ * Created by jakkra on 2015-01-29.
  */
 
 import android.support.v7.widget.CardView;
@@ -9,12 +9,12 @@ import android.widget.TextView;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.adapters.ViewHolderClickListener;
 
-public class ViewHolderLoadHeader extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class ViewHolderDrawerHeader extends RecyclerView.ViewHolder implements View.OnClickListener {
     private final View v;
     private final ViewHolderClickListener listener;
     public TextView loadMore;
 
-    public ViewHolderLoadHeader(View v, final ViewHolderClickListener listener) {
+    public ViewHolderDrawerHeader(View v, final ViewHolderClickListener listener) {
         super(v);
         this.v = v;
         this.listener = listener;
