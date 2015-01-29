@@ -19,6 +19,8 @@ public class SearchActivity extends BaseActivity implements SearchLocationFragme
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         onEvent(FragmentTypes.SEARCH_JOURNEY_FROM_TO, null);
+        getSupportActionBar().setTitle(getResources().getStringArray(R.array.drawer_labels)[0]);
+
     }
 
     //Should not be called by fragments, should instead be called by listeners implemented in this activity.

@@ -19,6 +19,7 @@ public class ReportActivity extends BaseActivity implements SearchLocationFragme
         super.onCreate(savedInstanceState);
         ReportFragment fragment = new ReportFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+        getSupportActionBar().setTitle(getResources().getStringArray(R.array.drawer_labels)[1]);
     }
 
 

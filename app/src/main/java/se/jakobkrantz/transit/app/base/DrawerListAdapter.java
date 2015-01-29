@@ -32,8 +32,8 @@ public class DrawerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         if (viewType == POSITION_HEADER) {
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.drawer_list_item, viewGroup, false);
-            return new ViewHolderDrawerMenu(v, listener);
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.drawer_list_header_item, viewGroup, false);
+            return new ViewHolderDrawerHeader(v);
         } else if (viewType == POSITION_MENU) {
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.drawer_list_item, viewGroup, false);
             return new ViewHolderDrawerMenu(v, listener);
@@ -48,8 +48,23 @@ public class DrawerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         } else if (viewHolder instanceof ViewHolderDrawerMenu) {
             ViewHolderDrawerMenu menu = (ViewHolderDrawerMenu) viewHolder;
-            menu.tv.setText(options[i]);
+            menu.tv.setText(options[i - 1]);
+            menu.icon.setImageResource(getIconResource(i - 1));
         }
+    }
+
+    private int getIconResource(int i) {
+        switch (i) {
+            case 0:
+                return R.drawable.ic_search;
+            case 1:
+                return R.drawable.ic_report;
+            case 2:
+                return R.drawable.ic_deviations;
+            default:
+                return 0;
+        }
+
     }
 
 
@@ -64,6 +79,6 @@ public class DrawerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemCount() {
-        return options.length;
+        return options.length + 1;
     }
 }

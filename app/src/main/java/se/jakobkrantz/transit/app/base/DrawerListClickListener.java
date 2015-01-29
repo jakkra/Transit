@@ -13,6 +13,7 @@ import se.jakobkrantz.transit.app.disturbances.DisturbancesActivity;
 import se.jakobkrantz.transit.app.reporting.ReportActivity;
 import se.jakobkrantz.transit.app.searching.SearchActivity;
 
+//Bad design I know.
 public class DrawerListClickListener implements ListView.OnItemClickListener {
     private final DrawerLayout layout;
     private String[] drawerLabels;
@@ -31,14 +32,7 @@ public class DrawerListClickListener implements ListView.OnItemClickListener {
     }
 
     private void selectItem(int position) {
-//        if (position == lastPosition) {
-//            Log.d("pos","" + position);
-//            drawerList.setItemChecked(position, true);
-//
-//            layout.closeDrawer(drawerList);
-//            return;
-//        }
-//        lastPosition = position;
+
 
         Intent intent;
         switch (position) {
@@ -59,10 +53,8 @@ public class DrawerListClickListener implements ListView.OnItemClickListener {
                 break;
         }
 
-        // Highlight the selected item, update the title, and close the drawer
         setTitle(drawerLabels[position]);
         layout.closeDrawers();
-        //layout.closeDrawer(drawerList);
     }
 
     public void setTitle(String title) {

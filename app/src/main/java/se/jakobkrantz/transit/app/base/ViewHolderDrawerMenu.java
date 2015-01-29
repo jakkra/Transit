@@ -5,6 +5,7 @@ package se.jakobkrantz.transit.app.base;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import se.jakobkrantz.transit.app.R;
 
@@ -12,10 +13,12 @@ import se.jakobkrantz.transit.app.R;
 public class ViewHolderDrawerMenu extends RecyclerView.ViewHolder implements View.OnClickListener {
     public DrawerListClickListener listener;
     public TextView tv;
+    public ImageView icon;
 
     public ViewHolderDrawerMenu(View view, DrawerListClickListener listener) {
         super(view);
         this.listener = listener;
+        icon = (ImageView) view.findViewById(R.id.drawer_icon);
         tv = (TextView) view.findViewById(R.id.label);
         tv.setOnClickListener(this);
 
@@ -23,6 +26,6 @@ public class ViewHolderDrawerMenu extends RecyclerView.ViewHolder implements Vie
 
     @Override
     public void onClick(View v) {
-        listener.onItemClick(null, null, getPosition(), 0);
+        listener.onItemClick(null, v, getPosition() - 1, 0);
     }
 }

@@ -1,36 +1,41 @@
-<android.support.v4.widget.DrawerLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/drawer_layout"
-        tools:context=".MainActivity"
-        android:fitsSystemWindows="true">
-
-
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-            android:orientation="vertical">
-
-        <include
-                android:id="@+id/toolbar"
-                layout="@layout/toolbar"/>
-
-        <FrameLayout
-                android:id="@+id/content_frame"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-
-
-        </FrameLayout>
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView android:id="@+id/left_drawer"
-              android:layout_width="240dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:layout_gravity="left"
-              android:choiceMode="singleChoice"
-              android:background="@color/colorPrimary"/>
+              android:orientation="vertical">
+    <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"/>
 
-</android.support.v4.widget.DrawerLayout>
+    <android.support.v4.widget.DrawerLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/drawer_layout"
+            tools:context=".MainActivity"
+            android:fitsSystemWindows="true">
+
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:orientation="vertical">
+
+            <FrameLayout
+                    android:id="@+id/content_frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+
+            </FrameLayout>
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView android:id="@+id/left_drawer"
+                                                android:layout_width="150dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_gravity="left"
+                                                android:choiceMode="singleChoice"
+                                                android:background="@drawable/drawer_bg"/>
+
+    </android.support.v4.widget.DrawerLayout>
+</LinearLayout>

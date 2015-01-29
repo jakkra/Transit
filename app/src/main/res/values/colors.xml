@@ -28,4 +28,10 @@
     <color name="resultListBackground">#ffe4e4e4</color>
     <color name="windowBackgroundColor">#333333</color>
     <color name="black_translucent">#FF1693EC</color>
+
+
+    <color name="colorDrawerStart">#ff0437ce</color>
+    <color name="colorDrawerEnd">#ff39a1d6</color>
+
+
 </resources>

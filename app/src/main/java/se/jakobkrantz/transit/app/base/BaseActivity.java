@@ -10,7 +10,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.widget.ListView;
 import se.jakobkrantz.transit.app.R;
 
 
@@ -24,7 +23,6 @@ public class BaseActivity extends ActionBarActivity {
     private DrawerLayout drawerLayout;
     private String[] drawerListText;
     private DrawerListAdapter drawerListAdapter;
-    private DrawerListClickListener drawerListClickListener;
     private ActionBarDrawerToggle drawerToggle;
 
     @Override

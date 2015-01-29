@@ -18,6 +18,8 @@ public class DisturbancesActivity extends BaseActivity implements View.OnClickLi
         DisturbancesFragment fragment = new DisturbancesFragment();
         fragment.setArguments(getIntent().getExtras());
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+        getSupportActionBar().setTitle(getResources().getStringArray(R.array.drawer_labels)[2]);
+
     }
 
 
