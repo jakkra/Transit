@@ -113,6 +113,7 @@
                         android:layout_alignParentEnd="true"/>
                 <ImageView android:layout_width="20dp" android:layout_height="20dp"
                            android:id="@+id/iw_first_bus_type" android:layout_toEndOf="@+id/transport_name_nbr"
+                           android:paddingTop="2dp"
                            android:layout_alignBottom="@+id/transport_name_nbr"
                            android:layout_toRightOf="@+id/transport_name_nbr"/>
                 <ImageView android:layout_width="25dp" android:layout_height="25dp"

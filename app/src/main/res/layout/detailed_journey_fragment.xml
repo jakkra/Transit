@@ -37,8 +37,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/nbr_dep_time"
                     android:textStyle="bold"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true" android:layout_alignParentEnd="true"
+                    android:layout_above="@+id/textView10" android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:textSize="20sp"/>
             <View style="@style/DividerDetailed"
                   android:padding="5dp"

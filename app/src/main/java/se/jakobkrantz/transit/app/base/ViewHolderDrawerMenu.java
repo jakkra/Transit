@@ -6,6 +6,7 @@ package se.jakobkrantz.transit.app.base;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import se.jakobkrantz.transit.app.R;
 
@@ -20,7 +21,8 @@ public class ViewHolderDrawerMenu extends RecyclerView.ViewHolder implements Vie
         this.listener = listener;
         icon = (ImageView) view.findViewById(R.id.drawer_icon);
         tv = (TextView) view.findViewById(R.id.label);
-        tv.setOnClickListener(this);
+        RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.drawerItemRelativeLayout);
+        relativeLayout.setOnClickListener(this);
 
     }
 
