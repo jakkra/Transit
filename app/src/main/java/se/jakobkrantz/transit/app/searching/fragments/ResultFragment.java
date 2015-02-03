@@ -32,14 +32,12 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
     private ResultListAdapter resultListAdapter;
     private OnDetailedJourneySelectedListener listener;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle b = getArguments();
         fromStation = new Station(b.getString(BundleConstants.FROM_STATION), Integer.parseInt(b.getString(BundleConstants.FROM_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LONG)), b.getString(BundleConstants.FROM_STATION_TYPE));
         toStation = new Station(b.getString(BundleConstants.TO_STATION), Integer.parseInt(b.getString(BundleConstants.TO_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LONG)), b.getString(BundleConstants.TO_STATION_TYPE));
-
     }
 
     @Override
@@ -50,7 +48,6 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
         recycleView = (RecyclerView) view.findViewById(R.id.recycle_view);
         return view;
     }
-
 
     @Override
     public void onStart() {
@@ -94,7 +91,6 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
             resultListAdapter.setJourneys(journeys);
             //Fragment reopened, means recycleView is initialised again
             recycleView.setAdapter(resultListAdapter);
-
         }
     }
 
@@ -115,7 +111,6 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
                 listener.onJourneySelected(Integer.toString(fromStation.getStationId()), Integer.toString(toStation.getStationId()), TimeAndDateConverter.getDate(j.getDepDateTime()), TimeAndDateConverter.formatTime(j.getDepDateTime()));
             }
 //            Toast.makeText(getActivity(), "Result item clicked " + j.getStartStation() + " -> " + j.getEndStation(), Toast.LENGTH_LONG).show();
-
         }
 
         @Override

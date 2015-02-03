@@ -86,7 +86,7 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
         favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO bug if click on recent search, it is displayed in search fields and then clear recent search and search/add to favs. Solved by: When clicking on menuItem clear searches, just clear the search fields. Also move MenuItems from activity to this fragment
+                //TODO Bug when filling in from and to station and pressing save before pressing search, solved same way as below when searching
                 if (fromStation.getText().length() > 1 && toStation.getText().length() > 1) {
                     SimpleJourney s = database.getSimpleJourneyFromRecentOrFavs(fromStation.getText().toString(), toStation.getText().toString());
                     if (s == null) {
@@ -106,7 +106,6 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Click on a favourite, edit one of the search fields and then search = > crash. Because the journey isn't in the database Solve by not adding click to the searchfield. Instedad to see mote results on that journey click on the cards below the list
                 if (fromStation.getText().length() > 1 && toStation.getText().length() > 1) {
 
                     Bundle b = getArguments();

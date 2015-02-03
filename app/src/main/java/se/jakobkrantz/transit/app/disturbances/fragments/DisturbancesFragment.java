@@ -3,31 +3,53 @@ package se.jakobkrantz.transit.app.disturbances.fragments;/*
  */
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import at.markushi.ui.CircleButton;
 import se.jakobkrantz.transit.app.R;
+import se.jakobkrantz.transit.app.disturbances.DisturbanceAdapter;
+import se.jakobkrantz.transit.app.disturbances.DisturbancesActivity;
+import se.jakobkrantz.transit.app.reporting.ReportActivity;
 import se.jakobkrantz.transit.app.utils.GcmConstants;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public class DisturbancesFragment extends Fragment {
-    private TextView textView;
+    private RecyclerView list;
     private CircleButton reportButton;
     private Bundle data;
     private View.OnClickListener listener;
+    private DisturbanceAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_disturbances, container, false);
-        textView = (TextView) view.findViewById(R.id.disturbance_info);
+        list = (RecyclerView) view.findViewById(R.id.disturbance_list);
         reportButton = (CircleButton) view.findViewById(R.id.disturbance_button);
         reportButton.setOnClickListener(listener);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        list.setLayoutManager(layoutManager);
+        list.setItemAnimator(new DefaultItemAnimator());
+        Object[] arr = getDisturbances(getActivity()).toArray();
+
+        adapter = new DisturbanceAdapter(Arrays.copyOf(arr, arr.length, String[].class));
+        list.setAdapter(adapter);
+
         data = getArguments();
-        Log.d("OnCreateView", "getArguments()");
 
         if (data != null) {
             fillData(data);
@@ -37,7 +59,6 @@ public class DisturbancesFragment extends Fragment {
         }
         return view;
     }
-
 
     private void fillData(Bundle data) {
         String from = data.getString(GcmConstants.DISTURBANCE_FROM_STATION_NAME);
@@ -51,7 +72,8 @@ public class DisturbancesFragment extends Fragment {
                 + "Approximerad försening: " + delay + "\n"
                 + "Notering: " + note;
         Log.d("fillData", info);
-        textView.setText(info);
+        Object[] arr = storeDisturbance(getActivity(), info).toArray();
+        adapter.updateDisturbances(Arrays.copyOf(arr, arr.length, String[].class));
     }
 
     @Override
@@ -70,8 +92,6 @@ public class DisturbancesFragment extends Fragment {
         if (savedInstanceState != null) {
             Log.d("Activity create", savedInstanceState.toString());
 
-            // Restore last state for checked position.
-            //fillData(savedInstanceState);
         } else {
             if (data != null) {
                 // fillData(data);
@@ -91,6 +111,32 @@ public class DisturbancesFragment extends Fragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnClickListener");
         }
+    }
+
+    private Set<String> storeDisturbance(Context context, String text) {
+        final SharedPreferences prefs = getDisturbancePrefs(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        Set<String> set = prefs.getStringSet("distSet", new HashSet<String>());
+        Set<String> updatedSet = new HashSet<String>(set);
+        updatedSet.add(text);
+        editor.putStringSet("distSet", updatedSet);
+        editor.commit();
+        return updatedSet;
+    }
+
+
+    private Set<String> getDisturbances(Context context) {
+        final SharedPreferences prefs = getDisturbancePrefs(context);
+        Set<String> set = prefs.getStringSet("distSet", new HashSet<String>());
+        if (set.isEmpty()) {
+            return new HashSet<String>();
+        }
+        return set;
+    }
+
+
+    private SharedPreferences getDisturbancePrefs(Context context) {
+        return context.getSharedPreferences(DisturbancesActivity.class.getSimpleName(), Context.MODE_PRIVATE);
     }
 
 }

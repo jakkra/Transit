@@ -39,6 +39,9 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
     public static final String TABLE_RECENT_JOURNEY_SEARCH = "recentjourneysearch";
 
 
+
+
+
     private static final String[] COLUMNS_RECENT = {COLUMN_STATION_ID, COLUMN_STATION_NAME, COLUMN_LATITUDE, COLUMN_LONG, COLUMN_STATION_TYPE, COLUMN_TIME_SEARCHED};
     private static final String[] COLUMNS_JOURNEYS = {COLUMN_STATION_ID, COLUMN_STATION_ID1, COLUMN_STATION_NAME, COLUMN_STATION_NAME1, COLUMN_LATITUDE, COLUMN_LATITUDE1,
             COLUMN_LONG, COLUMN_LONG1, COLUMN_STATION_TYPE, COLUMN_STATION_TYPE1, COLUMN_TIME_SEARCHED};
@@ -290,7 +293,6 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
         return null;
     }
 
-    //TODO DOES NOT WORK?
 
     public SimpleJourney getSimpleJourneyFromRecentOrFavs(String from, String to) {
         SQLiteDatabase db = this.getReadableDatabase();
