@@ -22,4 +22,8 @@ public class BundleConstants {
     public static final String DEP_TIME = "deltime";
 
 
+    /**
+     * Formatted "yy/MMM/dd HH:mm"
+     */
+    public static final String SET_TIME_AND_DATE = "setTimeFromTimeAndDateFragment";
 }

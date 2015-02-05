@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,10 @@ import se.jakobkrantz.transit.app.skanetrafikenAPI.Station;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.TimeAndDateConverter;
 import se.jakobkrantz.transit.app.utils.BundleConstants;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class ResultFragment extends Fragment implements SearchJourneysTask.DataDownloadListener, SwipeRefreshLayout.OnRefreshListener {
@@ -31,6 +35,7 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
     private RecyclerView recycleView;
     private ResultListAdapter resultListAdapter;
     private OnDetailedJourneySelectedListener listener;
+    private Date searchDate;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,16 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
         Bundle b = getArguments();
         fromStation = new Station(b.getString(BundleConstants.FROM_STATION), Integer.parseInt(b.getString(BundleConstants.FROM_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LONG)), b.getString(BundleConstants.FROM_STATION_TYPE));
         toStation = new Station(b.getString(BundleConstants.TO_STATION), Integer.parseInt(b.getString(BundleConstants.TO_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LONG)), b.getString(BundleConstants.TO_STATION_TYPE));
+
+        String date = b.getString(BundleConstants.SET_TIME_AND_DATE);
+        if (date != null) {
+            try {
+                Log.d("onCr Result fra", b.getString(BundleConstants.SET_TIME_AND_DATE));
+                searchDate = new SimpleDateFormat("yyMMdd HH:mm").parse(b.getString(BundleConstants.SET_TIME_AND_DATE));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -60,7 +75,16 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
         swipeRefreshLayout.setOnRefreshListener(this);
         SearchJourneysTask task = new SearchJourneysTask();
         task.setDataDownloadListener(this);
-        task.execute(Constants.getURL(fromStation.getStationId(), toStation.getStationId(), Constants.getCurrentDate(), Constants.getCurrentTime(), ResultListAdapter.NBR_ITEMS_PER_LOAD));
+        String date;
+        String time;
+        if (searchDate != null) {
+            date = new SimpleDateFormat("yyyy-MM-dd").format(searchDate);
+            time = new SimpleDateFormat("hh:mm").format(searchDate);
+        } else {
+            date = Constants.getCurrentDate();
+            time = Constants.getCurrentTime();
+        }
+        task.execute(Constants.getURL(fromStation.getStationId(), toStation.getStationId(), date, time, ResultListAdapter.NBR_ITEMS_PER_LOAD));
     }
 
     @Override
@@ -77,7 +101,17 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
     public void onRefresh() {
         SearchJourneysTask task = new SearchJourneysTask();
         task.setDataDownloadListener(this);
-        task.execute(Constants.getURL(fromStation.getStationId(), toStation.getStationId(), Constants.getCurrentDate(), Constants.getCurrentTime(), ResultListAdapter.NBR_ITEMS_PER_LOAD));
+        String date;
+        String time;
+        if (searchDate != null) {
+            date = new SimpleDateFormat("yyyy-MM-dd").format(searchDate);
+            time = new SimpleDateFormat("hh:mm").format(searchDate);
+        } else {
+            date = Constants.getCurrentDate();
+            time = Constants.getCurrentTime();
+        }
+        task.execute(Constants.getURL(fromStation.getStationId(), toStation.getStationId(), date, time, ResultListAdapter.NBR_ITEMS_PER_LOAD));
+
     }
 
     @Override
@@ -110,7 +144,6 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
             if (listener != null) {
                 listener.onJourneySelected(Integer.toString(fromStation.getStationId()), Integer.toString(toStation.getStationId()), TimeAndDateConverter.getDate(j.getDepDateTime()), TimeAndDateConverter.formatTime(j.getDepDateTime()));
             }
-//            Toast.makeText(getActivity(), "Result item clicked " + j.getStartStation() + " -> " + j.getEndStation(), Toast.LENGTH_LONG).show();
         }
 
         @Override

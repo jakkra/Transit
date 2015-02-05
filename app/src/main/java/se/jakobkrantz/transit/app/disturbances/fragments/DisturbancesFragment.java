@@ -5,8 +5,6 @@ package se.jakobkrantz.transit.app.disturbances.fragments;/*
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -20,7 +18,6 @@ import at.markushi.ui.CircleButton;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.disturbances.DisturbanceAdapter;
 import se.jakobkrantz.transit.app.disturbances.DisturbancesActivity;
-import se.jakobkrantz.transit.app.reporting.ReportActivity;
 import se.jakobkrantz.transit.app.utils.GcmConstants;
 
 import java.util.Arrays;
@@ -79,7 +76,6 @@ public class DisturbancesFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.d("Dist", "Saving");
         if (outState != null && data != null) {
             outState.putAll(data);
         }
@@ -97,7 +93,6 @@ public class DisturbancesFragment extends Fragment {
                 // fillData(data);
             } else {
                 //textView.setText("Inga rapporteringar");
-
             }
         }
     }

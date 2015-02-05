@@ -4,8 +4,10 @@ package se.jakobkrantz.transit.app.searching.fragments;
  */
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import se.jakobkrantz.transit.app.R;
+import se.jakobkrantz.transit.app.base.BaseActivity;
 import se.jakobkrantz.transit.app.base.FragmentEventListener;
 import se.jakobkrantz.transit.app.searching.SearchActivity;
 import se.jakobkrantz.transit.app.adapters.FavouriteListAdapter;
@@ -27,10 +30,12 @@ import se.jakobkrantz.transit.app.skanetrafikenAPI.Journey;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Station;
 import se.jakobkrantz.transit.app.utils.BundleConstants;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class MainSearchFragment extends Fragment implements View.OnClickListener, FavouriteListAdapter.OnItemChangeListener, SearchJourneysTask.DataDownloadListener {
+public class MainSearchFragment extends Fragment implements View.OnClickListener, FavouriteListAdapter.OnItemChangeListener, SearchJourneysTask.DataDownloadListener, TimeAndDatePickerDialogFragment.OnTimeSetListener {
     //TODO Change to enum and move to MainActivity instead
 
     public static final int NBR_OF_LIST_ITEM_TO_SHOW = 10;
@@ -45,6 +50,8 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
     private FavouriteListAdapter favListAdapter;
     private ProgressBar progressBar;
     private FillUIHelper fillUIHelper;
+    private Date searchDate;
+    private Button setTimeButton;
 
 
     @Override
@@ -62,6 +69,8 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
         fromStation = (TextView) view.findViewById(R.id.text_view_from_station);
         searchButton = (Button) view.findViewById(R.id.gcmButton);
         favButton = (Button) view.findViewById(R.id.favourite_button);
+        setTimeButton = (Button) view.findViewById(R.id.setTimeButton);
+        setTimeButton.setOnClickListener(this);
         listView = (RecyclerView) view.findViewById(R.id.listView);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
@@ -114,29 +123,23 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
                     }
                     List<Station> recentSearches = new ArrayList<Station>();
                     SimpleJourney s = database.getSimpleJourneyFromRecentOrFavs(fromStation.getText().toString(), toStation.getText().toString());
-                    Log.d("b.toString()", b.toString());
                     Station s1 = s.getFromStation();
                     Station s2 = s.getToStation();
                     if (s.getFromStation() == null && s.getToStation() == null) {
-                        Log.d("CLICK", "S null");
                         s1 = new Station(b.getString(BundleConstants.FROM_STATION), Integer.parseInt(b.getString(BundleConstants.FROM_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LONG)), b.getString(BundleConstants.FROM_STATION_TYPE));
                         s2 = new Station(b.getString(BundleConstants.TO_STATION), Integer.parseInt(b.getString(BundleConstants.TO_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LONG)), b.getString(BundleConstants.TO_STATION_TYPE));
                         recentSearches.add(s1);
                         recentSearches.add(s2);
-                        s = new SimpleJourney(s1,s2);
+                        s = new SimpleJourney(s1, s2);
                     } else if (s1 == null) {
-                        Log.d("CLICK", "S1 null");
                         s1 = new Station(b.getString(BundleConstants.FROM_STATION), Integer.parseInt(b.getString(BundleConstants.FROM_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LONG)), b.getString(BundleConstants.FROM_STATION_TYPE));
                         recentSearches.add(s1);
-                        Log.d("from dsdjnfk", s1.toString());
-                        Log.d("to dsdjnfk", s.getToStation().toString());
 
                         recentSearches.add(s.getToStation());
                         recentSearches.add(s1);
 
                         s.setFromStation(s1);
                     } else if (s2 == null) {
-                        Log.d("CLICK", "S2 null");
                         s2 = new Station(b.getString(BundleConstants.TO_STATION), Integer.parseInt(b.getString(BundleConstants.TO_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LONG)), b.getString(BundleConstants.TO_STATION_TYPE));
                         recentSearches.add(s2);
                         recentSearches.add(s.getFromStation());
@@ -158,7 +161,12 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
                     b.putString(BundleConstants.TO_STATION_TYPE, s2.getType());
                     b.putString(BundleConstants.TO_STATION_SEARCHED, s2.getTimeSearched());
 
-                    Log.d("addRecent call s before", s.getFromStation().toString() + "---->" + s.getToStation().toString());
+                    if (searchDate != null) {
+                        Log.d("BEfore result", new SimpleDateFormat("yyMMdd HH:mm").format(searchDate));
+                        b.putString(BundleConstants.SET_TIME_AND_DATE, new SimpleDateFormat("yyMMdd HH:mm").format(searchDate));
+                    }
+
+
                     database.addRecentJourneySearch(s);
                     database.addStationsToRecent(recentSearches);
                     favListAdapter.addRecentJourney(s);
@@ -192,20 +200,27 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+        if (v.getId() == R.id.setTimeButton) {
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            TimeAndDatePickerDialogFragment dialog = new TimeAndDatePickerDialogFragment();
+            dialog.setTargetFragment(this, 1);
+            dialog.show(fm, "TimeAndDatePicker");
 
-        Bundle args = getArguments();
-        if (args == null) args = new Bundle();
-        if (v.getId() == R.id.text_view_from_station) {
-            args.putString(BundleConstants.SOURCE, BundleConstants.SOURCE_FROM_STATION);
+        } else {
+
+
+            Bundle args = getArguments();
+            if (args == null) args = new Bundle();
+            if (v.getId() == R.id.text_view_from_station) {
+                args.putString(BundleConstants.SOURCE, BundleConstants.SOURCE_FROM_STATION);
+            }
+            if (v.getId() == R.id.text_view_to_station) {
+                args.putString(BundleConstants.SOURCE, BundleConstants.SOURCE_TO_STATION);
+            }
+            args.putString(BundleConstants.FROM_STATION, fromStation.getText().toString());
+            args.putString(BundleConstants.TO_STATION, toStation.getText().toString());
+            eventListener.onEvent(SearchActivity.FragmentTypes.SEARCH_STATION, args);
         }
-        if (v.getId() == R.id.text_view_to_station) {
-            args.putString(BundleConstants.SOURCE, BundleConstants.SOURCE_TO_STATION);
-        }
-
-        args.putString(BundleConstants.FROM_STATION, fromStation.getText().toString());
-        args.putString(BundleConstants.TO_STATION, toStation.getText().toString());
-
-        eventListener.onEvent(SearchActivity.FragmentTypes.SEARCH_STATION, args);
     }
 
     @Override
@@ -325,4 +340,9 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
         }
     }
 
+    @Override
+    public void onTimeSet(Date date) {
+        searchDate = date;
+
+    }
 }

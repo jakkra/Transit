@@ -1,6 +1,7 @@
 package se.jakobkrantz.transit.app.searching;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import se.jakobkrantz.transit.app.base.BaseActivity;
@@ -48,6 +49,10 @@ public class SearchActivity extends BaseActivity implements SearchLocationFragme
                 detailedJourneyFragment.setArguments(args);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, detailedJourneyFragment).addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
                 break;
+            case TIME_AND_DATE_PICKER:
+                FragmentManager fm = getSupportFragmentManager();
+                TimeAndDatePickerDialogFragment timeAndDatePicker = new TimeAndDatePickerDialogFragment();
+                timeAndDatePicker.show(fm, "Välj tid");
             default:
 
                 DummyFragment dummyFragment = new DummyFragment();

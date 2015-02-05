@@ -16,7 +16,7 @@ import se.jakobkrantz.transit.app.R;
 public class BaseActivity extends ActionBarActivity {
 
     public enum FragmentTypes {
-        SEARCH_STATION, SEARCH_JOURNEY_FROM_TO, SEARCH_RESULT, DETAILED_JOURNEY, DUMMY
+        SEARCH_STATION, SEARCH_JOURNEY_FROM_TO, SEARCH_RESULT, DETAILED_JOURNEY, TIME_AND_DATE_PICKER, TIME_SET, DUMMY
     }
 
     private RecyclerView drawerList;

@@ -215,6 +215,13 @@
                       android:text="Till" android:id="@+id/textView3" android:paddingLeft="5dp" android:textSize="12sp"
                       android:paddingBottom="5dp"
                       android:layout_below="@+id/text_view_from_station" android:layout_centerHorizontal="true"/>
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tid"
+                    android:id="@+id/setTimeButton"
+                    android:layout_below="@+id/textView4" android:layout_alignRight="@+id/gcmButton"
+                    android:layout_alignEnd="@+id/gcmButton"/>
 
         </RelativeLayout>
     </LinearLayout>
