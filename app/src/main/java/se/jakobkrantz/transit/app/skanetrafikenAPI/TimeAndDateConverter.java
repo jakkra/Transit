@@ -3,23 +3,26 @@ package se.jakobkrantz.transit.app.skanetrafikenAPI;/*
  */
 
 
+import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class TimeAndDateConverter{
+public class TimeAndDateConverter {
 
     /**
-     *Extracts hour and minutes from a dateDimestring
+     * Extracts hour and minutes from a dateDimestring
+     *
      * @param String in format 2012-10-15T08:17:00
      * @return String in format HH:MM
-     * */
-    public static String formatTime(String dateTimeString){
-        String formattedTime= "";
+     */
+    public static String formatTime(String dateTimeString) {
+        String formattedTime = "";
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        Date date =null;
+        Date date = null;
         try {
             date = dateFormat.parse(dateTimeString);
         } catch (ParseException e) {
@@ -28,30 +31,31 @@ public class TimeAndDateConverter{
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         String hour;
-        if (cal.get(Calendar.HOUR_OF_DAY)<10){
-            hour = "0"+ String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
-        }else {
+        if (cal.get(Calendar.HOUR_OF_DAY) < 10) {
+            hour = "0" + String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
+        } else {
             hour = String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
         }
         String minute;
-        if (cal.get(Calendar.MINUTE)<10){
-            minute = "0"+ String.valueOf(cal.get(Calendar.MINUTE));
-        }else {
+        if (cal.get(Calendar.MINUTE) < 10) {
+            minute = "0" + String.valueOf(cal.get(Calendar.MINUTE));
+        } else {
             minute = String.valueOf(cal.get(Calendar.MINUTE));
         }
 
-        formattedTime = formattedTime + " " + hour +":"+minute;
-        return hour +":"+minute;
+        formattedTime = formattedTime + " " + hour + ":" + minute;
+        return hour + ":" + minute;
     }
 
     /**
-     *Extracts date and month from dateTimeString and formats
+     * Extracts date and month from dateTimeString and formats
+     *
      * @param dateTimeString in format 2012-10-15T08:17:00
      * @return format dd/MM
-     * */
-    public static String formatDate(String dateTimeString){
+     */
+    public static String formatDate(String dateTimeString) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        Date date =null;
+        Date date = null;
         try {
             date = dateFormat.parse(dateTimeString);
         } catch (ParseException e) {
@@ -60,18 +64,19 @@ public class TimeAndDateConverter{
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         String day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
-        String month = String.valueOf(cal.get(Calendar.MONTH)+1);
-        return day +"/"+month;
+        String month = String.valueOf(cal.get(Calendar.MONTH) + 1);
+        return day + "/" + month;
     }
 
     /**
-     *Converts dates between formats
+     * Converts dates between formats
+     *
      * @param in format 2012-10-15T08:17:00
      * @return String in format YYYY-MM-DD
-     * */
-    public static String getDate(String dateTimeString){
+     */
+    public static String getDate(String dateTimeString) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        Date date =null;
+        Date date = null;
         try {
             date = dateFormat.parse(dateTimeString);
         } catch (ParseException e) {
@@ -81,19 +86,20 @@ public class TimeAndDateConverter{
         cal.setTime(date);
         String year = String.valueOf(cal.get(Calendar.YEAR));
         String day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
-        String month = String.valueOf(cal.get(Calendar.MONTH)+1);
-        return year+"-"+month +"-"+day;
+        String month = String.valueOf(cal.get(Calendar.MONTH) + 1);
+        return year + "-" + month + "-" + day;
     }
 
 
     /**
-     *Calculates difference in minutes between two datetimes
+     * Calculates difference in minutes between two datetimes
+     *
      * @param startTime in format 2012-10-15T08:17:00
-     * @param endTime in format 2012-10-15T08:17:00
+     * @param endTime   in format 2012-10-15T08:17:00
      * @return minutes difference between startTime and endTime
-     * */
-    public static String getTravelTimeinMinutes(String startTime, String endTime){
-        int diffMinutes= 0;
+     */
+    public static String getTravelTimeinMinutes(String startTime, String endTime) {
+        int diffMinutes = 0;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         Date startDate = null, endDate = null;
         try {
@@ -104,25 +110,27 @@ public class TimeAndDateConverter{
             Calendar calEnd = Calendar.getInstance();
             calEnd.setTime(endDate);
             long millisTravel = calEnd.getTimeInMillis() - calStart.getTimeInMillis();
-            diffMinutes = ((int)millisTravel/(60*1000));
+            diffMinutes = ((int) millisTravel / (60 * 1000));
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         return String.valueOf(diffMinutes);
     }
 
     /**
-     *Calculates minutes from now to a specific time in the future
+     * Calculates minutes from now to a specific time in the future
+     *
      * @param String startTime in format 2012-10-15T08:17:00
-     * @return minutes to departure
-     * */
-    public static String timeToDeparture(String startTime){
-        int diffMinutes=-1;
+     * @return formatted String dd:HH:mm, if @param startTime is passed, '-' is returned.
+     */
+    public static String timeToDeparture(String startTime) {
+        double diffMinutes, hours, days;
+
         Calendar now = Calendar.getInstance();
         now.setTime(new Date());
-        //now.setTimeZone(TimeZone.getTimeZone("Europe/Stockholm"));
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        Date date =null;
+        Date date = null;
         try {
             date = dateFormat.parse(startTime);
         } catch (ParseException e) {
@@ -131,21 +139,48 @@ public class TimeAndDateConverter{
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         long millisDiff = cal.getTimeInMillis() - now.getTimeInMillis();
-        if (millisDiff>0){
-            diffMinutes = ((int)millisDiff/(60*1000));
+        if (millisDiff > 0) {
+            diffMinutes = ((double) millisDiff / (60 * 1000));
+            if (diffMinutes > 120) {
+                hours = diffMinutes / 60;
+                diffMinutes = diffMinutes % 60;
+
+                if (hours > 48) {
+                    days = hours / 24;
+                    hours = hours % 24;
+                    if (hours < 10) {
+                        return (int) days + ":0" + (int) hours + ":" + (int) diffMinutes;
+                    } else {
+                        return (int) days + ":" + (int) hours + ":" + (int) diffMinutes;
+
+                    }
+                } else {
+                    if (hours < 10) {
+                        return "0" + (int) hours + ":" + (int) diffMinutes;
+                    } else {
+                        return (int) hours + ":" + (int) diffMinutes;
+
+                    }
+                }
+
+            }
+            return String.valueOf((int) diffMinutes) + " min";
+        } else {
+            return "-";
         }
-        return String.valueOf(diffMinutes);
     }
 
     //Takes a date String in format 2012-10-15T08:17:00 and converts it to a calendar object
+
     /**
-     *Converts a dateTimeString and makes a Calendar object
+     * Converts a dateTimeString and makes a Calendar object
+     *
      * @param dateTimeString in format 2012-10-15T08:17:00
      * @return Calendar object
-     * */
-    public static Calendar parseCalendarString(String dateTimeString){
+     */
+    public static Calendar parseCalendarString(String dateTimeString) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        Date date =null;
+        Date date = null;
         try {
             date = dateFormat.parse(dateTimeString);
         } catch (ParseException e) {
@@ -158,10 +193,11 @@ public class TimeAndDateConverter{
     }
 
     /**
-     *Returns now
+     * Returns now
+     *
      * @return Calendar object
-     * */
-    public static Calendar getTimeNow(){
+     */
+    public static Calendar getTimeNow() {
         Calendar now = Calendar.getInstance();
         now.setTime(new Date());
         return now;
@@ -169,16 +205,17 @@ public class TimeAndDateConverter{
 
     /**
      * Is a dateTime today
+     *
      * @param dateTimeString in format 2012-10-15T08:17:00
      * @return true if today
-     * */
+     */
     public static boolean isToday(String depDateTime) {
         boolean isToday = false;
         Calendar depDate = parseCalendarString(depDateTime);
         int depDay = depDate.get(Calendar.DAY_OF_MONTH);
         Calendar now = getTimeNow();
         int nowDay = now.get(Calendar.DAY_OF_MONTH);
-        if (depDay==nowDay){
+        if (depDay == nowDay) {
             isToday = true;
         }
         return isToday;
@@ -186,16 +223,17 @@ public class TimeAndDateConverter{
 
     /**
      * Is a dateTime tomorrow
+     *
      * @param dateTimeString in format 2012-10-15T08:17:00
      * @return true if tomorrow
-     * */
+     */
     public static boolean isTomorrow(String depDateTime) {
         boolean isTomorrow = false;
         Calendar depDate = parseCalendarString(depDateTime);
         int depDay = depDate.get(Calendar.DAY_OF_YEAR);
         Calendar now = getTimeNow();
         int nowDay = now.get(Calendar.DAY_OF_YEAR);
-        if ((depDay-nowDay)==1){
+        if ((depDay - nowDay) == 1) {
             isTomorrow = true;
         }
         return isTomorrow;
@@ -203,13 +241,14 @@ public class TimeAndDateConverter{
 
     /**
      * Is a dateTime after tomorrow
+     *
      * @param dateTimeString in format 2012-10-15T08:17:00
      * @return true if not today or tomorrow
-     * */
+     */
     public static String isAfterTomorrow(String dateTime) {
         Calendar depDate = parseCalendarString(dateTime);
-        int month = depDate.get(Calendar.MONTH)+1;
+        int month = depDate.get(Calendar.MONTH) + 1;
         int day = depDate.get(Calendar.DAY_OF_MONTH);
-        return day+"/"+month;
+        return day + "/" + month;
     }
 }

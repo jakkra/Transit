@@ -9,12 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import se.jakobkrantz.transit.app.R;
-import se.jakobkrantz.transit.app.searching.fragments.FillUIHelper;
-import se.jakobkrantz.transit.app.skanetrafikenAPI.Journey;
-import se.jakobkrantz.transit.app.skanetrafikenAPI.RouteLink;
-import se.jakobkrantz.transit.app.skanetrafikenAPI.TimeAndDateConverter;
-import se.jakobkrantz.transit.app.viewholders.PositionViewHolder;
-import se.jakobkrantz.transit.app.viewholders.TransportViewHolder;
 
 public class DrawerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int POSITION_HEADER = 0;

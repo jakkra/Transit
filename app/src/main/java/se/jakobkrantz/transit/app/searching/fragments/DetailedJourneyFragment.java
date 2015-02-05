@@ -15,6 +15,7 @@ import android.widget.Toast;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.adapters.DetailedJourneyAdapter;
 import se.jakobkrantz.transit.app.apiasynctasks.SearchJourneysTask;
+import se.jakobkrantz.transit.app.searching.FillDetailedHeaderHelper;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Constants;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Journey;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.TimeAndDateConverter;

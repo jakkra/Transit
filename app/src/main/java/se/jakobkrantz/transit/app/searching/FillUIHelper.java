@@ -1,4 +1,4 @@
-package se.jakobkrantz.transit.app.searching.fragments;/*
+package se.jakobkrantz.transit.app.searching;/*
  * Created by krantz on 14-11-26.
  */
 
@@ -65,10 +65,10 @@ public class FillUIHelper {
     }
 
     public void updateUI(Journey j) {
-        for (ImageView iw : routePics){
+        for (ImageView iw : routePics) {
             iw.setImageDrawable(null);
         }
-        for (TextView tw : routeNbrs){
+        for (TextView tw : routeNbrs) {
             tw.setText("");
         }
         transportNameNbr.setText(j.getFirstRouteTransportName() + " " + j.getFirstRouteLineNbr());
@@ -81,7 +81,8 @@ public class FillUIHelper {
             message.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
         }
         message.setText(j.getSmartMessage());
-        timeToDep.setText(" om " + j.getTimeToDep() + " min ");
+        Log.e("hehhe", j.getTimeToDep());
+        timeToDep.setText(" om " + j.getTimeToDep());
 
 
         delayMin.setText(j.getDeviationDepTime());

@@ -1,8 +1,8 @@
-package se.jakobkrantz.transit.app.searching.fragments;/*
+package se.jakobkrantz.transit.app.searching;/*
  * Created by krantz on 14-12-02.
  */
 
-import android.util.Log;
+
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,10 +20,8 @@ public class FillDetailedHeaderHelper {
         private TextView nbrDepTime;
         private TextView timeToDep;
 
-
         private List<ImageView> routePics;
         private List<TextView> routeNbrs;
-
 
         public FillDetailedHeaderHelper(View v) {
             routeNbrs = new ArrayList<TextView>();
@@ -62,7 +60,7 @@ public class FillDetailedHeaderHelper {
             }
             timeBetween.setText(TimeAndDateConverter.formatTime(j.getDepDateTime()) + " - " + TimeAndDateConverter.formatTime(j.getArrDateTime()));
             nbrDepTime.setText(j.getTotalTravelTime() + " min ");
-            timeToDep.setText(" om " + j.getTimeToDep() + " min ");
+            timeToDep.setText(" om " + j.getTimeToDep());
             List<String> lineNbrs = j.getChangeNbrs();
             List<Integer> lineTypes = j.getLineTypes();
             for (int i = 0; i < lineTypes.size(); i++) {
@@ -97,8 +95,7 @@ public class FillDetailedHeaderHelper {
                 case RouteLink.SKÅNE_EXPRESSEN:
                     return R.drawable.ic_bus_region;
                 default:
-                    Log.e("getDrawableFrom lineType", lineType + "");
-                    return R.drawable.ic_star;
+                    return R.drawable.ic_walking;
 
 
             }

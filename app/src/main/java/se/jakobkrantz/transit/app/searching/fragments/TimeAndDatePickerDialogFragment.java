@@ -65,6 +65,10 @@ public class TimeAndDatePickerDialogFragment extends DialogFragment implements V
         minutePicker.setMinValue(0);
         minutePicker.setMaxValue(59);
         minutePicker.setValue(rightNow.get(Calendar.MINUTE));
+        datePicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        hourPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        minutePicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
         doneButton.setOnClickListener(this);
         currentTimeButton.setOnClickListener(this);
         getDialog().setTitle(R.string.choose_time);
@@ -123,7 +127,7 @@ public class TimeAndDatePickerDialogFragment extends DialogFragment implements V
 
 
             } else if (v.getId() == R.id.currentTimeButton) {
-
+                Log.d("Callback Time", rightNow.getTime().toString());
                 callback.onTimeSet(rightNow.getTime());
 
 

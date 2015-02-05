@@ -2,7 +2,6 @@ package se.jakobkrantz.transit.app.skanetrafikenAPI;/*
  * Created by krantz on 14-11-18.
  */
 
-import android.util.Log;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -36,6 +35,7 @@ public class Constants {
     public static String getURL(int startStationNumber, int endStationNumber, String date, String time, int nbrResults) {
         String nbrRes = String.valueOf(nbrResults);
         String url = baseURL + queryActionNextURL + pipe + startStationNumber + pipe + midPartURL + pipe + endStationNumber + pipe + lastPartDateFromURL + date + space + time + noOfResults + nbrRes;
+
         return url;
     }
 
@@ -55,7 +55,6 @@ public class Constants {
     }
 
 
-
     /**
      * Build the Querystringz
      *
@@ -66,7 +65,6 @@ public class Constants {
     public static String getURL(int startStationNumber, int endStationNumber, int nbrResults) {
         String nbrRes = String.valueOf(nbrResults);
         String url = baseURL + queryActionNextURL + pipe + startStationNumber + pipe + midPartURL + pipe + endStationNumber + pipe + "0" + noOfResults + nbrRes;
-        Log.d("URL", url);
         return url;
     }
 
@@ -87,7 +85,6 @@ public class Constants {
         String year = String.valueOf(cal.get(Calendar.YEAR));
         String day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
         String month = String.valueOf(cal.get(Calendar.MONTH) + 1);
-        Log.d("Date", year + "-" + month + "-" + day);
         return year + "-" + month + "-" + day;
     }
 
@@ -107,7 +104,6 @@ public class Constants {
         } else {
             minute = String.valueOf(cal.get(Calendar.MINUTE));
         }
-        Log.d("Time", hour + ":"+ minute);
         return hour + ":" + minute;
     }
 }

@@ -29,11 +29,8 @@
                       android:textColor="@color/colorPrimary"
                       android:background="@drawable/abc_edit_text_material"
                       android:hint="@string/edit_text_search_from" android:paddingTop="5dp" android:textSize="22sp"
-                      android:layout_above="@+id/text_view_to_station"
-                      android:layout_toEndOf="@+id/textView4"
-                      android:layout_toRightOf="@+id/textView4"
-                      android:layout_alignParentLeft="true"
-                      android:layout_alignParentStart="true"/>
+                      android:layout_above="@+id/text_view_to_station" android:layout_toRightOf="@+id/imageView"
+                      android:layout_toLeftOf="@+id/setTimeButton" android:layout_toStartOf="@+id/setTimeButton"/>
 
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                       android:textColor="@color/colorPrimary"
@@ -44,7 +41,8 @@
 
                       android:layout_above="@+id/gcmButton"
                       android:layout_alignLeft="@+id/text_view_from_station"
-                      android:layout_alignStart="@+id/text_view_from_station"/>
+                      android:layout_alignStart="@+id/text_view_from_station"
+                      android:layout_toLeftOf="@+id/setTimeButton" android:layout_toStartOf="@+id/setTimeButton"/>
             <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -204,24 +202,31 @@
                     android:paddingLeft="10dp" android:paddingRight="10dp"
                     android:layout_alignParentBottom="true" android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:textColor="@color/resultListTextColor" android:textAppearance="?android:attr/textAppearanceMedium"
-                      android:text="Från" android:id="@+id/textView4"
-                      android:paddingLeft="5dp"
-                      android:textSize="12sp" android:paddingBottom="5dp"
-                      android:layout_alignTop="@+id/text_view_from_station" android:layout_centerHorizontal="true"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:textColor="@color/resultListTextColor" android:textAppearance="?android:attr/textAppearanceMedium"
-                      android:text="Till" android:id="@+id/textView3" android:paddingLeft="5dp" android:textSize="12sp"
-                      android:paddingBottom="5dp"
-                      android:layout_below="@+id/text_view_from_station" android:layout_centerHorizontal="true"/>
-            <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+            <ImageButton
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:text="Tid"
+                    android:src="@drawable/ic_set_clock"
                     android:id="@+id/setTimeButton"
-                    android:layout_below="@+id/textView4" android:layout_alignRight="@+id/gcmButton"
+                    android:scaleType="fitCenter"
+                    android:background="@null"
+                    android:layout_above="@+id/gcmButton" android:layout_alignRight="@+id/gcmButton"
                     android:layout_alignEnd="@+id/gcmButton"/>
+
+            <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_right_arrow"
+                    android:id="@+id/imageView"
+                    android:layout_below="@+id/relative" android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"/>
+
+            <ImageView android:layout_width="40dp" android:layout_height="40dp"
+
+                       android:src="@drawable/ic_left_arrow" android:id="@+id/imageView5"
+
+                       android:layout_below="@+id/text_view_from_station" android:layout_alignParentLeft="true"
+                       android:layout_alignParentStart="true"/>
 
         </RelativeLayout>
     </LinearLayout>

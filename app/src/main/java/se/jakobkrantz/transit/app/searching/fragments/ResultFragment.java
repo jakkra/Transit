@@ -8,7 +8,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,7 @@ import android.widget.Toast;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.adapters.ResultListAdapter;
 import se.jakobkrantz.transit.app.apiasynctasks.SearchJourneysTask;
+import se.jakobkrantz.transit.app.searching.OnDetailedJourneySelectedListener;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Constants;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Journey;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Station;
@@ -47,7 +47,6 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
         String date = b.getString(BundleConstants.SET_TIME_AND_DATE);
         if (date != null) {
             try {
-                Log.d("onCr Result fra", b.getString(BundleConstants.SET_TIME_AND_DATE));
                 searchDate = new SimpleDateFormat("yyMMdd HH:mm").parse(b.getString(BundleConstants.SET_TIME_AND_DATE));
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -79,7 +78,7 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
         String time;
         if (searchDate != null) {
             date = new SimpleDateFormat("yyyy-MM-dd").format(searchDate);
-            time = new SimpleDateFormat("hh:mm").format(searchDate);
+            time = new SimpleDateFormat("HH:mm").format(searchDate);
         } else {
             date = Constants.getCurrentDate();
             time = Constants.getCurrentTime();
@@ -105,7 +104,7 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
         String time;
         if (searchDate != null) {
             date = new SimpleDateFormat("yyyy-MM-dd").format(searchDate);
-            time = new SimpleDateFormat("hh:mm").format(searchDate);
+            time = new SimpleDateFormat("HH:mm").format(searchDate);
         } else {
             date = Constants.getCurrentDate();
             time = Constants.getCurrentTime();

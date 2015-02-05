@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.adapters.ViewHolderClickListener;
-import se.jakobkrantz.transit.app.searching.fragments.FillUIHelper;
+import se.jakobkrantz.transit.app.searching.FillUIHelper;
 
 import java.util.List;
 

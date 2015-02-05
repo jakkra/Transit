@@ -4,7 +4,6 @@ package se.jakobkrantz.transit.app.searching.fragments;
  */
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,13 +12,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.*;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import se.jakobkrantz.transit.app.R;
-import se.jakobkrantz.transit.app.base.BaseActivity;
 import se.jakobkrantz.transit.app.base.FragmentEventListener;
+import se.jakobkrantz.transit.app.searching.FillUIHelper;
 import se.jakobkrantz.transit.app.searching.SearchActivity;
 import se.jakobkrantz.transit.app.adapters.FavouriteListAdapter;
 import se.jakobkrantz.transit.app.apiasynctasks.SearchJourneysTask;
@@ -51,7 +47,7 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
     private ProgressBar progressBar;
     private FillUIHelper fillUIHelper;
     private Date searchDate;
-    private Button setTimeButton;
+    private ImageButton setTimeButton;
 
 
     @Override
@@ -69,7 +65,7 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
         fromStation = (TextView) view.findViewById(R.id.text_view_from_station);
         searchButton = (Button) view.findViewById(R.id.gcmButton);
         favButton = (Button) view.findViewById(R.id.favourite_button);
-        setTimeButton = (Button) view.findViewById(R.id.setTimeButton);
+        setTimeButton = (ImageButton) view.findViewById(R.id.setTimeButton);
         setTimeButton.setOnClickListener(this);
         listView = (RecyclerView) view.findViewById(R.id.listView);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
