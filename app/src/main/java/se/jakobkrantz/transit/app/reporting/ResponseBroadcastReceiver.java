@@ -12,7 +12,7 @@ import android.util.Log;
 public class ResponseBroadcastReceiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i("Brodcastrec", "Received packet");
+        Log.i("Brodcastreceiver", "Received packet");
         ComponentName componentName = new ComponentName(context.getPackageName(), MessageIntentService.class.getName());
         //start service, device will be awake while launching
         startWakefulService(context, intent.setComponent(componentName));

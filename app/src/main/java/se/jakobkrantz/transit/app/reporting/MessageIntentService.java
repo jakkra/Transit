@@ -45,10 +45,13 @@ public class MessageIntentService extends IntentService {
                 Log.e("GCM message delete type", extras.toString());
                 // If it's a regular GCM message, do some work.
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
+
                 try {
-                    Log.i("GCM received: ", extras.toString());
-                    Log.i("GCM -::-", extras.getString("distFromName"));
-                    sendNotification("Mellan " + extras.getString(GcmConstants.DISTURBANCE_FROM_STATION_NAME) + " och " + extras.getString(GcmConstants.DISTURBANCE_TO_STATION_NAME), extras);
+                    if (extras.getString(GcmConstants.ACTION).equals(GcmConstants.ACTION_REGISTER_SUCCESSFUL)) {
+                        Log.i("GCM rec action", GcmConstants.ACTION_REGISTER_SUCCESSFUL);
+                    } else if (extras.getString(GcmConstants.ACTION).equals(GcmConstants.ACTION_REPORT_DISTURBANCE)) {
+                        sendNotification("Mellan " + extras.getString(GcmConstants.DISTURBANCE_FROM_STATION_NAME) + " och " + extras.getString(GcmConstants.DISTURBANCE_TO_STATION_NAME), extras);
+                    }
                 } catch (NullPointerException e) {
 
                 }

@@ -33,11 +33,10 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static se.jakobkrantz.transit.app.R.id.gcmButton;
-import static se.jakobkrantz.transit.app.R.id.spinner;
 
 public class ReportFragment extends Fragment implements View.OnClickListener {
     public static final String PROPERTY_REG_ID = "registration_id";
-    private static final String PROPERTY_APP_VERSION = "0";
+    private static final String PROPERTY_APP_VERSION = "1";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     /**
@@ -76,6 +75,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
                 Log.i("gcm", "new user, reg");
                 registerInBackground();
             }
+
             View view = inflater.inflate(R.layout.fragment_report, container, false);
             sendButton = (CircleButton) view.findViewById(gcmButton);
             disturbanceType = (Spinner) view.findViewById(R.id.spinner);
@@ -142,9 +142,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
                     storeRegistrationId(context, regid);
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
-                    // If there is an error, don't just keep trying to register.
-                    // Require the user to click a button again, or perform
-                    // exponential back-off.
+                    Toast.makeText(getActivity(), "GCM Registration failed", Toast.LENGTH_LONG);
                 }
                 return msg;
             }
@@ -214,6 +212,8 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
         int currentVersion = getAppVersion(context);
         if (registeredVersion != currentVersion) {
             Log.i("GCM ReportActivity", "App version changed. Need to re register");
+            unregisterDevice(regid);
+            registerInBackground();
             return "";
         }
         return registrationId;
@@ -237,6 +237,32 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
      */
     private SharedPreferences getGcmPreferences(Context context) {
         return context.getSharedPreferences(ReportActivity.class.getSimpleName(), Context.MODE_PRIVATE);
+    }
+
+    private void unregisterDevice(String regid) {
+        new AsyncTask<String, Void, Boolean>() {
+            @Override
+            protected Boolean doInBackground(String... params) {
+                Bundle dataToSend = new Bundle();
+                dataToSend.putString(GcmConstants.ACTION, GcmConstants.ACTION_UNREGISTER);
+
+                try {
+                    gcm.send(SENDER_ID + "@gcm.googleapis.com", params[0], dataToSend);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+                return true;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean aBoolean) {
+                super.onPostExecute(aBoolean);
+                if (!aBoolean) {
+                    Log.e("ReportFragment unregister", "Unregister failed");
+                }
+            }
+        }.execute(regid, null, null);
     }
 
     @Override

@@ -144,8 +144,7 @@ public class FillUIHelper {
             case RouteLink.SKÅNE_EXPRESSEN:
                 return R.drawable.ic_bus_region;
             default:
-                Log.e("getDrawableFrom lineType", lineType + "");
-                return R.drawable.ic_star;
+                return R.drawable.ic_walking;
 
 
         }
