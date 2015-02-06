@@ -16,7 +16,7 @@ import se.jakobkrantz.transit.app.R;
 public class BaseActivity extends ActionBarActivity {
 
     public enum FragmentTypes {
-        SEARCH_STATION, SEARCH_JOURNEY_FROM_TO, SEARCH_RESULT, DETAILED_JOURNEY, TIME_AND_DATE_PICKER, TIME_SET, DUMMY
+        SEARCH_STATION, SEARCH_JOURNEY_FROM_TO, SEARCH_RESULT, DETAILED_JOURNEY, TIME_AND_DATE_PICKER, TIME_SET, REPORT_FRAGMENT, DUMMY
     }
 
     private RecyclerView drawerList;
@@ -62,7 +62,11 @@ public class BaseActivity extends ActionBarActivity {
         if (drawerLayout.isDrawerOpen(drawerList)) {
             drawerLayout.closeDrawer(drawerList);
         } else {
+            if (getSupportFragmentManager().getBackStackEntryCount() < 2) {
+                finish();
+            }
             super.onBackPressed();
+
         }
     }
 

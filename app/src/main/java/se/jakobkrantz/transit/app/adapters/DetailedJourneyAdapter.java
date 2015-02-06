@@ -16,6 +16,8 @@ import se.jakobkrantz.transit.app.skanetrafikenAPI.TimeAndDateConverter;
 import se.jakobkrantz.transit.app.viewholders.PositionViewHolder;
 import se.jakobkrantz.transit.app.viewholders.TransportViewHolder;
 
+import java.util.ArrayList;
+
 public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int POSITION_VIEW = 2;
     public static final int TRANSPORT_VIEW = 4;
@@ -124,5 +126,11 @@ public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public int getItemCount() {
         return Integer.parseInt(journey.getNbrChanges()) * 2 + 3; //should be +3
+    }
+
+    public void update(Journey journey) {
+        this.journey = journey;
+        notifyDataSetChanged();
+
     }
 }

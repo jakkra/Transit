@@ -30,6 +30,10 @@ public class DetailedJourneyFragment extends Fragment implements SearchJourneysT
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recycleView;
     private FillDetailedHeaderHelper uiFiller;
+    private int startId;
+    private int endId;
+    private String date;
+    private String time;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,7 @@ public class DetailedJourneyFragment extends Fragment implements SearchJourneysT
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.detailed_journey_fragment, container, false);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_container);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorDividerBackground);
         recycleView = (RecyclerView) view.findViewById(R.id.detailed_recycle_view);
         uiFiller = new FillDetailedHeaderHelper(view);
         return view;
@@ -57,8 +62,8 @@ public class DetailedJourneyFragment extends Fragment implements SearchJourneysT
         swipeRefreshLayout.setOnRefreshListener(this);
 
         Bundle args = getArguments();
-        int startId = Integer.parseInt(args.getString(BundleConstants.FROM_STATION_ID));
-        int endId = Integer.parseInt(args.getString(BundleConstants.TO_STATION_ID));
+        startId = Integer.parseInt(args.getString(BundleConstants.FROM_STATION_ID));
+        endId = Integer.parseInt(args.getString(BundleConstants.TO_STATION_ID));
 
 
         //TODO make nicer :p
@@ -69,8 +74,8 @@ public class DetailedJourneyFragment extends Fragment implements SearchJourneysT
         if (dayOfMonth.length() < 2) {
             dayOfMonth = 0 + dayOfMonth;
         }
-        String date = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + dayOfMonth;
-        String time = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
+        date = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + dayOfMonth;
+        time = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
 
 
         SearchJourneysTask task = new SearchJourneysTask();
@@ -89,9 +94,9 @@ public class DetailedJourneyFragment extends Fragment implements SearchJourneysT
             if (adapter == null) {
                 adapter = new DetailedJourneyAdapter(journey);
                 recycleView.setAdapter(adapter);
+            } else {
+                adapter.update(journey);
             }
-        } else {
-            //update adapter
         }
         swipeRefreshLayout.setRefreshing(false);
 
@@ -101,11 +106,13 @@ public class DetailedJourneyFragment extends Fragment implements SearchJourneysT
     @Override
     public void dataDownloadFailed() {
         Toast.makeText(getActivity(), "Failed to load data, none or slow internet connection", Toast.LENGTH_LONG).show();
-
     }
 
     @Override
     public void onRefresh() {
+        SearchJourneysTask task = new SearchJourneysTask();
+        task.setDataDownloadListener(this);
+        task.execute(Constants.getURL(startId, endId, date, time, 1));
 
     }
 }

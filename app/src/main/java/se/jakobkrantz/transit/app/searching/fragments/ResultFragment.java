@@ -8,9 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.Toast;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.adapters.ResultListAdapter;
@@ -59,6 +57,7 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.result_fragment, container, false);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         recycleView = (RecyclerView) view.findViewById(R.id.recycle_view);
         return view;
     }
@@ -182,5 +181,8 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
 
     }
 
-
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 }

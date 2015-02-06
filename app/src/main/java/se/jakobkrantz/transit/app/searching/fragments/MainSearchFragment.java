@@ -93,12 +93,25 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
             public void onClick(View v) {
                 //TODO Bug when filling in from and to station and pressing save before pressing search, solved same way as below when searching
                 if (fromStation.getText().length() > 1 && toStation.getText().length() > 1) {
+
+                    Bundle b = getArguments();
+                    if (b == null) {
+                        b = new Bundle();
+                    }
                     SimpleJourney s = database.getSimpleJourneyFromRecentOrFavs(fromStation.getText().toString(), toStation.getText().toString());
-                    if (s == null) {
-                        Bundle b = getArguments();
-                        Station s1 = new Station(b.getString(BundleConstants.FROM_STATION), Integer.parseInt(b.getString(BundleConstants.FROM_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LONG)), b.getString(BundleConstants.FROM_STATION_TYPE));
-                        Station s2 = new Station(b.getString(BundleConstants.TO_STATION), Integer.parseInt(b.getString(BundleConstants.TO_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LONG)), b.getString(BundleConstants.TO_STATION_TYPE));
+                    Station s1 = s.getFromStation();
+                    Station s2 = s.getToStation();
+
+                    if (s.getFromStation() == null && s.getToStation() == null) {
+                        s1 = new Station(b.getString(BundleConstants.FROM_STATION), Integer.parseInt(b.getString(BundleConstants.FROM_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LONG)), b.getString(BundleConstants.FROM_STATION_TYPE));
+                        s2 = new Station(b.getString(BundleConstants.TO_STATION), Integer.parseInt(b.getString(BundleConstants.TO_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LONG)), b.getString(BundleConstants.TO_STATION_TYPE));
                         s = new SimpleJourney(s1, s2);
+                    } else if (s1 == null) {
+                        s1 = new Station(b.getString(BundleConstants.FROM_STATION), Integer.parseInt(b.getString(BundleConstants.FROM_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LONG)), b.getString(BundleConstants.FROM_STATION_TYPE));
+                        s.setFromStation(s1);
+                    } else if (s2 == null) {
+                        s2 = new Station(b.getString(BundleConstants.TO_STATION), Integer.parseInt(b.getString(BundleConstants.TO_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.TO_STATION_LONG)), b.getString(BundleConstants.TO_STATION_TYPE));
+                        s.setToStation(s2);
                     }
                     if (database.addStationFavPair(s)) {
                         favListAdapter.addFavourite(s);
@@ -158,7 +171,6 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
                     b.putString(BundleConstants.TO_STATION_SEARCHED, s2.getTimeSearched());
 
                     if (searchDate != null) {
-                        Log.d("BEfore result", new SimpleDateFormat("yyMMdd HH:mm").format(searchDate));
                         b.putString(BundleConstants.SET_TIME_AND_DATE, new SimpleDateFormat("yyMMdd HH:mm").format(searchDate));
                     }
 
@@ -222,6 +234,7 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Do something that differs the Activity's menu here
+        inflater.inflate(R.menu.menu_main, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

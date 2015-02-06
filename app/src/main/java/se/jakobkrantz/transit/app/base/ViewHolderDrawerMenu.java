@@ -28,6 +28,6 @@ public class ViewHolderDrawerMenu extends RecyclerView.ViewHolder implements Vie
 
     @Override
     public void onClick(View v) {
-        listener.onItemClick(null, v, getPosition() - 1, 0);
+        listener.onItemClick(null, v, getPosition(), 0);
     }
 }

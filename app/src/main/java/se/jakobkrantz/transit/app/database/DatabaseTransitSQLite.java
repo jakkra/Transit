@@ -134,7 +134,6 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
     }
 
     private boolean addJourney(SimpleJourney s, String table) {
-        Log.d("addJounrey", s.getFromStation().toString() + " to: " + s.getToStation().toString());
         boolean wasAdded = false;
         s.getFromStation().getStationName();
         s.getToStation().getStationName();

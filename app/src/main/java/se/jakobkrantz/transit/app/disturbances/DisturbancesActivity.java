@@ -27,9 +27,11 @@ public class DisturbancesActivity extends BaseActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.disturbance_button:
-                Intent myIntent = new Intent(DisturbancesActivity.this, ReportActivity.class);
-                DisturbancesActivity.this.startActivity(myIntent);
+                Intent intent = new Intent(DisturbancesActivity.this, ReportActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                DisturbancesActivity.this.startActivity(intent);
                 break;
         }
     }
+
 }

@@ -96,8 +96,6 @@ public class FillDetailedHeaderHelper {
                     return R.drawable.ic_bus_region;
                 default:
                     return R.drawable.ic_walking;
-
-
             }
         }
 

@@ -91,7 +91,7 @@ public class TimeAndDatePickerDialogFragment extends DialogFragment implements V
             dates.add(dateFormat.format(c1.getTime()));
         }
 
-        c2.add(Calendar.DATE, -60);
+        c2.add(Calendar.DATE, -61);
         for (int i = 0; i < 60; i++) {
             c2.add(Calendar.DATE, 1);
             year[61 + i] = c1.get(Calendar.YEAR);

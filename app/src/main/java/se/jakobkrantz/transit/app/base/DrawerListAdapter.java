@@ -42,8 +42,8 @@ public class DrawerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         } else if (viewHolder instanceof ViewHolderDrawerMenu) {
             ViewHolderDrawerMenu menu = (ViewHolderDrawerMenu) viewHolder;
-            menu.tv.setText(options[i - 1]);
-            menu.icon.setImageResource(getIconResource(i - 1));
+            menu.tv.setText(options[i]);
+            menu.icon.setImageResource(getIconResource(i));
         }
     }
 
@@ -64,15 +64,16 @@ public class DrawerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
-            return POSITION_HEADER;
-        } else {
-            return POSITION_MENU;
-        }
+        // all  i to "i - 1" if header is wanted.
+        //if (position == 0) {
+        //    return POSITION_HEADER;
+        //} else {
+        return POSITION_MENU;
+        // }
     }
 
     @Override
     public int getItemCount() {
-        return options.length + 1;
+        return options.length;
     }
 }

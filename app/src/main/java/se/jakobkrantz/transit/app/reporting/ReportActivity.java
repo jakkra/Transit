@@ -14,25 +14,30 @@ import se.jakobkrantz.transit.app.searching.fragments.SearchLocationFragment;
 public class ReportActivity extends BaseActivity implements SearchLocationFragment.StationSelectedListener, FragmentEventListener {
 
 
+    private FragmentTypes showedFragmentType;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ReportFragment fragment = new ReportFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(null).commit();
-        getSupportActionBar().setTitle(getResources().getStringArray(R.array.drawer_labels)[1]);
+        onEvent(FragmentTypes.REPORT_FRAGMENT, null);
     }
 
 
     @Override
     public void onStationSelected(Bundle args) {
-        ReportFragment fragment = new ReportFragment();
-        fragment.setArguments(args);
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+        onEvent(FragmentTypes.REPORT_FRAGMENT, args);
     }
 
     @Override
     public void onEvent(FragmentTypes fragmentEvent, Bundle args) {
+        showedFragmentType = fragmentEvent;
         switch (fragmentEvent) {
+            case REPORT_FRAGMENT:
+                ReportFragment fragmentReport = new ReportFragment();
+                fragmentReport.setArguments(args);
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragmentReport).addToBackStack(null).commit();
+                getSupportActionBar().setTitle(getResources().getStringArray(R.array.drawer_labels)[1]);
+                break;
             case SEARCH_STATION:
                 SearchLocationFragment fragment = new SearchLocationFragment();
                 fragment.setArguments(args);
@@ -42,4 +47,5 @@ public class ReportActivity extends BaseActivity implements SearchLocationFragme
                 Log.e("onEvent ReportActivity", "should not be called");
         }
     }
+
 }
