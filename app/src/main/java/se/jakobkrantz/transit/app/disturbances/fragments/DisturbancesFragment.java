@@ -3,21 +3,20 @@ package se.jakobkrantz.transit.app.disturbances.fragments;/*
  */
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import at.markushi.ui.CircleButton;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.disturbances.DisturbanceAdapter;
 import se.jakobkrantz.transit.app.disturbances.DisturbancesActivity;
+import se.jakobkrantz.transit.app.reporting.MessageIntentService;
+import se.jakobkrantz.transit.app.reporting.fragments.ReportFragment;
 import se.jakobkrantz.transit.app.utils.GcmConstants;
 
 import java.util.Arrays;
@@ -25,11 +24,24 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class DisturbancesFragment extends Fragment {
+    private Context context;
     private RecyclerView list;
     private CircleButton reportButton;
     private Bundle data;
     private View.OnClickListener listener;
     private DisturbanceAdapter adapter;
+    private DisturbanceBroadcastReceiver broadcastReceiver;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context = getActivity();
+
+        broadcastReceiver = new DisturbanceBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter(MessageIntentService.ACTION_DISTRUBANCE_RECEIVED);
+        intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
+        context.registerReceiver(broadcastReceiver, intentFilter);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,13 +50,14 @@ public class DisturbancesFragment extends Fragment {
         reportButton = (CircleButton) view.findViewById(R.id.disturbance_button);
         reportButton.setOnClickListener(listener);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         list.setLayoutManager(layoutManager);
         list.setItemAnimator(new DefaultItemAnimator());
-        Object[] arr = getDisturbances(getActivity()).toArray();
+        Object[] arr = getDisturbances(context).toArray();
 
         adapter = new DisturbanceAdapter(Arrays.copyOf(arr, arr.length, String[].class));
         list.setAdapter(adapter);
+        setHasOptionsMenu(true);
 
         data = getArguments();
 
@@ -63,13 +76,16 @@ public class DisturbancesFragment extends Fragment {
         String type = data.getString(GcmConstants.DISTURBANCE_TYPE);
         String delay = data.getString(GcmConstants.DISTURBANCE_APPROX_MINS);
         String note = data.getString(GcmConstants.DISTURBANCE_NOTE);
+        String reportTime = data.getString(GcmConstants.DISTURBANCE_REPORT_TIME);
+        String reportTimeMillis = data.getString(GcmConstants.DISTURBANCE_REPORT_TIME_MILLIS);
+
 
         String info = "Försening mellan " + from + " och " + to + "\n"
                 + "Typ: " + type + "\n"
                 + "Approximerad försening: " + delay + "\n"
-                + "Notering: " + note;
-        Log.d("fillData", info);
-        Object[] arr = storeDisturbance(getActivity(), info).toArray();
+                + "Notering: " + note + "\n"
+                + "Tid för rapporteting: " + reportTime;
+        Object[] arr = storeDisturbance(context, info).toArray();
         adapter.updateDisturbances(Arrays.copyOf(arr, arr.length, String[].class));
     }
 
@@ -119,6 +135,13 @@ public class DisturbancesFragment extends Fragment {
         return updatedSet;
     }
 
+    private void clearDisturbances(Context context){
+        final SharedPreferences prefs = getDisturbancePrefs(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.remove("distSet");
+        editor.commit();
+
+    }
 
     private Set<String> getDisturbances(Context context) {
         final SharedPreferences prefs = getDisturbancePrefs(context);
@@ -134,4 +157,39 @@ public class DisturbancesFragment extends Fragment {
         return context.getSharedPreferences(DisturbancesActivity.class.getSimpleName(), Context.MODE_PRIVATE);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_disturbance, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_clear_disturbances:
+                adapter.clearAll();
+                clearDisturbances(context);
+                return true;
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        context.unregisterReceiver(broadcastReceiver);
+
+    }
+
+    public class DisturbanceBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            fillData(intent.getBundleExtra(MessageIntentService.DISTURBANCE_EXTRAS));
+        }
+
+    }
 }

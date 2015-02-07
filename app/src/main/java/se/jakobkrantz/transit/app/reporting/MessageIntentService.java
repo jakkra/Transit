@@ -13,11 +13,16 @@ import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.disturbances.DisturbancesActivity;
-import se.jakobkrantz.transit.app.searching.SearchActivity;
 import se.jakobkrantz.transit.app.utils.GcmConstants;
 
 public class MessageIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
+    public static final String ACTION_MESSAGEINTENTSERVICE = "action_messIntent";
+    public static final String REGISTRATION_SUCCESSFUL = "reggSuccessful";
+
+    public static final String ACTION_DISTRUBANCE_RECEIVED = "action_messIntent";
+    public static final String DISTURBANCE_EXTRAS = "reggSuccessful";
+
     private NotificationManager mNotificationManager;
 
     public MessageIntentService() {
@@ -49,8 +54,10 @@ public class MessageIntentService extends IntentService {
                 try {
                     if (extras.getString(GcmConstants.ACTION).equals(GcmConstants.ACTION_REGISTER_SUCCESSFUL)) {
                         Log.i("GCM rec action", GcmConstants.ACTION_REGISTER_SUCCESSFUL);
+                        notifySuccessfulRegistration();
                     } else if (extras.getString(GcmConstants.ACTION).equals(GcmConstants.ACTION_REPORT_DISTURBANCE)) {
                         sendNotification("Mellan " + extras.getString(GcmConstants.DISTURBANCE_FROM_STATION_NAME) + " och " + extras.getString(GcmConstants.DISTURBANCE_TO_STATION_NAME), extras);
+                        notifyDisturbanceReport(extras);
                     }
                 } catch (NullPointerException e) {
 
@@ -60,9 +67,26 @@ public class MessageIntentService extends IntentService {
                     Log.e("GCM rec unknown message", messageType);
                 }
             }
+
         }
         // Release the wake lock
         ResponseBroadcastReceiver.completeWakefulIntent(intent);
+    }
+
+    private void notifySuccessfulRegistration() {
+        Intent intentResponse = new Intent();
+        intentResponse.setAction(ACTION_MESSAGEINTENTSERVICE);
+        intentResponse.addCategory(Intent.CATEGORY_DEFAULT);
+        intentResponse.putExtra(REGISTRATION_SUCCESSFUL, true);
+        sendBroadcast(intentResponse);
+    }
+    private void notifyDisturbanceReport(Bundle extras) {
+        Intent intentResponse = new Intent();
+        intentResponse.setAction(ACTION_DISTRUBANCE_RECEIVED);
+        intentResponse.addCategory(Intent.CATEGORY_DEFAULT);
+        intentResponse.putExtra(DISTURBANCE_EXTRAS, extras);
+        sendBroadcast(intentResponse);
+
     }
 
     // Put the message into a notification and post it.
@@ -73,9 +97,6 @@ public class MessageIntentService extends IntentService {
         Intent intent = new Intent(this, DisturbancesActivity.class);
         intent.putExtras(data);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-
-        Log.e("SendNot", data.getString(GcmConstants.DISTURBANCE_FROM_STATION_NAME));
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         NotificationCompat.Builder mBuilder =
@@ -83,8 +104,7 @@ public class MessageIntentService extends IntentService {
                         .setContentTitle(getString(R.string.delay_reported))
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(msg))
-                        .setContentText(msg).setSmallIcon(R.drawable.ic_launcher);
-
+                        .setContentText(msg).setSmallIcon(R.drawable.ic_launcher).setAutoCancel(true).setVibrate(new long[] {1000,500,1000 });
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }

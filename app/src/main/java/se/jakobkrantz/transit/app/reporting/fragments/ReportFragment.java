@@ -5,8 +5,7 @@ package se.jakobkrantz.transit.app.reporting.fragments;
  */
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
@@ -24,11 +23,14 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.base.BaseActivity;
 import se.jakobkrantz.transit.app.base.FragmentEventListener;
+import se.jakobkrantz.transit.app.reporting.MessageIntentService;
 import se.jakobkrantz.transit.app.reporting.ReportActivity;
 import se.jakobkrantz.transit.app.utils.BundleConstants;
 import se.jakobkrantz.transit.app.utils.GcmConstants;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -36,7 +38,9 @@ import static se.jakobkrantz.transit.app.R.id.gcmButton;
 
 public class ReportFragment extends Fragment implements View.OnClickListener {
     public static final String PROPERTY_REG_ID = "registration_id";
-    private static final String PROPERTY_APP_VERSION = "1";
+    private static final String PROPERTY_APP_VERSION = "0";
+    private static final String REGISTRATION_SUCCESSFUL = "regSucc";
+
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     /**
@@ -60,19 +64,29 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
     private FragmentEventListener eventListener;
     private ArrayAdapter<CharSequence> spinnerAdapter;
 
-    private String type;
+    private RegistrationBroadcastReceiver broadcastReceiver;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context = getActivity();
+
+        broadcastReceiver = new RegistrationBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter(MessageIntentService.ACTION_MESSAGEINTENTSERVICE);
+        intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
+        context.registerReceiver(broadcastReceiver, intentFilter);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         if (checkPlayServices()) {
-            Log.i("gcm", "play services OK");
-            context = getActivity();
+            Log.i("GCM", "Play Services OK");
             gcm = GoogleCloudMessaging.getInstance(context);
 
             regid = getRegistrationId(context);
             if (regid.isEmpty()) {
-                Log.i("gcm", "new user, reg");
+                unregisterDevice(regid);
                 registerInBackground();
             }
 
@@ -94,13 +108,10 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
             spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             disturbanceType.setAdapter(spinnerAdapter);
 
-
             sendButton.setOnClickListener(this);
 
             fillStationsText(getArguments());
-
             return view;
-
         } else {
             Log.i("GCM ReportActivity", "No valid Google Play Services APK found.");
             return inflater.inflate(R.layout.fragment_no_play_services, container, false);
@@ -131,28 +142,36 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
                     if (gcm == null) {
                         gcm = GoogleCloudMessaging.getInstance(context);
                     }
-
                     regid = gcm.register(SENDER_ID);
-                    String id = UUID.randomUUID().toString();
-                    Bundle data = new Bundle();
-                    data.putString(GcmConstants.ACTION, GcmConstants.ACTION_REGISTER);
-                    gcm.send(SENDER_ID + "@gcm.googleapis.com", id, data);
-                    msg = "Device registered, registration ID=" + regid;
-
+                    registerOnBackend();
+                    Log.e("GCM ReportFragment register", "Device registered, registration ID=" + regid);
+                    msg = "";
                     storeRegistrationId(context, regid);
                 } catch (IOException ex) {
-                    msg = "Error :" + ex.getMessage();
-                    Toast.makeText(getActivity(), "GCM Registration failed", Toast.LENGTH_LONG);
+                    Log.e("GCM ReportFragment register", "Error :" + ex.getMessage());
+                    msg = "GCM Registration failed, please try again later";
                 }
                 return msg;
             }
 
             @Override
             protected void onPostExecute(String msg) {
-                Log.i("GCM ReportActivity msg: ", msg);
+                if (!msg.isEmpty()) {
+                    Log.i("GCM ReportFragment msg: ", msg);
+                    Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
+                }
+
             }
         }.execute(null, null, null);
     }
+
+    private void registerOnBackend() throws IOException {
+        String id = UUID.randomUUID().toString();
+        Bundle data = new Bundle();
+        data.putString(GcmConstants.ACTION, GcmConstants.ACTION_REGISTER);
+        gcm.send(SENDER_ID + "@gcm.googleapis.com", id, data);
+    }
+
 
     /**
      * Check the device to make sure it has the Google Play Services APK. If
@@ -165,7 +184,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
                 GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(), PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
-                Log.i("GCM Activity", "This device is not supported. Please add play services");
+                Log.i("GCM", "This device is not supported. Please add play services");
                 getActivity().finish();
             }
             return false;
@@ -212,11 +231,17 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
         int currentVersion = getAppVersion(context);
         if (registeredVersion != currentVersion) {
             Log.i("GCM ReportActivity", "App version changed. Need to re register");
-            unregisterDevice(regid);
-            registerInBackground();
             return "";
         }
         return registrationId;
+    }
+
+    /**
+     * @return true if backend server has received application's GCM Registration ID
+     */
+    private boolean wasRegToBackendSuccessful() {
+        final SharedPreferences prefs = getGcmPreferences(context);
+        return prefs.getBoolean(REGISTRATION_SUCCESSFUL, false);
     }
 
     /**
@@ -239,7 +264,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
         return context.getSharedPreferences(ReportActivity.class.getSimpleName(), Context.MODE_PRIVATE);
     }
 
-    private void unregisterDevice(String regid) {
+    private void unregisterDevice(String regId) {
         new AsyncTask<String, Void, Boolean>() {
             @Override
             protected Boolean doInBackground(String... params) {
@@ -256,18 +281,17 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
             }
 
             @Override
-            protected void onPostExecute(Boolean aBoolean) {
-                super.onPostExecute(aBoolean);
-                if (!aBoolean) {
+            protected void onPostExecute(Boolean success) {
+                super.onPostExecute(success);
+                if (!success) {
                     Log.e("ReportFragment unregister", "Unregister failed");
                 }
             }
-        }.execute(regid, null, null);
+        }.execute(regId, null, null);
     }
 
     @Override
     public void onClick(View v) {
-
         if (v.getId() == R.id.report_from_station) {
             Bundle args = getArguments();
             if (args == null) {
@@ -283,52 +307,64 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
             args.putString(BundleConstants.SOURCE, BundleConstants.SOURCE_TO_STATION);
             eventListener.onEvent(BaseActivity.FragmentTypes.SEARCH_STATION, args);
         } else if (v.getId() == R.id.gcmButton) {
-
             new AsyncTask<Void, Void, String>() {
                 @Override
                 protected String doInBackground(Void... params) {
-                    Bundle args = getArguments();
+                    if (wasRegToBackendSuccessful()) {
+                        Bundle args = getArguments();
 
-                    String msg;
-                    try {
-                        Bundle dataToSend = new Bundle();
-                        String fromNbr = null;
-                        String toNbr = null;
-                        if (args != null) {
-                            fromNbr = args.getString(BundleConstants.FROM_STATION_ID);
-                            toNbr = args.getString(BundleConstants.TO_STATION_ID);
+                        String msg;
+                        try {
+                            Bundle dataToSend = new Bundle();
+                            String fromNbr = null;
+                            String toNbr = null;
+                            if (args != null) {
+                                fromNbr = args.getString(BundleConstants.FROM_STATION_ID);
+                                toNbr = args.getString(BundleConstants.TO_STATION_ID);
+                            }
+                            if (fromNbr == null || toNbr == null) {
+                                return "Error, must fill both from and to field";
+                            }
+
+
+                            dataToSend.putString(GcmConstants.ACTION, GcmConstants.ACTION_REPORT_DISTURBANCE);
+                            dataToSend.putString(GcmConstants.DISTURBANCE_FROM_STATION_NBR, fromNbr);
+                            dataToSend.putString(GcmConstants.DISTURBANCE_TO_STATION_NBR, toNbr);
+                            dataToSend.putString(GcmConstants.DISTURBANCE_FROM_STATION_NAME, fromStation.getText().toString());
+                            dataToSend.putString(GcmConstants.DISTURBANCE_TO_STATION_NAME, toStation.getText().toString());
+                            dataToSend.putString(GcmConstants.DISTURBANCE_APPROX_MINS, Integer.toString(minutePicker.getValue()));
+                            dataToSend.putString(GcmConstants.DISTURBANCE_TYPE, disturbanceType.getSelectedItem().toString());
+                            dataToSend.putString(GcmConstants.DISTURBANCE_REPORT_TIME, new SimpleDateFormat("dd/MM/yy HH:mm:ss").format(Calendar.getInstance().getTime()));
+                            dataToSend.putString(GcmConstants.DISTURBANCE_REPORT_TIME_MILLIS, Long.toString(System.currentTimeMillis()));
+
+                            if (!disturbanceNote.getText().equals("")) {
+                                dataToSend.putString(GcmConstants.DISTURBANCE_NOTE, disturbanceNote.getText().toString());
+                            }
+                            String id = UUID.randomUUID().toString();
+                            gcm.send(SENDER_ID + "@gcm.googleapis.com", id, dataToSend);
+                            msg = "Report send";
+                        } catch (IOException ex) {
+                            msg = "Error :" + ex.getMessage();
                         }
-                        if (fromNbr == null || toNbr == null) {
-                            Toast.makeText(getActivity(), "Must fill both from and to station", Toast.LENGTH_SHORT).show();
-                            return "error, must fill both from and to field";
+                        return msg;
+                    } else {
+                        try {
+                            registerOnBackend();
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-
-
-                        dataToSend.putString(GcmConstants.ACTION, GcmConstants.ACTION_REPORT_DISTURBANCE);
-                        dataToSend.putString(GcmConstants.DISTURBANCE_FROM_STATION_NBR, fromNbr);
-                        dataToSend.putString(GcmConstants.DISTURBANCE_TO_STATION_NBR, toNbr);
-                        dataToSend.putString(GcmConstants.DISTURBANCE_FROM_STATION_NAME, fromStation.getText().toString());
-                        dataToSend.putString(GcmConstants.DISTURBANCE_TO_STATION_NAME, toStation.getText().toString());
-                        dataToSend.putString(GcmConstants.DISTURBANCE_APPROX_MINS, Integer.toString(minutePicker.getValue()));
-                        dataToSend.putString(GcmConstants.DISTURBANCE_TYPE, disturbanceType.getSelectedItem().toString());
-
-                        if (!disturbanceNote.getText().equals("")) {
-                            dataToSend.putString(GcmConstants.DISTURBANCE_NOTE, disturbanceNote.getText().toString());
-                        }
-                        String id = UUID.randomUUID().toString();
-                        gcm.send(SENDER_ID + "@gcm.googleapis.com", id, dataToSend);
-                        msg = "Sent message";
-                    } catch (IOException ex) {
-                        msg = "Error :" + ex.getMessage();
+                        String msg = "Not registered to backend, trying again. Please try to resend the report";
+                        return msg;
                     }
-                    return msg;
                 }
 
                 @Override
                 protected void onPostExecute(String msg) {
                     Log.d("GCM ReportActivity ", msg);
+                    Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
                 }
             }.execute(null, null, null);
+
 
         }
     }
@@ -342,5 +378,25 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement StationSelectedListener");
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        context.unregisterReceiver(broadcastReceiver);
+
+    }
+
+    public class RegistrationBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean result = intent.getBooleanExtra(MessageIntentService.REGISTRATION_SUCCESSFUL, false);
+            final SharedPreferences prefs = getGcmPreferences(context);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean(REGISTRATION_SUCCESSFUL, result);
+            editor.commit();
+        }
+
     }
 }

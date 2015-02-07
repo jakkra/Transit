@@ -31,6 +31,7 @@
     <string name="choose_time">Välj tid</string>
     <string name="done">Klar</string>
     <string name="currentTime">Just nu</string>
+    <string name="clear_disturbances">Töm rapporteringar</string>
 
     <string-array name="drawer_labels">
         <item>Sök</item>

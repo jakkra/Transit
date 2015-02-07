@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-              android:textColor="@color/resultListTextColor"
+              android:textColor="@color/white"
               android:textSize="25sp"
               android:textAppearance="?android:attr/textAppearanceLarge" android:text="@string/disturbance_type"
               android:id="@+id/textView"
-              android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
-              android:layout_alignParentStart="true" android:padding="5dp"/>
+              android:padding="5dp"
+              android:gravity="center" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"/>
     <Spinner
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:elevation="5dp"
             android:prompt="@string/report_spinner_prompt"
             android:id="@+id/spinner" android:layout_gravity="center_horizontal" android:spinnerMode="dropdown"
             android:layout_below="@+id/textView"/>
@@ -23,6 +25,7 @@
               android:id="@+id/report_from_station"
               android:textColorHint="@color/colorPrimary"
               android:textColor="@color/colorPrimary"
+              android:gravity="center"
               android:background="@drawable/abc_edit_text_material"
               android:hint="@string/report_from_station" android:paddingTop="5dp" android:textSize="22sp"
               android:layout_below="@+id/minutePicker" android:layout_alignParentLeft="true"
@@ -32,6 +35,8 @@
               android:id="@+id/report_to_station"
               android:textColorHint="@color/colorPrimary"
               android:textColor="@color/colorPrimary"
+              android:gravity="center"
+
               android:background="@drawable/abc_edit_text_material"
               android:hint="@string/report_to_station" android:paddingTop="5dp" android:textSize="22sp"
 
@@ -44,6 +49,8 @@
             android:textSize="25sp"
             android:inputType="textMultiLine"
             android:hint="@string/report_note"
+            android:gravity="center"
+
             android:textColorHint="@color/text_hint_gray"
             android:textColor="@color/resultListTextColor"
             android:textColorHighlight="@color/resultListTextColor"
@@ -55,15 +62,16 @@
 
 
     <at.markushi.ui.CircleButton
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:id="@+id/gcmButton"
             android:src="@drawable/ic_plus"
             app:cb_color="#99CC00"
             app:cb_pressedRingWidth="8dip" android:layout_gravity="right"
             android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"/>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-              android:textColor="@color/resultListTextColor" android:textSize="25sp"
+              android:textColor="@color/white"
+              android:textSize="25sp"
               android:textAppearance="?android:attr/textAppearanceLarge" android:text="@string/disturbance_minutes"
               android:id="@+id/textView2"
               android:padding="5dp" android:layout_below="@+id/spinner" android:layout_centerHorizontal="true"/>

@@ -4,6 +4,7 @@ package se.jakobkrantz.transit.app.disturbances;/*
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.base.BaseActivity;
@@ -33,5 +34,9 @@ public class DisturbancesActivity extends BaseActivity implements View.OnClickLi
                 break;
         }
     }
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        return true;
+    }
 }

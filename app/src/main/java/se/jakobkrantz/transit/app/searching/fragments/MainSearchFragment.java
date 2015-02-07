@@ -48,6 +48,8 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
     private FillUIHelper fillUIHelper;
     private Date searchDate;
     private ImageButton setTimeButton;
+    private RelativeLayout relativeSwapStation;
+    private Bundle initBundle;
 
 
     @Override
@@ -55,6 +57,7 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         database = new DatabaseTransitSQLite(getActivity());
+        initBundle = getArguments();
     }
 
     @Override
@@ -62,6 +65,8 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.main_fragment, container, false);
         toStation = (TextView) view.findViewById(R.id.text_view_to_station);
+        relativeSwapStation = (RelativeLayout) view.findViewById(R.id.relative_swap);
+        relativeSwapStation.setOnClickListener(this);
         fromStation = (TextView) view.findViewById(R.id.text_view_from_station);
         searchButton = (Button) view.findViewById(R.id.gcmButton);
         favButton = (Button) view.findViewById(R.id.favourite_button);
@@ -94,7 +99,7 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
                 //TODO Bug when filling in from and to station and pressing save before pressing search, solved same way as below when searching
                 if (fromStation.getText().length() > 1 && toStation.getText().length() > 1) {
 
-                    Bundle b = getArguments();
+                    Bundle b = initBundle;
                     if (b == null) {
                         b = new Bundle();
                     }
@@ -116,7 +121,6 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
                     if (database.addStationFavPair(s)) {
                         favListAdapter.addFavourite(s);
                     }
-
                 }
             }
         });
@@ -126,7 +130,7 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
             public void onClick(View v) {
                 if (fromStation.getText().length() > 1 && toStation.getText().length() > 1) {
 
-                    Bundle b = getArguments();
+                    Bundle b = initBundle;
                     if (b == null) {
                         b = new Bundle();
                     }
@@ -143,7 +147,6 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
                     } else if (s1 == null) {
                         s1 = new Station(b.getString(BundleConstants.FROM_STATION), Integer.parseInt(b.getString(BundleConstants.FROM_STATION_ID)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LAT)), Double.parseDouble(b.getString(BundleConstants.FROM_STATION_LONG)), b.getString(BundleConstants.FROM_STATION_TYPE));
                         recentSearches.add(s1);
-
                         recentSearches.add(s.getToStation());
                         recentSearches.add(s1);
 
@@ -193,7 +196,7 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
             fromStation.setText(j.get(0).getFromStation().toString());
             toStation.setText(j.get(0).getToStation().toString());
         }
-        fillStationsText(getArguments());
+        fillStationsText(initBundle);
     }
 
 
@@ -214,10 +217,11 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
             dialog.setTargetFragment(this, 1);
             dialog.show(fm, "TimeAndDatePicker");
 
+        } else if (v.getId() == R.id.relative_swap) {
+            swapFromAndToStation();
         } else {
 
-
-            Bundle args = getArguments();
+            Bundle args = initBundle;
             if (args == null) args = new Bundle();
             if (v.getId() == R.id.text_view_from_station) {
                 args.putString(BundleConstants.SOURCE, BundleConstants.SOURCE_FROM_STATION);
@@ -229,6 +233,38 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
             args.putString(BundleConstants.TO_STATION, toStation.getText().toString());
             eventListener.onEvent(SearchActivity.FragmentTypes.SEARCH_STATION, args);
         }
+    }
+
+    private void swapFromAndToStation() {
+        String s1 = fromStation.getText().toString();
+        String s2 = toStation.getText().toString();
+        fromStation.setText(s2);
+        toStation.setText(s1);
+        Bundle before = initBundle;
+        if (before == null) {
+            return;
+        }
+        Bundle after = new Bundle();
+        after.putString(BundleConstants.FROM_STATION, before.getString(BundleConstants.TO_STATION));
+        after.putString(BundleConstants.FROM_STATION_ID, before.getString(BundleConstants.TO_STATION_ID));
+        after.putString(BundleConstants.FROM_STATION_LONG, before.getString(BundleConstants.TO_STATION_LONG));
+        after.putString(BundleConstants.FROM_STATION_LAT, before.getString(BundleConstants.TO_STATION_LAT));
+        after.putString(BundleConstants.FROM_STATION_TYPE, before.getString(BundleConstants.TO_STATION_TYPE));
+        after.putString(BundleConstants.FROM_STATION_SEARCHED, before.getString(BundleConstants.TO_STATION_SEARCHED));
+
+        after.putString(BundleConstants.TO_STATION, before.getString(BundleConstants.FROM_STATION));
+        after.putString(BundleConstants.TO_STATION_ID, before.getString(BundleConstants.FROM_STATION_ID));
+        after.putString(BundleConstants.TO_STATION_LONG, before.getString(BundleConstants.FROM_STATION_ID));
+        after.putString(BundleConstants.TO_STATION_LAT, before.getString(BundleConstants.FROM_STATION_ID));
+        after.putString(BundleConstants.TO_STATION_TYPE, before.getString(BundleConstants.FROM_STATION_ID));
+        after.putString(BundleConstants.TO_STATION_SEARCHED, before.getString(BundleConstants.FROM_STATION_ID));
+
+        after.putString(BundleConstants.SET_TIME_AND_DATE, before.getString(BundleConstants.SET_TIME_AND_DATE));
+        after.putString(BundleConstants.DEP_DATE, before.getString(BundleConstants.DEP_DATE));
+        after.putString(BundleConstants.SOURCE, before.getString(BundleConstants.SOURCE));
+        after.putString(BundleConstants.SOURCE_FROM_STATION, before.getString(BundleConstants.SOURCE_TO_STATION));
+        after.putString(BundleConstants.SOURCE_TO_STATION, before.getString(BundleConstants.SOURCE_FROM_STATION));
+        this.initBundle = after;
     }
 
     @Override

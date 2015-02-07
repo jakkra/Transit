@@ -15,9 +15,6 @@ public class DisturbanceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public DisturbanceAdapter(String[] disturbs) {
         this.disturbs = disturbs;
-        Log.e("distlength", disturbs.length + "");
-
-
     }
 
     @Override
@@ -30,7 +27,6 @@ public class DisturbanceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         if (viewHolder instanceof DisturbancesViewHolder) {
             DisturbancesViewHolder text = (DisturbancesViewHolder) viewHolder;
-            Log.d("ösi", disturbs[i]);
             text.tv.setText(disturbs[i]);
         }
     }
@@ -42,6 +38,11 @@ public class DisturbanceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public void updateDisturbances(String[] disturbs) {
         this.disturbs = disturbs;
+        notifyDataSetChanged();
+    }
+
+    public void clearAll() {
+        disturbs = new String[0];
         notifyDataSetChanged();
     }
 }
