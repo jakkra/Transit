@@ -405,7 +405,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onDestroy() {
+    public void onPause() {
         super.onDestroy();
         context.unregisterReceiver(broadcastReceiver);
     }
@@ -414,6 +414,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getStringExtra(GcmConstants.ACTION);
+            Log.d("BroadCast rec action ", action);
             if (action.equals(GcmConstants.ACTION_REGISTER_SUCCESSFUL)) {
                 final SharedPreferences prefs = getGcmPreferences(context);
                 SharedPreferences.Editor editor = prefs.edit();

@@ -20,9 +20,8 @@ import se.jakobkrantz.transit.app.utils.GcmConstants;
 public class MessageIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
     public static final String ACTION_MESSAGE_INTENT_SERVICE = "action_messIntent";
-    public static final String REGISTRATION_SUCCESSFUL = "reggSuccessful";
 
-    public static final String ACTION_DISTRUBANCE_RECEIVED = "action_messIntent";
+    public static final String ACTION_DISTRUBANCE_RECEIVED = "action_DistIntent";
     public static final String DISTURBANCE_EXTRAS = "reggSuccessful";
     private static final String ACK_RECEIVED = "ackReceived";
 
@@ -58,6 +57,8 @@ public class MessageIntentService extends IntentService {
                     if (extras.getString(GcmConstants.ACTION).equals(GcmConstants.ACTION_REGISTER_SUCCESSFUL)) {
                         notifySuccessfulRegistration();
                     } else if (extras.getString(GcmConstants.ACTION).equals(GcmConstants.ACTION_REPORT_DISTURBANCE)) {
+                        //TODO save input to database/prefs so report is displayed even though notification was clicked, alt. DisturbanceFragment was open.
+
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         //TODO Shouldn't be done here, prefs should unregister from gcm, so the app won't receive them at all.
                         boolean shouldNotify = prefs.getBoolean(getResources().getString(R.string.pref_key_accept_not), true);
@@ -69,6 +70,7 @@ public class MessageIntentService extends IntentService {
                             notifyDisturbanceReport(extras);
                         }
                     } else if (extras.getString(GcmConstants.ACTION).equals(GcmConstants.ACTION_ACK)) {
+
                         notifyAckReportReceived();
                     }
                 } catch (NullPointerException e) {
@@ -100,8 +102,6 @@ public class MessageIntentService extends IntentService {
         intentResponse.setAction(ACTION_MESSAGE_INTENT_SERVICE);
         intentResponse.addCategory(Intent.CATEGORY_DEFAULT);
         intentResponse.putExtra(GcmConstants.ACTION, GcmConstants.ACTION_REGISTER_SUCCESSFUL);
-
-        intentResponse.putExtra(REGISTRATION_SUCCESSFUL, true);
         sendBroadcast(intentResponse);
     }
 
@@ -112,6 +112,8 @@ public class MessageIntentService extends IntentService {
         intentResponse.putExtra(DISTURBANCE_EXTRAS, extras);
         sendBroadcast(intentResponse);
     }
+
+
 
     private void sendNotification(String msg, Bundle data) {
         mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);

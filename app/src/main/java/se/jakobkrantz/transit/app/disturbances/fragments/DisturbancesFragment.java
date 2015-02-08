@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.*;
 import at.markushi.ui.CircleButton;
 import se.jakobkrantz.transit.app.R;
@@ -69,7 +70,17 @@ public class DisturbancesFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        context.unregisterReceiver(broadcastReceiver);
+
+
+    }
+
     private void fillData(Bundle data) {
+        Log.e("Filldata","");
+
         String from = data.getString(GcmConstants.DISTURBANCE_FROM_STATION_NAME);
         String to = data.getString(GcmConstants.DISTURBANCE_TO_STATION_NAME);
         String type = data.getString(GcmConstants.DISTURBANCE_TYPE);
@@ -101,6 +112,7 @@ public class DisturbancesFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         if (savedInstanceState != null) {
+            Log.d("Activity create", savedInstanceState.toString());
 
         } else {
             if (data != null) {
@@ -175,21 +187,19 @@ public class DisturbancesFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        context.unregisterReceiver(broadcastReceiver);
-
-    }
-
     public class DisturbanceBroadcastReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.e("Rec","");
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             if (prefs.getBoolean(getResources().getString(R.string.pref_key_accept_dist_report), true)) {
                 fillData(intent.getBundleExtra(MessageIntentService.DISTURBANCE_EXTRAS));
+                Log.e("Rec","in if");
+
             }
+            Log.e("Rec","after");
+
         }
 
     }

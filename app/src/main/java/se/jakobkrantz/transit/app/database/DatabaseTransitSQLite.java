@@ -90,19 +90,19 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public void clearRecentJourneySearches() {
+    public synchronized void clearRecentJourneySearches() {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("delete from " + TABLE_RECENT_JOURNEY_SEARCH);
         db.close();
     }
 
-    public void clearAllFavourites() {
+    public synchronized void clearAllFavourites() {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("delete from " + TABLE_NAME_FAVOURITES);
         db.close();
     }
 
-    public void addStationsToRecent(List<Station> stations) {
+    public synchronized void addStationsToRecent(List<Station> stations) {
         if (stations != null) {
             SQLiteDatabase db = getWritableDatabase();
             for (int i = 0; i < stations.size(); i++) {
@@ -119,7 +119,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
         }
     }
 
-    public void addRecentJourneySearch(SimpleJourney s) {
+    public synchronized void addRecentJourneySearch(SimpleJourney s) {
         addJourney(s, TABLE_RECENT_JOURNEY_SEARCH);
     }
 
@@ -127,12 +127,12 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
      * @param s SimpleJourney to add as favourite
      * @return true if it was added, false if it was already a favourite. In this case last time used was updated to now.
      */
-    public boolean addStationFavPair(SimpleJourney s) {
+    public synchronized boolean addStationFavPair(SimpleJourney s) {
         return addJourney(s, TABLE_NAME_FAVOURITES);
 
     }
 
-    private boolean addJourney(SimpleJourney s, String table) {
+    private synchronized boolean addJourney(SimpleJourney s, String table) {
         boolean wasAdded = false;
         s.getFromStation().getStationName();
         s.getToStation().getStationName();
@@ -158,15 +158,15 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
 
     }
 
-    public void deleteFavouriteJourney(SimpleJourney j) {
+    public synchronized void deleteFavouriteJourney(SimpleJourney j) {
         deleteFavouriteJourney(j, TABLE_NAME_FAVOURITES);
     }
 
-    public void deleteRecentJourney(SimpleJourney j) {
+    public synchronized void deleteRecentJourney(SimpleJourney j) {
         deleteFavouriteJourney(j, TABLE_RECENT_JOURNEY_SEARCH);
     }
 
-    private void deleteFavouriteJourney(SimpleJourney j, String tableName) {
+    private synchronized void deleteFavouriteJourney(SimpleJourney j, String tableName) {
         Station s1 = j.getFromStation();
         Station s2 = j.getToStation();
         SQLiteDatabase db = getWritableDatabase();
@@ -174,18 +174,18 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void deleteRecentStation(Station s) {
+    public synchronized void deleteRecentStation(Station s) {
         deleteRecentStation(s.getStationId());
     }
 
-    public void deleteRecentStation(int stationId) {
+    public synchronized void deleteRecentStation(int stationId) {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_NAME_RECENT, COLUMN_STATION_ID + "= ?", new String[]{Integer.toString(stationId)});
         db.close();
     }
 
 
-    public Station getRecentStation(String stationName) {
+    public synchronized Station getRecentStation(String stationName) {
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_NAME_RECENT, null, COLUMN_STATION_NAME + " = ? ", new String[]{stationName}, null, null, null, "1");
@@ -215,7 +215,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
      *                Sorted after last time searched.
      * @return
      */
-    public List<Station> getRecentStations(int howMany) {
+    public synchronized List<Station> getRecentStations(int howMany) {
         List<Station> stations = new ArrayList<Station>(howMany);
         SQLiteDatabase db = getReadableDatabase();
 
@@ -244,7 +244,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
      *                Sorted after time added/searched
      * @return
      */
-    public List<SimpleJourney> getFavouriteJourneys(int howMany) {
+    public synchronized List<SimpleJourney> getFavouriteJourneys(int howMany) {
         return getFavouriteJourneys(howMany, TABLE_NAME_FAVOURITES);
     }
 
@@ -253,11 +253,11 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
      *                Sorted after time added/searched
      * @return
      */
-    public List<SimpleJourney> getRecentJourneys(int howMany) {
+    public synchronized List<SimpleJourney> getRecentJourneys(int howMany) {
         return getFavouriteJourneys(howMany, TABLE_RECENT_JOURNEY_SEARCH);
     }
 
-    private Station searchTableForStation(SQLiteDatabase db, String table, String station) {
+    private synchronized Station searchTableForStation(SQLiteDatabase db, String table, String station) {
         Cursor cursor = db.query(table, null, COLUMN_STATION_NAME + " = ?", new String[]{station}, null, null, null, "1");
         Station s1;
         if (cursor.getCount() > 0) {
@@ -289,7 +289,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
     }
 
 
-    public SimpleJourney getSimpleJourneyFromRecentOrFavs(String from, String to) {
+    public synchronized SimpleJourney getSimpleJourneyFromRecentOrFavs(String from, String to) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_NAME_FAVOURITES, null, COLUMN_STATION_NAME + " = ? AND " + COLUMN_STATION_NAME1 + " = ?", new String[]{from, to}, null, null, null, "1");
@@ -339,7 +339,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
     }
 
 
-    private List<SimpleJourney> getFavouriteJourneys(int howMany, String table) {
+    private synchronized List<SimpleJourney> getFavouriteJourneys(int howMany, String table) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(table, COLUMNS_JOURNEYS, null, null, null, null, COLUMN_TIME_SEARCHED + " DESC", Integer.toString(howMany));
@@ -379,7 +379,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public synchronized void onCreate(SQLiteDatabase db) {
         db.execSQL(DATABASE_CREATE_TABLE_RECENT);
         db.execSQL(DATABASE_CREATE_TABLE_FAVOURITES);
         db.execSQL(DATABASE_CREATE_TABLE_RECENT_JOURNEY_SEARCH);
@@ -387,7 +387,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
 
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public synchronized void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
 
@@ -398,7 +398,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
         return dateFormat.format(date);
     }
 
-    private ContentValues stationToContentValues(Station s) {
+    private synchronized ContentValues stationToContentValues(Station s) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_STATION_NAME, s.getStationName());
         values.put(COLUMN_STATION_ID, s.getStationId());
