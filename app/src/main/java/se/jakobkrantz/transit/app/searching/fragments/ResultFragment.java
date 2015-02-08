@@ -82,6 +82,7 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
             date = Constants.getCurrentDate();
             time = Constants.getCurrentTime();
         }
+
         task.execute(Constants.getURL(fromStation.getStationId(), toStation.getStationId(), date, time, ResultListAdapter.NBR_ITEMS_PER_LOAD));
     }
 

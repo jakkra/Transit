@@ -47,13 +47,18 @@ public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         if (viewHolder instanceof PositionViewHolder) {
             PositionViewHolder holder = ((PositionViewHolder) viewHolder);
+
+            Log.d("onBindDetailed i", i + "");
+            Log.d("onBindDetailed getItemCount", getItemCount() + "");
+
+
             if (i != 0) {
                 holder.arrTime.setText(TimeAndDateConverter.formatTime(journey.getRouteLinks().get(calculateArrivalIndex(i)).getArrDateTime()));
             }
 
             if (i != getItemCount() - 1) {
-                holder.depTime.setText(TimeAndDateConverter.formatTime(journey.getRouteLinks().get(calculateDepartureIndex(i)).getDepDateTime()));
 
+                holder.depTime.setText(TimeAndDateConverter.formatTime(journey.getRouteLinks().get(calculateDepartureIndex(i)).getDepDateTime()));
             }
 
             if (i != getItemCount() - 1) {
@@ -88,7 +93,6 @@ public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }
             holder.noteView.setText(note);
             holder.transportImage.setImageResource(FillUIHelper.getDrawableFromLineType(r.getLineTypeId()));
-//
         }
     }
 
@@ -125,7 +129,7 @@ public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public int getItemCount() {
-        return Integer.parseInt(journey.getNbrChanges()) * 2 + 3; //should be +3
+        return Integer.parseInt(journey.getNbrChanges()) * 2 + 3;
     }
 
     public void update(Journey journey) {

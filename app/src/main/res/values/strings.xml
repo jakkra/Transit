@@ -32,11 +32,22 @@
     <string name="done">Klar</string>
     <string name="currentTime">Just nu</string>
     <string name="clear_disturbances">Töm rapporteringar</string>
+    <string name="Util">Allmänt</string>
+    <string name="report">Rapportering</string>
+    <string name="pref_summary_dist">Ta emot rapporteringar från andra användare gällande förseningar, väglag med
+        mera.
+    </string>
+    <string name="messages">Meddelanden</string>
+    <string name="prefs_summary_allow_notifications">Tillåt appen att notifiera när en försening rapporterats.</string>
+    <string name="settings">Inställningar</string>
+    <string name="pref_key_accept_dist_report">accept_disturbance_reports</string>
+    <string name="pref_key_accept_not">accept_notifications</string>
 
     <string-array name="drawer_labels">
         <item>Sök</item>
         <item>Rapportera</item>
         <item>Förseningar</item>
+        <item>Inställningar</item>
     </string-array>
 
     <string-array name="disturbance_types">

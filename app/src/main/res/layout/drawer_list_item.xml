@@ -8,14 +8,14 @@
               android:descendantFocusability="blocksDescendants"
               android:focusable="false"
               android:focusableInTouchMode="false"
-              android:weightSum="1" android:paddingBottom="20dp" android:paddingTop="10dp">
+              android:weightSum="1">
 
     <RelativeLayout
             android:layout_width="fill_parent"
             android:clickable="true"
             android:id="@+id/drawerItemRelativeLayout"
             android:background="@drawable/selector_drawer"
-            android:layout_height="130dp">
+            android:layout_height="125dp">
         <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="50dp"

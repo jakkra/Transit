@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:icon="@drawable/ic_launcher"
+                  android:title="@string/settings">
+
+    <PreferenceCategory android:title="@string/Util">
+        <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="@string/pref_key_accept_dist_report"
+                android:title="@string/report"
+                android:summary="@string/pref_summary_dist">
+
+        </CheckBoxPreference>
+        <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="@string/pref_key_accept_not"
+                android:title="@string/messages"
+                android:summary="@string/prefs_summary_allow_notifications">
+        </CheckBoxPreference>
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

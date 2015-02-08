@@ -5,6 +5,7 @@ package se.jakobkrantz.transit.app.disturbances.fragments;/*
 import android.app.Activity;
 import android.content.*;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -135,7 +136,7 @@ public class DisturbancesFragment extends Fragment {
         return updatedSet;
     }
 
-    private void clearDisturbances(Context context){
+    private void clearDisturbances(Context context) {
         final SharedPreferences prefs = getDisturbancePrefs(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.remove("distSet");
@@ -188,7 +189,10 @@ public class DisturbancesFragment extends Fragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            fillData(intent.getBundleExtra(MessageIntentService.DISTURBANCE_EXTRAS));
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            if (prefs.getBoolean(getResources().getString(R.string.pref_key_accept_dist_report), true)) {
+                fillData(intent.getBundleExtra(MessageIntentService.DISTURBANCE_EXTRAS));
+            }
         }
 
     }

@@ -3,18 +3,17 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
+
+
     <include
             android:id="@+id/toolbar"
             layout="@layout/toolbar"/>
-
     <android.support.v4.widget.DrawerLayout
 
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/drawer_layout"
-            tools:context=".MainActivity"
-            android:fitsSystemWindows="true">
-
+            tools:context=".MainActivity">
 
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="match_parent"
@@ -38,4 +37,5 @@
                                                 android:background="@drawable/drawer_bg"/>
 
     </android.support.v4.widget.DrawerLayout>
+
 </LinearLayout>

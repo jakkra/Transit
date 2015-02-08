@@ -51,7 +51,6 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
     private RelativeLayout relativeSwapStation;
     private Bundle initBundle;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -277,8 +276,6 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
-                return true;
             case R.id.action_clear_recent_searches:
                 database.clearRecentJourneySearches();
                 favListAdapter.clearAllSearches();
@@ -336,7 +333,7 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onItemLongClickListener(SimpleJourney s) {
-        Toast.makeText(getActivity(), s.getFromStation() + " -> " + s.getToStation(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), s.getFromStation() + " -> " + s.getToStation(), Toast.LENGTH_SHORT).show();
 
     }
 

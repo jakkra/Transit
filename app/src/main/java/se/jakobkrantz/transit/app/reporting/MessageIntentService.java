@@ -7,7 +7,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -56,8 +58,15 @@ public class MessageIntentService extends IntentService {
                         Log.i("GCM rec action", GcmConstants.ACTION_REGISTER_SUCCESSFUL);
                         notifySuccessfulRegistration();
                     } else if (extras.getString(GcmConstants.ACTION).equals(GcmConstants.ACTION_REPORT_DISTURBANCE)) {
-                        sendNotification("Mellan " + extras.getString(GcmConstants.DISTURBANCE_FROM_STATION_NAME) + " och " + extras.getString(GcmConstants.DISTURBANCE_TO_STATION_NAME), extras);
-                        notifyDisturbanceReport(extras);
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        boolean shouldNotify = prefs.getBoolean(getResources().getString(R.string.pref_key_accept_not), true);
+                        boolean shouldAcceptReport = prefs.getBoolean(getResources().getString(R.string.pref_key_accept_dist_report), true);
+                        if (shouldAcceptReport && !shouldNotify) {
+                            notifyDisturbanceReport(extras);
+                        } else if (shouldAcceptReport && shouldNotify) {
+                            sendNotification("Mellan " + extras.getString(GcmConstants.DISTURBANCE_FROM_STATION_NAME) + " och " + extras.getString(GcmConstants.DISTURBANCE_TO_STATION_NAME), extras);
+                            notifyDisturbanceReport(extras);
+                        }
                     }
                 } catch (NullPointerException e) {
 
@@ -80,6 +89,7 @@ public class MessageIntentService extends IntentService {
         intentResponse.putExtra(REGISTRATION_SUCCESSFUL, true);
         sendBroadcast(intentResponse);
     }
+
     private void notifyDisturbanceReport(Bundle extras) {
         Intent intentResponse = new Intent();
         intentResponse.setAction(ACTION_DISTRUBANCE_RECEIVED);
@@ -104,7 +114,7 @@ public class MessageIntentService extends IntentService {
                         .setContentTitle(getString(R.string.delay_reported))
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(msg))
-                        .setContentText(msg).setSmallIcon(R.drawable.ic_launcher).setAutoCancel(true).setVibrate(new long[] {1000,500,1000 });
+                        .setContentText(msg).setSmallIcon(R.drawable.ic_launcher).setAutoCancel(true).setVibrate(new long[]{1000, 500, 1000});
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }

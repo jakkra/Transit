@@ -5,10 +5,11 @@
 
     <style name="AppTheme.Base" parent="Theme.AppCompat">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkMore</item>
         <item name="android:actionBarItemBackground">@color/colorPrimary</item>
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+        <item name="android:windowActionBarOverlay">true</item>
         <!-- For the resting Spinner style -->
         <item name="android:spinnerItemStyle">
             @style/spinnerItemStyle
@@ -35,9 +36,11 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:paddingLeft">5dp</item>
-        <item name="android:paddingRight">5dp</item>
+        <item name="android:paddingRight">5dp</item>z
         <item name="android:background">@color/colorPrimary</item>
     </style>
+
+
 
     <style name="DividerDetailed">
         <item name="android:layout_width">match_parent</item>

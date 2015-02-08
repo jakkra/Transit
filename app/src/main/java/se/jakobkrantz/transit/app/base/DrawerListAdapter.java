@@ -56,7 +56,7 @@ public class DrawerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case 2:
                 return R.drawable.ic_deviations;
             default:
-                return 0;
+                return R.drawable.ic_settings;
         }
 
     }

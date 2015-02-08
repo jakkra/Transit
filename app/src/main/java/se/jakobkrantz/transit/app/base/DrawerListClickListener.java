@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import se.jakobkrantz.transit.app.disturbances.DisturbancesActivity;
+import se.jakobkrantz.transit.app.preferences.SettingsActivity;
 import se.jakobkrantz.transit.app.reporting.ReportActivity;
 import se.jakobkrantz.transit.app.searching.SearchActivity;
 
@@ -17,7 +18,6 @@ import se.jakobkrantz.transit.app.searching.SearchActivity;
 public class DrawerListClickListener implements ListView.OnItemClickListener {
     private final DrawerLayout layout;
     private String[] drawerLabels;
-    private String title;
     private BaseActivity activity;
 
     public DrawerListClickListener(BaseActivity activity, DrawerLayout layout, String[] drawerLabels) {
@@ -45,9 +45,15 @@ public class DrawerListClickListener implements ListView.OnItemClickListener {
                 intent = new Intent(activity.getBaseContext(), ReportActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 activity.startActivity(intent);
+
+                break;
+            case 2:
+                intent = new Intent(activity.getBaseContext(), DisturbancesActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                activity.startActivity(intent);
                 break;
             default:
-                intent = new Intent(activity.getBaseContext(), DisturbancesActivity.class);
+                intent = new Intent(activity.getBaseContext(), SettingsActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 activity.startActivity(intent);
                 break;
@@ -58,7 +64,6 @@ public class DrawerListClickListener implements ListView.OnItemClickListener {
     }
 
     public void setTitle(String title) {
-        this.title = title;
         activity.getSupportActionBar().setTitle(title);
     }
 

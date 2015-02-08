@@ -54,7 +54,7 @@ public class FavouriteListAdapter extends RecyclerView.Adapter<RecyclerView.View
                 public void onViewLongClick(View caller, int position) {
                     if (position < headerRecent) {
                         listener.onItemLongClickListener(simpleJourneys.get(position - 1));
-                        removeFavourite(position);
+                        //removeFavourite(position);
                     } else if (position > headerRecent) {
                         listener.onItemLongClickListener(recentSearches.get(position - headerRecent - 1));
                     }

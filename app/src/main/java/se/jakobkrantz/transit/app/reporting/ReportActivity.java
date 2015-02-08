@@ -14,8 +14,6 @@ import se.jakobkrantz.transit.app.searching.fragments.SearchLocationFragment;
 public class ReportActivity extends BaseActivity implements SearchLocationFragment.StationSelectedListener, FragmentEventListener {
 
 
-    private FragmentTypes showedFragmentType;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +28,6 @@ public class ReportActivity extends BaseActivity implements SearchLocationFragme
 
     @Override
     public void onEvent(FragmentTypes fragmentEvent, Bundle args) {
-        showedFragmentType = fragmentEvent;
         switch (fragmentEvent) {
             case REPORT_FRAGMENT:
                 ReportFragment fragmentReport = new ReportFragment();

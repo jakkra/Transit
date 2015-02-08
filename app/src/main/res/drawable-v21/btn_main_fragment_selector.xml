@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+        android:color="@color/colorDividerBackground"> <!-- ripple color -->
+
+    <item android:drawable="@drawable/btn_border1"/> <!-- normal color -->
+
+</ripple>

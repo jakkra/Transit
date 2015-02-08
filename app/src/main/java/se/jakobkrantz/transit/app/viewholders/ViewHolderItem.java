@@ -4,6 +4,7 @@ package se.jakobkrantz.transit.app.viewholders;/*
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.adapters.ViewHolderClickListener;
@@ -13,14 +14,16 @@ public class ViewHolderItem extends RecyclerView.ViewHolder implements View.OnCl
     private final View v;
     private final ViewHolderClickListener listener;
     public TextView favTextView;
+    private RelativeLayout rl;
 
     public ViewHolderItem(View v, ViewHolderClickListener listener) {
         super(v);
         this.v = v;
         this.listener = listener;
         favTextView = (TextView) v.findViewById(R.id.info_text);
-        favTextView.setOnClickListener(this);
-        favTextView.setOnLongClickListener(this);
+        rl = (RelativeLayout) v.findViewById(R.id.fav_layout);
+        rl.setOnClickListener(this);
+        rl.setOnLongClickListener(this);
     }
 
     @Override

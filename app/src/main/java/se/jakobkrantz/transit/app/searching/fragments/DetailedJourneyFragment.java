@@ -56,7 +56,7 @@ public class DetailedJourneyFragment extends Fragment implements SearchJourneysT
         super.onStart();
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recycleView.setLayoutManager(mLayoutManager);
-//        recycleView.setHasFixedSize(true);
+        recycleView.setHasFixedSize(true);
         recycleView.setItemAnimator(new DefaultItemAnimator());
         swipeRefreshLayout.setRefreshing(true);
         swipeRefreshLayout.setOnRefreshListener(this);
