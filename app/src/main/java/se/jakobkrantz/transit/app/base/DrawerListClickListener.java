@@ -4,8 +4,7 @@ package se.jakobkrantz.transit.app.base;/*
 
 import android.content.Intent;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -14,7 +13,7 @@ import se.jakobkrantz.transit.app.preferences.SettingsActivity;
 import se.jakobkrantz.transit.app.reporting.ReportActivity;
 import se.jakobkrantz.transit.app.searching.SearchActivity;
 
-//Bad design I know.
+//TODO Bad design I know.
 public class DrawerListClickListener implements ListView.OnItemClickListener {
     private final DrawerLayout layout;
     private String[] drawerLabels;

@@ -8,7 +8,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Station;
 
 import java.text.SimpleDateFormat;
@@ -259,7 +258,6 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
     }
 
     private Station searchTableForStation(SQLiteDatabase db, String table, String station) {
-        Log.d("SearchTableStation", station + " :table: " + table);
         Cursor cursor = db.query(table, null, COLUMN_STATION_NAME + " = ?", new String[]{station}, null, null, null, "1");
         Station s1;
         if (cursor.getCount() > 0) {
@@ -271,7 +269,6 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
             s1.setLongitude(Double.parseDouble(cursor.getString(6)));
             s1.setType(cursor.getString(8));
             s1.setTimeSearched(cursor.getString(10));
-            Log.d("SearchTableStation", s1.toString() + " " + s1.getStationId());
             return s1;
         } else {
             cursor = db.query(table, null, COLUMN_STATION_NAME1 + " = ?", new String[]{station}, null, null, null, "1");
@@ -284,7 +281,6 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
                 s1.setLongitude(Double.parseDouble(cursor.getString(7)));
                 s1.setType(cursor.getString(9));
                 s1.setTimeSearched(cursor.getString(10));
-                Log.d("SearchTableStation1", s1.toString());
                 return s1;
             }
 

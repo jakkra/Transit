@@ -14,6 +14,7 @@ public class GcmConstants {
     public static String ACTION_SET_INTERESTING_LOCATIONS = "actionLocationsInteresting";
     public static String ACTION_REPORT_DISTURBANCE = "reportDisturbance";
     public static String ACTION_REGISTER_SUCCESSFUL = "registrationSuccessful";
+    public static final String ACTION_ACK = "actionAck";
 
     public static String DISTURBANCE_FROM_STATION_NBR = "distFrom";
     public static String DISTURBANCE_TO_STATION_NBR = "distTo";

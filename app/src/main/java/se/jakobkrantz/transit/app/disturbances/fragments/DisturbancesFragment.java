@@ -10,14 +10,12 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.*;
 import at.markushi.ui.CircleButton;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.disturbances.DisturbanceAdapter;
 import se.jakobkrantz.transit.app.disturbances.DisturbancesActivity;
 import se.jakobkrantz.transit.app.reporting.MessageIntentService;
-import se.jakobkrantz.transit.app.reporting.fragments.ReportFragment;
 import se.jakobkrantz.transit.app.utils.GcmConstants;
 
 import java.util.Arrays;
@@ -103,7 +101,6 @@ public class DisturbancesFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         if (savedInstanceState != null) {
-            Log.d("Activity create", savedInstanceState.toString());
 
         } else {
             if (data != null) {

@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static se.jakobkrantz.transit.app.R.id.gcmButton;
 
@@ -40,7 +39,6 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "0";
     private static final String REGISTRATION_SUCCESSFUL = "regSucc";
-
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     /**
@@ -50,7 +48,6 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
     private String SENDER_ID = "24223089278";
 
     private GoogleCloudMessaging gcm;
-    private AtomicInteger msgId = new AtomicInteger();
     private Context context;
 
     private String regid;
@@ -65,6 +62,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
     private ArrayAdapter<CharSequence> spinnerAdapter;
 
     private RegistrationBroadcastReceiver broadcastReceiver;
+    private boolean ackReceived;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,7 +70,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
         context = getActivity();
 
         broadcastReceiver = new RegistrationBroadcastReceiver();
-        IntentFilter intentFilter = new IntentFilter(MessageIntentService.ACTION_MESSAGEINTENTSERVICE);
+        IntentFilter intentFilter = new IntentFilter(MessageIntentService.ACTION_MESSAGE_INTENT_SERVICE);
         intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
         context.registerReceiver(broadcastReceiver, intentFilter);
     }
@@ -166,7 +164,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
     }
 
     private void registerOnBackend() throws IOException {
-        String id = UUID.randomUUID().toString();
+        String id = UUID.randomUUID().toString(); //Should be changed from just a random.
         Bundle data = new Bundle();
         data.putString(GcmConstants.ACTION, GcmConstants.ACTION_REGISTER);
         gcm.send(SENDER_ID + "@gcm.googleapis.com", id, data);
@@ -284,7 +282,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
             protected void onPostExecute(Boolean success) {
                 super.onPostExecute(success);
                 if (!success) {
-                    Log.e("ReportFragment unregister", "Unregister failed");
+                    Log.i("ReportFragment unregister", "Unregister failed");
                 }
             }
         }.execute(regId, null, null);
@@ -311,6 +309,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
                 @Override
                 protected String doInBackground(Void... params) {
                     if (wasRegToBackendSuccessful()) {
+                        System.out.println("Backend successful refgister");
                         Bundle args = getArguments();
 
                         String msg;
@@ -325,8 +324,6 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
                             if (fromNbr == null || toNbr == null) {
                                 return "Error, must fill both from and to field";
                             }
-
-
                             dataToSend.putString(GcmConstants.ACTION, GcmConstants.ACTION_REPORT_DISTURBANCE);
                             dataToSend.putString(GcmConstants.DISTURBANCE_FROM_STATION_NBR, fromNbr);
                             dataToSend.putString(GcmConstants.DISTURBANCE_TO_STATION_NBR, toNbr);
@@ -342,6 +339,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
                             }
                             String id = UUID.randomUUID().toString();
                             gcm.send(SENDER_ID + "@gcm.googleapis.com", id, dataToSend);
+                            waitForAck(5000);
                             msg = "Report send";
                         } catch (IOException ex) {
                             msg = "Error :" + ex.getMessage();
@@ -349,24 +347,50 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
                         return msg;
                     } else {
                         try {
+                            System.out.println("RegOnBackend");
                             registerOnBackend();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        String msg = "Not registered to backend, trying again. Please try to resend the report";
+                        String msg = "Not registered to backend, trying again. Please try to resend the report later";
                         return msg;
                     }
                 }
 
                 @Override
                 protected void onPostExecute(String msg) {
-                    Log.d("GCM ReportActivity ", msg);
+                    Log.i("GCM ReportActivity ", msg);
                     Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
                 }
             }.execute(null, null, null);
-
-
         }
+    }
+
+    /**
+     * @param millis time to wait for ack from server
+     */
+    private void waitForAck(final long millis) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    Thread.sleep(millis);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                if (!ackReceived) {
+                    Toast.makeText(context, "Backend server offline, try again later", Toast.LENGTH_LONG).show();
+                }
+                ackReceived = false;
+            }
+        }.execute();
+
     }
 
     @Override
@@ -384,18 +408,20 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
     public void onDestroy() {
         super.onDestroy();
         context.unregisterReceiver(broadcastReceiver);
-
     }
 
     public class RegistrationBroadcastReceiver extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
-            boolean result = intent.getBooleanExtra(MessageIntentService.REGISTRATION_SUCCESSFUL, false);
-            final SharedPreferences prefs = getGcmPreferences(context);
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putBoolean(REGISTRATION_SUCCESSFUL, result);
-            editor.commit();
+            String action = intent.getStringExtra(GcmConstants.ACTION);
+            if (action.equals(GcmConstants.ACTION_REGISTER_SUCCESSFUL)) {
+                final SharedPreferences prefs = getGcmPreferences(context);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean(REGISTRATION_SUCCESSFUL, true);
+                editor.commit();
+            } else if (action.equals(GcmConstants.ACTION_ACK)) {
+                ackReceived = true;
+            }
         }
 
     }

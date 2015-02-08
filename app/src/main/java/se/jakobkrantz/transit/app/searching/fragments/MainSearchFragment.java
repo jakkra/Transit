@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import se.jakobkrantz.transit.app.R;
@@ -188,7 +187,6 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
 
         List<SimpleJourney> j = database.getRecentJourneys(1);
         if (j.size() > 0) {
-            Log.d("Showing", j.get(0).getFromStation() + " -> " + j.get(0).getToStation());
             SearchJourneysTask task = new SearchJourneysTask();
             task.setDataDownloadListener(this);
             task.execute(Constants.getURL(j.get(0).getFromStation().getStationId(), j.get(0).getToStation().getStationId(), 1));

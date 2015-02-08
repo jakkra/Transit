@@ -3,7 +3,6 @@ package se.jakobkrantz.transit.app.skanetrafikenAPI;/*
  */
 
 
-import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

@@ -127,7 +127,6 @@ public class TimeAndDatePickerDialogFragment extends DialogFragment implements V
 
 
             } else if (v.getId() == R.id.currentTimeButton) {
-                Log.d("Callback Time", rightNow.getTime().toString());
                 callback.onTimeSet(rightNow.getTime());
 
 

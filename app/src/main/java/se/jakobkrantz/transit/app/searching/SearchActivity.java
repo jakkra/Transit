@@ -1,10 +1,8 @@
 package se.jakobkrantz.transit.app.searching;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.Menu;
 import se.jakobkrantz.transit.app.base.BaseActivity;
 import se.jakobkrantz.transit.app.R;

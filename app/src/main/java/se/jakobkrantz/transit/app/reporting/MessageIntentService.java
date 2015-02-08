@@ -19,11 +19,12 @@ import se.jakobkrantz.transit.app.utils.GcmConstants;
 
 public class MessageIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
-    public static final String ACTION_MESSAGEINTENTSERVICE = "action_messIntent";
+    public static final String ACTION_MESSAGE_INTENT_SERVICE = "action_messIntent";
     public static final String REGISTRATION_SUCCESSFUL = "reggSuccessful";
 
     public static final String ACTION_DISTRUBANCE_RECEIVED = "action_messIntent";
     public static final String DISTURBANCE_EXTRAS = "reggSuccessful";
+    private static final String ACK_RECEIVED = "ackReceived";
 
     private NotificationManager mNotificationManager;
 
@@ -55,10 +56,10 @@ public class MessageIntentService extends IntentService {
 
                 try {
                     if (extras.getString(GcmConstants.ACTION).equals(GcmConstants.ACTION_REGISTER_SUCCESSFUL)) {
-                        Log.i("GCM rec action", GcmConstants.ACTION_REGISTER_SUCCESSFUL);
                         notifySuccessfulRegistration();
                     } else if (extras.getString(GcmConstants.ACTION).equals(GcmConstants.ACTION_REPORT_DISTURBANCE)) {
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        //TODO Shouldn't be done here, prefs should unregister from gcm, so the app won't receive them at all.
                         boolean shouldNotify = prefs.getBoolean(getResources().getString(R.string.pref_key_accept_not), true);
                         boolean shouldAcceptReport = prefs.getBoolean(getResources().getString(R.string.pref_key_accept_dist_report), true);
                         if (shouldAcceptReport && !shouldNotify) {
@@ -67,13 +68,15 @@ public class MessageIntentService extends IntentService {
                             sendNotification("Mellan " + extras.getString(GcmConstants.DISTURBANCE_FROM_STATION_NAME) + " och " + extras.getString(GcmConstants.DISTURBANCE_TO_STATION_NAME), extras);
                             notifyDisturbanceReport(extras);
                         }
+                    } else if (extras.getString(GcmConstants.ACTION).equals(GcmConstants.ACTION_ACK)) {
+                        notifyAckReportReceived();
                     }
                 } catch (NullPointerException e) {
 
                 }
             } else {
                 if (messageType != null) {
-                    Log.e("GCM rec unknown message", messageType);
+                    Log.i("GCM rec unknown message", messageType);
                 }
             }
 
@@ -82,10 +85,22 @@ public class MessageIntentService extends IntentService {
         ResponseBroadcastReceiver.completeWakefulIntent(intent);
     }
 
+    private void notifyAckReportReceived() {
+        Intent intentResponse = new Intent();
+        intentResponse.setAction(ACTION_MESSAGE_INTENT_SERVICE);
+        intentResponse.addCategory(Intent.CATEGORY_DEFAULT);
+        intentResponse.putExtra(ACK_RECEIVED, true);
+        intentResponse.putExtra(GcmConstants.ACTION, GcmConstants.ACTION_ACK);
+
+        sendBroadcast(intentResponse);
+    }
+
     private void notifySuccessfulRegistration() {
         Intent intentResponse = new Intent();
-        intentResponse.setAction(ACTION_MESSAGEINTENTSERVICE);
+        intentResponse.setAction(ACTION_MESSAGE_INTENT_SERVICE);
         intentResponse.addCategory(Intent.CATEGORY_DEFAULT);
+        intentResponse.putExtra(GcmConstants.ACTION, GcmConstants.ACTION_REGISTER_SUCCESSFUL);
+
         intentResponse.putExtra(REGISTRATION_SUCCESSFUL, true);
         sendBroadcast(intentResponse);
     }
@@ -96,12 +111,8 @@ public class MessageIntentService extends IntentService {
         intentResponse.addCategory(Intent.CATEGORY_DEFAULT);
         intentResponse.putExtra(DISTURBANCE_EXTRAS, extras);
         sendBroadcast(intentResponse);
-
     }
 
-    // Put the message into a notification and post it.
-    // This is just one simple example of what you might choose to do with
-    // a GCM message.
     private void sendNotification(String msg, Bundle data) {
         mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent intent = new Intent(this, DisturbancesActivity.class);

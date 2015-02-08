@@ -3,7 +3,6 @@ package se.jakobkrantz.transit.app.apiasynctasks;/*
  */
 
 import android.os.AsyncTask;
-import android.util.Log;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;

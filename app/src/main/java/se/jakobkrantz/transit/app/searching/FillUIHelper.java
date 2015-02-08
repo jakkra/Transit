@@ -2,7 +2,6 @@ package se.jakobkrantz.transit.app.searching;/*
  * Created by krantz on 14-11-26.
  */
 
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -81,7 +80,6 @@ public class FillUIHelper {
             message.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
         }
         message.setText(j.getSmartMessage());
-        Log.e("hehhe", j.getTimeToDep());
         timeToDep.setText(" om " + j.getTimeToDep());
 
 
