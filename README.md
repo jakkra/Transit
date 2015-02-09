@@ -2,9 +2,9 @@ Transit
 =======
 Transit android app used to search for journeys with Skånetrafiken.
 
-![Home](https://github.com/jakkra/Transit/pics/home.png)
+![Home](pics/home.png)
 
-![Result](https://github.com/jakkra/Transit/pics/result.png)
+[Result](pics/result.png)
 
 ![Detailed](https://github.com/jakkra/Transit/pics/detail.png)
 
