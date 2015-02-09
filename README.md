@@ -4,9 +4,9 @@ Transit android app used to search for journeys with Skånetrafiken.
 
 ![Home](pics/home.png)
 
-[Result](pics/result.png)
+![Result](pics/result.png)
 
-![Detailed](https://github.com/jakkra/Transit/pics/detail.png)
+![Detailed](pics/detail.png)
 
 ## Installation
 Install by downloading the Transit.apk to your phone. The phone will ask you to allow installation of unknown software, do that -> Profit
