@@ -2,13 +2,13 @@ Transit
 =======
 Transit android app used to search for journeys with Skånetrafiken.
 
-![Home](pics/home.png =200x)
+![Home](pics/home.png)
 
-![Result](pics/result.png =200x)
+![Result](pics/result.png)
 
-![Detailed](pics/detail.png =200x)
+![Detailed](pics/detail.png)
 
-![Drawer](pics/drawer.png =200x)
+![Drawer](pics/drawer.png)
 
 
 ## Installation
