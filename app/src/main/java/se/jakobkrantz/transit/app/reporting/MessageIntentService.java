@@ -16,12 +16,14 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.disturbances.DisturbancesActivity;
 import se.jakobkrantz.transit.app.utils.GcmConstants;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MessageIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
     public static final String ACTION_MESSAGE_INTENT_SERVICE = "action_messIntent";
 
-    public static final String ACTION_DISTRUBANCE_RECEIVED = "action_DistIntent";
+    public static final String ACTION_DISTURBANCE_RECEIVED = "action_DistIntent";
     public static final String DISTURBANCE_EXTRAS = "reggSuccessful";
     private static final String ACK_RECEIVED = "ackReceived";
 
@@ -33,7 +35,6 @@ public class MessageIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.i("OnHandelIntent", "Received from server");
         Bundle extras = intent.getExtras();
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
         // The getMessageType() intent parameter must be the intent you received
@@ -64,8 +65,10 @@ public class MessageIntentService extends IntentService {
                         boolean shouldNotify = prefs.getBoolean(getResources().getString(R.string.pref_key_accept_not), true);
                         boolean shouldAcceptReport = prefs.getBoolean(getResources().getString(R.string.pref_key_accept_dist_report), true);
                         if (shouldAcceptReport && !shouldNotify) {
+                            storeDataInPrefs(extras);
                             notifyDisturbanceReport(extras);
                         } else if (shouldAcceptReport && shouldNotify) {
+                            storeDataInPrefs(extras);
                             sendNotification("Mellan " + extras.getString(GcmConstants.DISTURBANCE_FROM_STATION_NAME) + " och " + extras.getString(GcmConstants.DISTURBANCE_TO_STATION_NAME), extras);
                             notifyDisturbanceReport(extras);
                         }
@@ -85,6 +88,32 @@ public class MessageIntentService extends IntentService {
         }
         // Release the wake lock
         ResponseBroadcastReceiver.completeWakefulIntent(intent);
+    }
+
+    private void storeDataInPrefs(Bundle data) {
+        Context ctx = getApplicationContext();
+        SharedPreferences prefs = ctx.getSharedPreferences(DisturbancesActivity.class.getSimpleName(), Context.MODE_PRIVATE);
+
+        String from = data.getString(GcmConstants.DISTURBANCE_FROM_STATION_NAME);
+        String to = data.getString(GcmConstants.DISTURBANCE_TO_STATION_NAME);
+        String type = data.getString(GcmConstants.DISTURBANCE_TYPE);
+        String delay = data.getString(GcmConstants.DISTURBANCE_APPROX_MINS);
+        String note = data.getString(GcmConstants.DISTURBANCE_NOTE);
+        String reportTime = data.getString(GcmConstants.DISTURBANCE_REPORT_TIME);
+        String reportTimeMillis = data.getString(GcmConstants.DISTURBANCE_REPORT_TIME_MILLIS);
+
+
+        String info = "Försening mellan " + from + " och " + to + "\n"
+                + "Typ: " + type + "\n"
+                + "Approximerad försening: " + delay + "\n"
+                + "Notering: " + note + "\n"
+                + "Tid för rapporteting: " + reportTime;
+        SharedPreferences.Editor editor = prefs.edit();
+        Set<String> set = prefs.getStringSet("distSet", new HashSet<String>());
+        Set<String> updatedSet = new HashSet<String>(set);
+        updatedSet.add(info);
+        editor.putStringSet("distSet", updatedSet);
+        editor.commit();
     }
 
     private void notifyAckReportReceived() {
@@ -107,18 +136,17 @@ public class MessageIntentService extends IntentService {
 
     private void notifyDisturbanceReport(Bundle extras) {
         Intent intentResponse = new Intent();
-        intentResponse.setAction(ACTION_DISTRUBANCE_RECEIVED);
+        intentResponse.setAction(ACTION_DISTURBANCE_RECEIVED);
         intentResponse.addCategory(Intent.CATEGORY_DEFAULT);
         intentResponse.putExtra(DISTURBANCE_EXTRAS, extras);
         sendBroadcast(intentResponse);
     }
 
 
-
     private void sendNotification(String msg, Bundle data) {
         mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent intent = new Intent(this, DisturbancesActivity.class);
-        intent.putExtras(data);
+        //intent.putExtras(data);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 

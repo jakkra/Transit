@@ -13,16 +13,27 @@ import se.jakobkrantz.transit.app.utils.BundleConstants;
 
 public class SearchActivity extends BaseActivity implements SearchLocationFragment.StationSelectedListener, OnDetailedJourneySelectedListener, FragmentEventListener {
 
+    private FragmentTypes activeFragment;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        onEvent(FragmentTypes.SEARCH_JOURNEY_FROM_TO, null);
+        if (savedInstanceState != null) {
+            //activeFragment = (FragmentTypes) savedInstanceState.getSerializable(LAST_FRAGMENT);
+        }
+        if (activeFragment != null) {
+
+            //onEvent(activeFragment, savedInstanceState);
+        } else {
+            onEvent(FragmentTypes.SEARCH_JOURNEY_FROM_TO, null);
+        }
         getSupportActionBar().setTitle(getResources().getStringArray(R.array.drawer_labels)[0]);
 
     }
 
     //Should not be called by fragments, should instead be called by listeners implemented in this activity.
     public void onEvent(FragmentTypes fragmentEvent, Bundle args) {
+        this.activeFragment = fragmentEvent;
         switch (fragmentEvent) {
             case SEARCH_JOURNEY_FROM_TO:
                 MainSearchFragment fragment = new MainSearchFragment();
@@ -70,6 +81,12 @@ public class SearchActivity extends BaseActivity implements SearchLocationFragme
         args.putString(BundleConstants.DEP_DATE, depDate);
         args.putString(BundleConstants.DEP_TIME, depTime);
         onEvent(FragmentTypes.DETAILED_JOURNEY, args);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putSerializable(LAST_FRAGMENT, activeFragment);
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override

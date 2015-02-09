@@ -42,6 +42,7 @@ public class FavouriteListAdapter extends RecyclerView.Adapter<RecyclerView.View
             ViewHolderClickListener l = new ViewHolderClickListener() {
                 @Override
                 public void onViewClick(View caller, int position) {
+                    Log.d("FavAdapte", "Clicked");
                     if (position < headerRecent) {
                         listener.onItemClickListener(simpleJourneys.get(position - 1));
 

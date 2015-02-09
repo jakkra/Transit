@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.*;
 import at.markushi.ui.CircleButton;
 import se.jakobkrantz.transit.app.R;
@@ -36,9 +35,8 @@ public class DisturbancesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
-
         broadcastReceiver = new DisturbanceBroadcastReceiver();
-        IntentFilter intentFilter = new IntentFilter(MessageIntentService.ACTION_DISTRUBANCE_RECEIVED);
+        IntentFilter intentFilter = new IntentFilter(MessageIntentService.ACTION_DISTURBANCE_RECEIVED);
         intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
         context.registerReceiver(broadcastReceiver, intentFilter);
     }
@@ -58,15 +56,6 @@ public class DisturbancesFragment extends Fragment {
         adapter = new DisturbanceAdapter(Arrays.copyOf(arr, arr.length, String[].class));
         list.setAdapter(adapter);
         setHasOptionsMenu(true);
-
-        data = getArguments();
-
-        if (data != null) {
-            fillData(data);
-        } else {
-            if (savedInstanceState != null)
-                fillData(savedInstanceState);
-        }
         return view;
     }
 
@@ -79,8 +68,6 @@ public class DisturbancesFragment extends Fragment {
     }
 
     private void fillData(Bundle data) {
-        Log.e("Filldata","");
-
         String from = data.getString(GcmConstants.DISTURBANCE_FROM_STATION_NAME);
         String to = data.getString(GcmConstants.DISTURBANCE_TO_STATION_NAME);
         String type = data.getString(GcmConstants.DISTURBANCE_TYPE);
@@ -104,22 +91,6 @@ public class DisturbancesFragment extends Fragment {
         super.onSaveInstanceState(outState);
         if (outState != null && data != null) {
             outState.putAll(data);
-        }
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        if (savedInstanceState != null) {
-            Log.d("Activity create", savedInstanceState.toString());
-
-        } else {
-            if (data != null) {
-                // fillData(data);
-            } else {
-                //textView.setText("Inga rapporteringar");
-            }
         }
     }
 
@@ -191,14 +162,11 @@ public class DisturbancesFragment extends Fragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.e("Rec","");
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             if (prefs.getBoolean(getResources().getString(R.string.pref_key_accept_dist_report), true)) {
-                fillData(intent.getBundleExtra(MessageIntentService.DISTURBANCE_EXTRAS));
-                Log.e("Rec","in if");
-
+                Object[] arr = getDisturbances(context).toArray();
+                adapter.updateDisturbances(Arrays.copyOf(arr, arr.length, String[].class));
             }
-            Log.e("Rec","after");
 
         }
 

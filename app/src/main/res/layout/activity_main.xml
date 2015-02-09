@@ -9,7 +9,6 @@
             android:id="@+id/toolbar"
             layout="@layout/toolbar"/>
     <android.support.v4.widget.DrawerLayout
-
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/drawer_layout"

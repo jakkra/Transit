@@ -31,8 +31,6 @@ import java.util.Date;
 import java.util.List;
 
 public class MainSearchFragment extends Fragment implements View.OnClickListener, FavouriteListAdapter.OnItemChangeListener, SearchJourneysTask.DataDownloadListener, TimeAndDatePickerDialogFragment.OnTimeSetListener {
-    //TODO Change to enum and move to MainActivity instead
-
     public static final int NBR_OF_LIST_ITEM_TO_SHOW = 10;
 
     private FragmentEventListener eventListener;
@@ -94,7 +92,6 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
         favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Bug when filling in from and to station and pressing save before pressing search, solved same way as below when searching
                 if (fromStation.getText().length() > 1 && toStation.getText().length() > 1) {
 
                     Bundle b = initBundle;

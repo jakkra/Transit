@@ -15,6 +15,7 @@
                 android:defaultValue="true"
                 android:key="@string/pref_key_accept_not"
                 android:title="@string/messages"
+                android:dependency="@string/pref_key_accept_dist_report"
                 android:summary="@string/prefs_summary_allow_notifications">
         </CheckBoxPreference>
 

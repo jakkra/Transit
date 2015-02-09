@@ -6,13 +6,14 @@
                 android:layout_gravity="center"
                 android:id="@+id/fav_layout"
                 android:layout_height="50dp"
-                android:background="@drawable/selector_fav_recent_list"
+
                 android:focusable="true"
-                android:clickable="true">
+                android:clickable="false">
     <TextView
             android:id="@+id/info_text"
             android:clickable="false"
             android:gravity="center"
+            android:background="@drawable/selector_fav_recent_list"
             android:focusable="false"
             android:layout_width="match_parent"
             android:layout_height="100dp"

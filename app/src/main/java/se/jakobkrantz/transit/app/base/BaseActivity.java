@@ -14,6 +14,7 @@ import se.jakobkrantz.transit.app.R;
 
 
 public class BaseActivity extends ActionBarActivity {
+    protected static String LAST_FRAGMENT = "lastFragment";
 
     public enum FragmentTypes {
         SEARCH_STATION, SEARCH_JOURNEY_FROM_TO, SEARCH_RESULT, DETAILED_JOURNEY, TIME_AND_DATE_PICKER, TIME_SET, REPORT_FRAGMENT, DUMMY
@@ -49,7 +50,6 @@ public class BaseActivity extends ActionBarActivity {
         drawerList.setItemAnimator(new DefaultItemAnimator());
         drawerListAdapter = new DrawerListAdapter(drawerListText, new DrawerListClickListener(this, drawerLayout, drawerListText));
         drawerList.setAdapter(drawerListAdapter);
-
 
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerToggle.setDrawerIndicatorEnabled(true);
