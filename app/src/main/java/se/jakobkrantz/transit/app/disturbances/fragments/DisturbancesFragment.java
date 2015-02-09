@@ -63,8 +63,6 @@ public class DisturbancesFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         context.unregisterReceiver(broadcastReceiver);
-
-
     }
 
     private void fillData(Bundle data) {

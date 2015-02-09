@@ -22,8 +22,8 @@ android {
         applicationId "se.jakobkrantz.transit.app"
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 8
-        versionName "1.23"
+        versionCode 9
+        versionName "1.24"
     }
     buildTypes {
         release {
