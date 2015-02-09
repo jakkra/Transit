@@ -2,11 +2,14 @@ Transit
 =======
 Transit android app used to search for journeys with Skånetrafiken.
 
-![Home](pics/home.png)
+![Home](pics/home.png =200x)
 
-![Result](pics/result.png)
+![Result](pics/result.png =200x)
 
-![Detailed](pics/detail.png)
+![Detailed](pics/detail.png =200x)
+
+![Drawer](pics/drawer.png =200x)
+
 
 ## Installation
 Install by downloading the Transit.apk to your phone. The phone will ask you to allow installation of unknown software, do that -> Profit
