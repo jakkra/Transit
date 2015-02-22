@@ -17,7 +17,6 @@
 
             android:layout_gravity="center"
             android:hint="@string/edit_text_search_hint"
-            android:background="@drawable/abc_edit_text_material"
             android:textSize="25sp"
             android:gravity="center" android:paddingRight="5dp" android:paddingLeft="5dp"/>
     <ListView

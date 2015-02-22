@@ -6,7 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
-    <string name="edit_text_search_hint">Sök station</string>
+    <string name="edit_text_search_hint">Sök resmål/startpunkt</string>
     <string name="edit_text_search_from">Sök från</string>
     <string name="search_journey_button_text">Sök</string>
     <string name="edit_text_search_to">Sök till</string>

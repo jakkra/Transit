@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import se.jakobkrantz.transit.app.R;
 
 public class DrawerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -15,10 +16,10 @@ public class DrawerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static final int POSITION_MENU = 1;
 
     private String[] options;
-    private DrawerListClickListener listener;
+    private AdapterView.OnItemClickListener listener;
 
 
-    public DrawerListAdapter(String[] options, DrawerListClickListener listener) {
+    public DrawerListAdapter(String[] options, AdapterView.OnItemClickListener listener) {
         this.options = options;
         this.listener = listener;
     }

@@ -154,6 +154,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
             cv.put(COLUMN_TIME_SEARCHED, getDateTime());
             db.update(table, cv, COLUMN_STATION_NAME + " = ? AND " + COLUMN_STATION_NAME1 + " = ?", new String[]{s.getFromStation().getStationName(), s.getToStation().getStationName()});
         }
+        db.close();
         return wasAdded;
 
     }
@@ -269,6 +270,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
             s1.setLongitude(Double.parseDouble(cursor.getString(6)));
             s1.setType(cursor.getString(8));
             s1.setTimeSearched(cursor.getString(10));
+            db.close();
             return s1;
         } else {
             cursor = db.query(table, null, COLUMN_STATION_NAME1 + " = ?", new String[]{station}, null, null, null, "1");
@@ -281,6 +283,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
                 s1.setLongitude(Double.parseDouble(cursor.getString(7)));
                 s1.setType(cursor.getString(9));
                 s1.setTimeSearched(cursor.getString(10));
+                db.close();
                 return s1;
             }
 
@@ -334,6 +337,7 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
             if (s2 == null) {
                 s2 = searchTableForStation(db, TABLE_RECENT_JOURNEY_SEARCH, to);
             }
+            db.close();
             return new SimpleJourney(s1, s2);
         }
     }

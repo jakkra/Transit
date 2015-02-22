@@ -48,10 +48,10 @@ public class RouteLink {
     private String operatorName; //Vehicle operators name
     private String depTimeDeviation; //Deviation from timetable time in min. (on departure side). Delays are positive integer values and earlier times are negative.
     private String arrTimeDeviation; //Deviation from timetable time in min. (on arrival side). Delays are positive integer values and earlier times are negative.
-    private String accessibility; //Accessibility, sum of accesibility features for line where 1=R (Adapted for wheelchair), 2=S (Visually impaired), 4=H (Hearing impaired)
-    private String routeLinkKey; //Used by the Elmer seach engine to identify an object uniquely in the scope of a traffic data.
+    private String accessibility; //Accessibility, sum of accessibility features for line where 1=R (Adapted for wheelchair), 2=S (Visually impaired), 4=H (Hearing impaired)
+    private String routeLinkKey; //Used by the Elmer search engine to identify an object uniquely in the scope of a traffic data.
     private String depDateTime; //Departure date and time
-    private String depIsTimingPoint; //Denotes if Departure node is a timing point. False means that DepDateTime is aproximated time
+    private String depIsTimingPoint; //Denotes if Departure node is a timing point. False means that DepDateTime is approximated time
     private String arrDateTime; //Arrival date and time
     private String arrIsTimingPoint; //Arrival date and time
     private String callTrip; //Denotes if Arrival node is timing point. False means that ArrDateTime is approximated time
@@ -92,7 +92,7 @@ public class RouteLink {
                 "Arr is timing point: " + getArrIsTimingPoint() + "\n" +
                 "Arr deviation time: " + getArrTimeDeviation() + "\n" +
                 "Arr time deviation effect: " + getArrDeviationAffect() + "\n" +
-                "Accessability level: " + getAccessibility() + "\n" +
+                "Accessibility level: " + getAccessibility() + "\n" +
                 "\n" +
                 "Text: " + getText() + "\n" +
                 "Public note: " + getPublicNote() + "\n" +
@@ -105,8 +105,11 @@ public class RouteLink {
     public String getLineNbr() {
         if (transportMode == TRAIN) {
             return trainNbr;
+        } else if (lineTypeName.equals("Gång")) {
+            return "";
         } else {
-            return lineNbr;
+            return lineName;
+
         }
     }
 

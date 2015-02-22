@@ -14,9 +14,9 @@ public class Journey {
     private String depWalkDist; // Walk distance in m. between starting point for journey (if address or POI) and Stop Area for departure
     private String arrWalkDist; // Walk distance in m. between Stop Area for arrival and journey end point (if address or POI)
     private String nbrOfChanges; // No of change
-    private String guaranteed; // Denotes if journey is guaranteed by transport authority, according to rules for "Travel Guarnantee"
+    private String guaranteed; // Denotes if journey is guaranteed by transport authority, according to rules for "Travel Guarantee"
     private String CO2Factor; // Journeys impact on the environment - environmental index based on the carbon dioxide (CO2) emissions, Values between 0(lowest impact) and 100
-    private String nbrOfZones; // No of passing zones in a zoned fare stucture defined by transport authority
+    private String nbrOfZones; // No of passing zones in a zoned fare structure defined by transport authority
     private String journeyKey; // Used by the Elmer search engine to identify an object uniquely in the scope of a traffic data. Information may be used by back-end services like Map Service to draw itinerary on map.
 
     private List<RouteLink> routeLinks; // All part distances, if more than one you need to change bus/tran..

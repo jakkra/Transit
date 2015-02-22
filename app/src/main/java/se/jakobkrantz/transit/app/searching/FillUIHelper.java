@@ -2,6 +2,7 @@ package se.jakobkrantz.transit.app.searching;/*
  * Created by krantz on 14-11-26.
  */
 
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -70,7 +71,11 @@ public class FillUIHelper {
         for (TextView tw : routeNbrs) {
             tw.setText("");
         }
-        transportNameNbr.setText(j.getFirstRouteTransportName() + " " + j.getFirstRouteLineNbr());
+        if (j.getFirstRouteLineNbr().contains("SkåneExpressen")) {
+            transportNameNbr.setText(j.getFirstRouteLineNbr());
+        } else {
+            transportNameNbr.setText(j.getFirstRouteTransportName() + " " + j.getFirstRouteLineNbr());
+        }
         timeBetween.setText(TimeAndDateConverter.formatTime(j.getDepDateTime()) + " - " + TimeAndDateConverter.formatTime(j.getArrDateTime()));
         nbrDepTime.setText(j.getTotalTravelTime() + " min ");
         String smartMessage = j.getSmartMessage();
@@ -96,7 +101,13 @@ public class FillUIHelper {
         List<Integer> lineTypes = j.getLineTypes();
         for (int i = 0; i < lineTypes.size(); i++) {
             routePics.get(i * 2).setImageResource(getDrawableFromLineType(lineTypes.get(i)));
-            routeNbrs.get(i).setText(lineNbrs.get(i));
+            if (lineNbrs.get(i).length() < 6) {
+                routeNbrs.get(i).setText(lineNbrs.get(i));
+            } else {
+                String nbr = lineNbrs.get(i).replaceAll("[^\\d.]", "");
+                routeNbrs.get(i).setText(nbr);
+
+            }
 
 
         }

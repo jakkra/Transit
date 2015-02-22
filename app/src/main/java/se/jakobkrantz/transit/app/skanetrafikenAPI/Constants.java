@@ -3,6 +3,8 @@ package se.jakobkrantz.transit.app.skanetrafikenAPI;/*
  */
 
 
+import android.util.Log;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -35,7 +37,6 @@ public class Constants {
     public static String getURL(int startStationNumber, int endStationNumber, String date, String time, int nbrResults) {
         String nbrRes = String.valueOf(nbrResults);
         String url = baseURL + queryActionNextURL + pipe + startStationNumber + pipe + midPartURL + pipe + endStationNumber + pipe + lastPartDateFromURL + date + space + time + noOfResults + nbrRes;
-
         return url;
     }
 

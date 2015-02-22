@@ -3,7 +3,6 @@ package se.jakobkrantz.transit.app.skanetrafikenAPI;/*
  */
 
 
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -148,17 +147,36 @@ public class TimeAndDateConverter {
                     days = hours / 24;
                     hours = hours % 24;
                     if (hours < 10) {
-                        return (int) days + ":0" + (int) hours + ":" + (int) diffMinutes;
+                        if (diffMinutes < 10) {
+                            return (int) days + ":0" + (int) hours + ":0" + (int) diffMinutes;
+
+                        } else {
+                            return (int) days + ":0" + (int) hours + ":" + (int) diffMinutes;
+                        }
                     } else {
-                        return (int) days + ":" + (int) hours + ":" + (int) diffMinutes;
+                        if (diffMinutes < 10) {
+                            return (int) days + ":" + (int) hours + ":0" + (int) diffMinutes;
+
+                        } else {
+                            return (int) days + ":" + (int) hours + ":" + (int) diffMinutes;
+                        }
 
                     }
                 } else {
                     if (hours < 10) {
-                        return "0" + (int) hours + ":" + (int) diffMinutes;
-                    } else {
-                        return (int) hours + ":" + (int) diffMinutes;
+                        if (diffMinutes < 10) {
+                            return "0" + (int) hours + ":0" + (int) diffMinutes;
 
+                        } else {
+                            return "0" + (int) hours + ":" + (int) diffMinutes;
+                        }
+                    } else {
+                        if (diffMinutes < 10) {
+                            return (int) hours + ":0" + (int) diffMinutes;
+
+                        } else {
+                            return (int) hours + ":" + (int) diffMinutes;
+                        }
                     }
                 }
 
