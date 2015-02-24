@@ -1,7 +1,4 @@
-package se.jakobkrantz.transit.app.skanetrafikenAPI;/*
- * Created by krantz on 14-11-20.
- */
-
+package se.jakobkrantz.transit.app.skanetrafikenAPI;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -186,9 +183,7 @@ public class TimeAndDateConverter {
             return "-";
         }
     }
-
-    //Takes a date String in format 2012-10-15T08:17:00 and converts it to a calendar object
-
+    
     /**
      * Converts a dateTimeString and makes a Calendar object
      *

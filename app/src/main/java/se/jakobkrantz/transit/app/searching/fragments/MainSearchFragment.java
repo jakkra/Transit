@@ -16,7 +16,7 @@ import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.base.FragmentEventListener;
 import se.jakobkrantz.transit.app.searching.FillUIHelper;
 import se.jakobkrantz.transit.app.searching.SearchActivity;
-import se.jakobkrantz.transit.app.adapters.FavouriteListAdapter;
+import se.jakobkrantz.transit.app.searching.FavouriteListAdapter;
 import se.jakobkrantz.transit.app.apiasynctasks.SearchJourneysTask;
 import se.jakobkrantz.transit.app.database.DatabaseTransitSQLite;
 import se.jakobkrantz.transit.app.database.SimpleJourney;
@@ -84,8 +84,6 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
     @Override
     public void onStart() {
         super.onStart();
-
-
         fromStation.setOnClickListener(this);
         toStation.setOnClickListener(this);
 
@@ -229,6 +227,9 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
         }
     }
 
+    /**
+     * Swaps the text between from and to. Also switches the data corresponding to each of them.
+     */
     private void swapFromAndToStation() {
         String s1 = fromStation.getText().toString();
         String s2 = toStation.getText().toString();
@@ -263,7 +264,6 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Do something that differs the Activity's menu here
         inflater.inflate(R.menu.menu_main, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -334,7 +334,7 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onFavouriteItemAdded(SimpleJourney s) {
-        //List was full, more than 10? favourites, deletes old
+        //List was full, more than 10? favourites, deletes oldest, why? Because 10 is enough! :)
         Toast.makeText(getActivity(), "Favourite journey limit reached, oldest was removed", Toast.LENGTH_LONG).show();
         database.deleteFavouriteJourney(s);
     }

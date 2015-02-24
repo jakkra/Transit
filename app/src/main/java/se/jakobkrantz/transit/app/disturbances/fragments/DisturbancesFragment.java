@@ -65,25 +65,6 @@ public class DisturbancesFragment extends Fragment {
         context.unregisterReceiver(broadcastReceiver);
     }
 
-    private void fillData(Bundle data) {
-        String from = data.getString(GcmConstants.DISTURBANCE_FROM_STATION_NAME);
-        String to = data.getString(GcmConstants.DISTURBANCE_TO_STATION_NAME);
-        String type = data.getString(GcmConstants.DISTURBANCE_TYPE);
-        String delay = data.getString(GcmConstants.DISTURBANCE_APPROX_MINS);
-        String note = data.getString(GcmConstants.DISTURBANCE_NOTE);
-        String reportTime = data.getString(GcmConstants.DISTURBANCE_REPORT_TIME);
-        String reportTimeMillis = data.getString(GcmConstants.DISTURBANCE_REPORT_TIME_MILLIS);
-
-
-        String info = "Försening mellan " + from + " och " + to + "\n"
-                + "Typ: " + type + "\n"
-                + "Approximerad försening: " + delay + "\n"
-                + "Notering: " + note + "\n"
-                + "Tid för rapporteting: " + reportTime;
-        Object[] arr = storeDisturbance(context, info).toArray();
-        adapter.updateDisturbances(Arrays.copyOf(arr, arr.length, String[].class));
-    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);

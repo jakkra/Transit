@@ -17,6 +17,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * Custom Dialog for selecting Date and Time
+ */
 public class TimeAndDatePickerDialogFragment extends DialogFragment implements View.OnClickListener {
 
 
@@ -38,7 +41,6 @@ public class TimeAndDatePickerDialogFragment extends DialogFragment implements V
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dates = getDatesFromCalender();
-
     }
 
     @Override
@@ -133,7 +135,7 @@ public class TimeAndDatePickerDialogFragment extends DialogFragment implements V
             }
 
         }
-        getDialog().dismiss(); //TODO Not recommended to do this, should be changed.
+        getDialog().dismiss(); //TODO Not recommended to do this, should be changed I believe
     }
 
 

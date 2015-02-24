@@ -6,6 +6,5 @@ package se.jakobkrantz.transit.app.base;
 import android.os.Bundle;
 
 public interface FragmentEventListener {
-
     public void onEvent(BaseActivity.FragmentTypes fragmentEvent, Bundle args);
 }

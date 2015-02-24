@@ -252,7 +252,7 @@ public class RouteLink {
 
 
     /**
-     * @param accessibility sum of accesibility features for line where
+     * @param accessibility sum of accessibility features for line where
      *                      1=R (Adapted for wheelchair), 2=S (Visually impaired),
      *                      4=H (Hearing impaired)
      */

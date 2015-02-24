@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 import se.jakobkrantz.transit.app.R;
-import se.jakobkrantz.transit.app.adapters.ViewHolderClickListener;
+import se.jakobkrantz.transit.app.base.ViewHolderClickListener;
 
 public class ViewHolderLoadHeader extends RecyclerView.ViewHolder implements View.OnClickListener {
     private final View v;

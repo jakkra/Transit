@@ -1,4 +1,5 @@
-package se.jakobkrantz.transit.app.apiasynctasks;/*
+package se.jakobkrantz.transit.app.apiasynctasks;
+/*
  * Created by krantz on 14-11-19.
  */
 
@@ -7,7 +8,7 @@ import android.os.AsyncTask;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import se.jakobkrantz.transit.app.adapters.SearchFragmentListAdapter;
+import se.jakobkrantz.transit.app.searching.SearchFragmentListAdapter;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Station;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.XMLQueryStationHandler;
 import javax.xml.parsers.ParserConfigurationException;
@@ -58,10 +59,6 @@ public class SearchStationsTask extends AsyncTask<String, Void, ArrayList<Statio
         if (stations != null) {
             adapter.setSearchResults(stations);
         }
-
-        //Fill listView with the stations
-        //listViewAdapter = new CustomListViewAdapter(context, stations);
-        //listView.setAdapter(listViewAdapter);
     }
 
 }

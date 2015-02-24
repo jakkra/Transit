@@ -2,6 +2,9 @@ package se.jakobkrantz.transit.app.utils;/*
  * Created by krantz on 14-11-30.
  */
 
+/**
+ * Constants used when passing Bundles around
+ */
 public class BundleConstants {
     public static final String SOURCE = "source";
     public static final String SOURCE_TO_STATION = "sourcetostation";

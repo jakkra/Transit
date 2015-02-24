@@ -1,4 +1,4 @@
-package se.jakobkrantz.transit.app.adapters;
+package se.jakobkrantz.transit.app.searching;
 /*
  * Created by krantz on 14-11-22.
  */
@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import se.jakobkrantz.transit.app.R;
+import se.jakobkrantz.transit.app.base.ViewHolderClickListener;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Journey;
 import se.jakobkrantz.transit.app.viewholders.ViewHolderLoadHeader;
 import se.jakobkrantz.transit.app.viewholders.ViewHolderResult;
@@ -99,7 +100,7 @@ public class ResultListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 
     /**
-     * @param journeys journeys to bew showed in the list
+     * @param journeys journeys to be showed in the list
      * @param b        true if added to beginning, false if added to the end
      */
     public void addJourneys(ArrayList<Journey> update, boolean b) {

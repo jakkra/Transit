@@ -22,11 +22,10 @@ import java.util.Set;
 public class MessageIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
     public static final String ACTION_MESSAGE_INTENT_SERVICE = "action_messIntent";
-
     public static final String ACTION_DISTURBANCE_RECEIVED = "action_DistIntent";
     public static final String DISTURBANCE_EXTRAS = "reggSuccessful";
+    
     private static final String ACK_RECEIVED = "ackReceived";
-
     private NotificationManager mNotificationManager;
 
     public MessageIntentService() {
@@ -58,10 +57,9 @@ public class MessageIntentService extends IntentService {
                     if (extras.getString(GcmConstants.ACTION).equals(GcmConstants.ACTION_REGISTER_SUCCESSFUL)) {
                         notifySuccessfulRegistration();
                     } else if (extras.getString(GcmConstants.ACTION).equals(GcmConstants.ACTION_REPORT_DISTURBANCE)) {
-                        //TODO save input to database/prefs so report is displayed even though notification was clicked, alt. DisturbanceFragment was open.
 
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                        //TODO Shouldn't be done here, prefs should unregister from gcm, so the app won't receive them at all.
+                        //TODO Shouldn't be done here? prefs should unregister from gcm, so the app won't receive them at all?
                         boolean shouldNotify = prefs.getBoolean(getResources().getString(R.string.pref_key_accept_not), true);
                         boolean shouldAcceptReport = prefs.getBoolean(getResources().getString(R.string.pref_key_accept_dist_report), true);
                         if (shouldAcceptReport && !shouldNotify) {
@@ -101,8 +99,7 @@ public class MessageIntentService extends IntentService {
         String note = data.getString(GcmConstants.DISTURBANCE_NOTE);
         String reportTime = data.getString(GcmConstants.DISTURBANCE_REPORT_TIME);
         String reportTimeMillis = data.getString(GcmConstants.DISTURBANCE_REPORT_TIME_MILLIS);
-
-
+        
         String info = "Försening mellan " + from + " och " + to + "\n"
                 + "Typ: " + type + "\n"
                 + "Approximerad försening: " + delay + "\n"

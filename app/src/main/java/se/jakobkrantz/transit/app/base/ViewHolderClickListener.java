@@ -1,4 +1,4 @@
-package se.jakobkrantz.transit.app.adapters;/*
+package se.jakobkrantz.transit.app.base;/*
  * Created by krantz on 14-11-23.
  */
 

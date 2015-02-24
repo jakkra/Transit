@@ -1,9 +1,4 @@
-package se.jakobkrantz.transit.app.skanetrafikenAPI;/*
- * Created by krantz on 14-11-18.
- */
-
-
-import android.util.Log;
+package se.jakobkrantz.transit.app.skanetrafikenAPI;
 
 import java.util.Calendar;
 import java.util.Date;

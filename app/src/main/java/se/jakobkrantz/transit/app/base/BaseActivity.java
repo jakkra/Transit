@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -26,7 +25,7 @@ import se.jakobkrantz.transit.app.searching.SearchActivity;
 
 
 public class BaseActivity extends ActionBarActivity implements ListView.OnItemClickListener {
-    protected static String LAST_FRAGMENT = "lastFragment";
+    protected static String LAST_FRAGMENT = "lastFragment"; //Remember last used fragment when app is closed.
 
     public enum FragmentTypes {
         SEARCH_STATION, SEARCH_JOURNEY_FROM_TO, SEARCH_RESULT, DETAILED_JOURNEY, TIME_AND_DATE_PICKER, TIME_SET, REPORT_FRAGMENT, DUMMY

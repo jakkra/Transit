@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import se.jakobkrantz.transit.app.R;
+import se.jakobkrantz.transit.app.viewholders.ViewHolderDrawerHeader;
+import se.jakobkrantz.transit.app.viewholders.ViewHolderDrawerMenu;
 
 public class DrawerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int POSITION_HEADER = 0;

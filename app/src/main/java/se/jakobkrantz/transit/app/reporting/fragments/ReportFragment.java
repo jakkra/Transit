@@ -40,17 +40,13 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
     private static final String PROPERTY_APP_VERSION = "0";
     private static final String REGISTRATION_SUCCESSFUL = "regSucc";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
-    /**
-     * Substitute you own sender ID here. This is the project number you got
-     * from the API Console, as described in "Getting Started."
-     */
-    private String SENDER_ID = "24223089278";
+    
+    private String SENDER_ID = "24223089278"; // Project number
 
     private GoogleCloudMessaging gcm;
     private Context context;
 
-    private String regid;
+    private String regId;
 
     private CircleButton sendButton;
     private Spinner disturbanceType;
@@ -82,9 +78,9 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
             Log.i("GCM", "Play Services OK");
             gcm = GoogleCloudMessaging.getInstance(context);
 
-            regid = getRegistrationId(context);
-            if (regid.isEmpty()) {
-                unregisterDevice(regid);
+            regId = getRegistrationId(context);
+            if (regId.isEmpty()) {
+                unregisterDevice(regId);
                 registerInBackground();
             }
 
@@ -140,11 +136,11 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
                     if (gcm == null) {
                         gcm = GoogleCloudMessaging.getInstance(context);
                     }
-                    regid = gcm.register(SENDER_ID);
+                    regId = gcm.register(SENDER_ID);
                     registerOnBackend();
-                    Log.e("GCM ReportFragment register", "Device registered, registration ID=" + regid);
+                    Log.d("GCM ReportFragment register", "Device registered, registration ID=" + regId);
                     msg = "";
-                    storeRegistrationId(context, regid);
+                    storeRegistrationId(context, regId);
                 } catch (IOException ex) {
                     Log.e("GCM ReportFragment register", "Error :" + ex.getMessage());
                     msg = "GCM Registration failed, please try again later";
@@ -155,7 +151,6 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
             @Override
             protected void onPostExecute(String msg) {
                 if (!msg.isEmpty()) {
-                    Log.i("GCM ReportFragment msg: ", msg);
                     Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
                 }
 

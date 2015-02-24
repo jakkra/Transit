@@ -43,7 +43,9 @@ public class Journey {
     }
 
 
-
+    /**
+     * Shortens a message in a "smart" way
+     */
     public String getSmartMessage() {
         String message = "";
         String text = "";
@@ -87,8 +89,6 @@ public class Journey {
                     return RouteLink.LATE;
                 }
             }
-
-
         }
         return RouteLink.UNKNOWN_DEVIATION;
 

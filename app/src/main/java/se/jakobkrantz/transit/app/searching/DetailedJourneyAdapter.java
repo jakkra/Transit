@@ -1,4 +1,4 @@
-package se.jakobkrantz.transit.app.adapters;
+package se.jakobkrantz.transit.app.searching;
 /*
  * Created by krantz on 14-11-30.
  */
@@ -18,7 +18,7 @@ import se.jakobkrantz.transit.app.viewholders.TransportViewHolder;
 
 public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int POSITION_VIEW = 2;
-    public static final int POSITION_VIEW_BUTTOM = 3;
+    public static final int POSITION_VIEW_BUTTON = 3;
     public static final int TRANSPORT_VIEW = 4;
 
     private Journey journey;
@@ -36,7 +36,7 @@ public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         } else if (viewType == TRANSPORT_VIEW) {
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.journey_transport_item, viewGroup, false);
             return new TransportViewHolder(v);
-        } else if (viewType == POSITION_VIEW_BUTTOM) {
+        } else if (viewType == POSITION_VIEW_BUTTON) {
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.journey_position_item_bottom, viewGroup, false);
             return new PositionViewHolder(v);
         } else {
@@ -49,14 +49,12 @@ public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         if (viewHolder instanceof PositionViewHolder) {
             PositionViewHolder holder = ((PositionViewHolder) viewHolder);
-
-
+            
             if (i != 0) {
                 holder.arrTime.setText(TimeAndDateConverter.formatTime(journey.getRouteLinks().get(calculateArrivalIndex(i)).getArrDateTime()));
             }
 
             if (i != getItemCount() - 1) {
-
                 holder.depTime.setText(TimeAndDateConverter.formatTime(journey.getRouteLinks().get(calculateDepartureIndex(i)).getDepDateTime()));
             }
 
@@ -113,6 +111,9 @@ public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
+    /**
+     *  Calculates which index in an list of Routes correspond to a index inside the list in DetailedFragment*  
+     */
     private static int calculateArrivalIndex(int i) {
         if (i == 0) return 0;
         i--;
@@ -129,7 +130,9 @@ public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         return 0;
 
     }
-
+    /**
+     *  Calculates which index in an list of Routes correspond to a index inside the list in DetailedFragment*  
+     */
     private static int calculateDepartureIndex(int i) {
         if (i == 0) return 0;
         return calculateArrivalIndex(i) + 1;
@@ -138,7 +141,7 @@ public class DetailedJourneyAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public int getItemViewType(int position) {
         if (position == getItemCount() -1) {
-            return POSITION_VIEW_BUTTOM;
+            return POSITION_VIEW_BUTTON;
         } else if (position % 2 == 0) {
             return POSITION_VIEW;
         } else {

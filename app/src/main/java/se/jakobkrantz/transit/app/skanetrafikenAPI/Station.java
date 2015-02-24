@@ -13,7 +13,7 @@ public class Station {
     public Station(String stationName, int stationId, double latitude, double longitude, String type) {
         this.stationName = stationName;
         this.stationId = stationId;
-        this.latitude = latitude; //https://github.com/goober/coordinate-transformation-library
+        this.latitude = latitude; // https://github.com/goober/coordinate-transformation-library
         this.longitude = longitude; // RT90 format if needed use this library to change to long/lat
         this.type = type;
     }

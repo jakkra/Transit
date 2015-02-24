@@ -1,4 +1,5 @@
-package se.jakobkrantz.transit.app.apiasynctasks;/*
+package se.jakobkrantz.transit.app.apiasynctasks;
+/*
  * Created by krantz on 14-11-21.
  */
 
@@ -43,7 +44,6 @@ public class SearchJourneysTask extends AsyncTask<String, Void, ArrayList<Journe
     }
     @Override
     protected ArrayList<Journey> doInBackground(String... params) {
-//        Log.d("URL", params[0]);
         try {
             URL url = new URL(params[0]);
             xmlR.parse(new InputSource(url.openStream()));

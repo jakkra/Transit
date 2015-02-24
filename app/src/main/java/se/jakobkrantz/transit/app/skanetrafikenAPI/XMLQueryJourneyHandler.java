@@ -48,7 +48,8 @@ public class XMLQueryJourneyHandler extends DefaultHandler {
         }
 
     }
-
+    
+    //FML...
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
         elementOn = false;

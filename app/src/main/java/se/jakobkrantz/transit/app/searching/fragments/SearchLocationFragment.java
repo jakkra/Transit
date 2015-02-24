@@ -17,7 +17,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import se.jakobkrantz.transit.app.R;
-import se.jakobkrantz.transit.app.adapters.SearchFragmentListAdapter;
+import se.jakobkrantz.transit.app.searching.SearchFragmentListAdapter;
 import se.jakobkrantz.transit.app.apiasynctasks.SearchStationsTask;
 import se.jakobkrantz.transit.app.database.DatabaseTransitSQLite;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Constants;

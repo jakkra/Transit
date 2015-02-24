@@ -1,4 +1,4 @@
-package se.jakobkrantz.transit.app.adapters;/*
+package se.jakobkrantz.transit.app.searching;/*
  * Created by krantz on 14-11-21.
  */
 
@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import se.jakobkrantz.transit.app.R;
+import se.jakobkrantz.transit.app.base.ViewHolderClickListener;
 import se.jakobkrantz.transit.app.database.SimpleJourney;
 import se.jakobkrantz.transit.app.viewholders.ViewHolderItem;
 
@@ -42,7 +43,6 @@ public class FavouriteListAdapter extends RecyclerView.Adapter<RecyclerView.View
             ViewHolderClickListener l = new ViewHolderClickListener() {
                 @Override
                 public void onViewClick(View caller, int position) {
-                    Log.d("FavAdapte", "Clicked");
                     if (position < headerRecent) {
                         listener.onItemClickListener(simpleJourneys.get(position - 1));
 
@@ -55,7 +55,7 @@ public class FavouriteListAdapter extends RecyclerView.Adapter<RecyclerView.View
                 public void onViewLongClick(View caller, int position) {
                     if (position < headerRecent) {
                         listener.onItemLongClickListener(simpleJourneys.get(position - 1));
-                        //removeFavourite(position);
+                        //removeFavourite(position); //Not the best way to remove favourites
                     } else if (position > headerRecent) {
                         listener.onItemLongClickListener(recentSearches.get(position - headerRecent - 1));
                     }

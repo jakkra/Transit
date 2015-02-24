@@ -11,7 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.*;
 import android.widget.Toast;
 import se.jakobkrantz.transit.app.R;
-import se.jakobkrantz.transit.app.adapters.ResultListAdapter;
+import se.jakobkrantz.transit.app.searching.ResultListAdapter;
 import se.jakobkrantz.transit.app.apiasynctasks.SearchJourneysTask;
 import se.jakobkrantz.transit.app.searching.OnDetailedJourneySelectedListener;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Constants;

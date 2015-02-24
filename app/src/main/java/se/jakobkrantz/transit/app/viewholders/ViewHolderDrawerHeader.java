@@ -1,4 +1,4 @@
-package se.jakobkrantz.transit.app.base;/*
+package se.jakobkrantz.transit.app.viewholders;/*
  * Created by jakkra on 2015-01-29.
  */
 

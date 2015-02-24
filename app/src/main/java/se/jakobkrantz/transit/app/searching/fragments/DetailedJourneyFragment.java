@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import se.jakobkrantz.transit.app.R;
-import se.jakobkrantz.transit.app.adapters.DetailedJourneyAdapter;
+import se.jakobkrantz.transit.app.searching.DetailedJourneyAdapter;
 import se.jakobkrantz.transit.app.apiasynctasks.SearchJourneysTask;
 import se.jakobkrantz.transit.app.searching.FillDetailedHeaderHelper;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.Constants;
@@ -67,7 +67,7 @@ public class DetailedJourneyFragment extends Fragment implements SearchJourneysT
 
 
         //TODO make nicer :p
-        //Somehow searching with the specific time does not return journeys for that exact departure time, we need to remove one minute from the journey time we want to search for.
+        //For some reason  searching with the specific time does not return journeys for that exact departure time, we need to remove one minute from the journey time we want to search for.
         Calendar cal = TimeAndDateConverter.parseCalendarString(args.getString(BundleConstants.DEP_DATE) + "T" + args.getString(BundleConstants.DEP_TIME) + ":00");
         cal.add(Calendar.MINUTE, -1);
         String dayOfMonth = Integer.toString(cal.get(Calendar.DAY_OF_MONTH));
@@ -76,8 +76,7 @@ public class DetailedJourneyFragment extends Fragment implements SearchJourneysT
         }
         date = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + dayOfMonth;
         time = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
-
-
+        
         SearchJourneysTask task = new SearchJourneysTask();
         task.setDataDownloadListener(this);
         task.execute(Constants.getURL(startId, endId, date, time, 1));
