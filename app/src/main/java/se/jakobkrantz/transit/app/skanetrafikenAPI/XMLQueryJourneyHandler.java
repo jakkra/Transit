@@ -2,6 +2,7 @@ package se.jakobkrantz.transit.app.skanetrafikenAPI;/*
  * Created by krantz on 14-11-20.
  */
 
+import android.util.Log;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -19,6 +20,7 @@ public class XMLQueryJourneyHandler extends DefaultHandler {
     private boolean isOnLineElement;
     private boolean isOnPriceZoneElement;
     private StringBuilder sb;
+    private String jounreyRouteKey;
 
     public XMLQueryJourneyHandler() {
         sb = new StringBuilder();
@@ -48,7 +50,7 @@ public class XMLQueryJourneyHandler extends DefaultHandler {
         }
 
     }
-    
+
     //FML...
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
@@ -72,8 +74,8 @@ public class XMLQueryJourneyHandler extends DefaultHandler {
             t.setCO2Factor(sb.toString());
         } else if (localName.equals("NoOfZones")) {
             t.setNbrOfZones(sb.toString());
-        } else if (localName.equals("JourneyKey")) {
-            t.setJourneyKey(sb.toString());
+        } else if (localName.equals("JourneyResultKey")) {
+            jounreyRouteKey = sb.toString();
 
             //RouteLink start
         } else if (localName.equals("RouteLinkKey")) {
@@ -184,4 +186,7 @@ public class XMLQueryJourneyHandler extends DefaultHandler {
         return journeys;
     }
 
+    public String getJourneyRouteKey() {
+        return jounreyRouteKey;
+    }
 }

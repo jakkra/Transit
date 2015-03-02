@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.*;
 import android.widget.*;
+import se.jakobkrantz.transit.app.apiasynctasks.DataDownloadListener;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.base.FragmentEventListener;
 import se.jakobkrantz.transit.app.searching.FillUIHelper;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MainSearchFragment extends Fragment implements View.OnClickListener, FavouriteListAdapter.OnItemChangeListener, SearchJourneysTask.DataDownloadListener, TimeAndDatePickerDialogFragment.OnTimeSetListener {
+public class MainSearchFragment extends Fragment implements View.OnClickListener, FavouriteListAdapter.OnItemChangeListener, DataDownloadListener, TimeAndDatePickerDialogFragment.OnTimeSetListener {
     public static final int NBR_OF_LIST_ITEM_TO_SHOW = 10;
 
     private FragmentEventListener eventListener;

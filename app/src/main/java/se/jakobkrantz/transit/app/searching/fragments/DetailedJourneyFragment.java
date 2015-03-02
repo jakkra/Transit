@@ -2,17 +2,23 @@ package se.jakobkrantz.transit.app.searching.fragments;/*
  * Created by krantz on 14-11-30.
  */
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import se.jakobkrantz.transit.app.apiasynctasks.DataDownloadListener;
 import se.jakobkrantz.transit.app.R;
+import se.jakobkrantz.transit.app.base.BaseActivity;
+import se.jakobkrantz.transit.app.base.FragmentEventListener;
 import se.jakobkrantz.transit.app.searching.DetailedJourneyAdapter;
 import se.jakobkrantz.transit.app.apiasynctasks.SearchJourneysTask;
 import se.jakobkrantz.transit.app.searching.FillDetailedHeaderHelper;
@@ -24,7 +30,7 @@ import se.jakobkrantz.transit.app.utils.BundleConstants;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class DetailedJourneyFragment extends Fragment implements SearchJourneysTask.DataDownloadListener, SwipeRefreshLayout.OnRefreshListener {
+public class DetailedJourneyFragment extends Fragment implements DataDownloadListener, SwipeRefreshLayout.OnRefreshListener {
     private Journey journey;
     private DetailedJourneyAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -34,6 +40,8 @@ public class DetailedJourneyFragment extends Fragment implements SearchJourneysT
     private int endId;
     private String date;
     private String time;
+    private FragmentEventListener eventListener;
+    private FloatingActionButton mapButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +56,7 @@ public class DetailedJourneyFragment extends Fragment implements SearchJourneysT
         swipeRefreshLayout.setColorSchemeResources(R.color.colorDividerBackground);
         recycleView = (RecyclerView) view.findViewById(R.id.detailed_recycle_view);
         uiFiller = new FillDetailedHeaderHelper(view);
+        mapButton = (FloatingActionButton) view.findViewById(R.id.map_button);
         return view;
     }
 
@@ -76,10 +85,11 @@ public class DetailedJourneyFragment extends Fragment implements SearchJourneysT
         }
         date = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + dayOfMonth;
         time = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
-        
+
         SearchJourneysTask task = new SearchJourneysTask();
         task.setDataDownloadListener(this);
-        task.execute(Constants.getURL(startId, endId, date, time, 1));
+        String url = Constants.getURL(startId, endId, date, time, 1);
+        task.execute(url);
     }
 
 
@@ -89,7 +99,17 @@ public class DetailedJourneyFragment extends Fragment implements SearchJourneysT
         if (journeys.size() > 0) {
             journey = journeys.get(0);
             uiFiller.updateUI(journey);
-
+            String resultKey = journey.getJourneyResultKey();
+            if (resultKey != null) {
+                mapButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Bundle b = new Bundle();
+                        b.putString(BundleConstants.JOURNEY_RESULT_KEY, journey.getJourneyResultKey());
+                        eventListener.onEvent(BaseActivity.FragmentTypes.MAP, b);
+                    }
+                });
+            }
             if (adapter == null) {
                 adapter = new DetailedJourneyAdapter(journey);
                 recycleView.setAdapter(adapter);
@@ -114,4 +134,19 @@ public class DetailedJourneyFragment extends Fragment implements SearchJourneysT
         task.execute(Constants.getURL(startId, endId, date, time, 1));
 
     }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        // This makes sure that the container activity has implemented
+        // the listener interface. If not, it throws an exception.
+        try {
+            eventListener = (FragmentEventListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement StationSelectedListener");
+        }
+    }
+
+
 }

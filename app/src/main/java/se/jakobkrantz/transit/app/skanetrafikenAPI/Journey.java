@@ -248,15 +248,6 @@ public class Journey {
         return nbrOfZones;
     }
 
-    public void setJourneyKey(String journeyKey) {
-        this.journeyKey = journeyKey;
-    }
-
-    public String getJourneyKey() {
-        return journeyKey;
-    }
-
-
     public void setDistance(String distance) {
         this.distance = distance;
     }
@@ -292,5 +283,13 @@ public class Journey {
                 "Part routes: " + "\n" + routeLinks.toString() +
                 "\n_________Journey Snd________\n";
 
+    }
+
+    public void setJourneyResultKey(String journeyResultKey) {
+        this.journeyKey = journeyResultKey;
+    }
+
+    public String getJourneyResultKey() {
+        return journeyKey;
     }
 }

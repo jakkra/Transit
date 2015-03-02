@@ -19,6 +19,16 @@ public class Constants {
     public static final String noOfResults = "&NoOf=";
     public static int nbrResultsToGet = 25;
 
+    /**
+     * Build QueryString for getting a route
+     * Query string parameters*
+     * @param resultKey JourneyKey retrieved in response from resultspage method
+     * @param sequenceNbr SequenceNo of journey retrieved in response from resultspage method
+     * @return url
+     */
+    public static String getUrlJourneyPath(String resultKey, String sequenceNbr){
+        return baseURL + "journeypath.asp?cf=" + resultKey + "&id=" + sequenceNbr;
+    }
 
     /**
      * Build the Querystringz

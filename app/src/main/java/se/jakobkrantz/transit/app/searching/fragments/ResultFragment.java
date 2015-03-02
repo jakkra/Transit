@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.*;
 import android.widget.Toast;
+import se.jakobkrantz.transit.app.apiasynctasks.DataDownloadListener;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.searching.ResultListAdapter;
 import se.jakobkrantz.transit.app.apiasynctasks.SearchJourneysTask;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-public class ResultFragment extends Fragment implements SearchJourneysTask.DataDownloadListener, SwipeRefreshLayout.OnRefreshListener {
+public class ResultFragment extends Fragment implements DataDownloadListener, SwipeRefreshLayout.OnRefreshListener {
     private Station fromStation;
     private Station toStation;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -157,7 +158,7 @@ public class ResultFragment extends Fragment implements SearchJourneysTask.DataD
             String date = TimeAndDateConverter.getDate(dateAndTime);
             String time = TimeAndDateConverter.formatTime(dateAndTime);
             SearchJourneysTask task = new SearchJourneysTask();
-            task.setDataDownloadListener(new SearchJourneysTask.DataDownloadListener() {
+            task.setDataDownloadListener(new DataDownloadListener() {
                 @Override
                 public void dataDownloadedSuccessfully(Object data) {
                     ArrayList<Journey> journeys = (ArrayList<Journey>) data;

@@ -61,6 +61,11 @@ public class SearchActivity extends BaseActivity implements SearchLocationFragme
                 TimeAndDatePickerDialogFragment timeAndDatePicker = new TimeAndDatePickerDialogFragment();
                 timeAndDatePicker.show(fm, "Välj tid");
                 break;
+            case MAP:
+                RouteMapFragment routeMapFragment = new RouteMapFragment();
+                routeMapFragment.setArguments(args);
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, routeMapFragment).addToBackStack("map").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
+                break;
             default:
                 DummyFragment dummyFragment = new DummyFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, dummyFragment).commit();

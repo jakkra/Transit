@@ -23,6 +23,9 @@ public class BundleConstants {
     public static final String TO_STATION_SEARCHED = "tostatsearch";
     public static final String DEP_DATE = "depdate";
     public static final String DEP_TIME = "deltime";
+    public static final String JOURNEY_RESULT_KEY = "journeyResultKey";
+
+
 
 
     /**

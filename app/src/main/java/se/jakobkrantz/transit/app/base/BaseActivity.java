@@ -28,7 +28,7 @@ public class BaseActivity extends ActionBarActivity implements ListView.OnItemCl
     protected static String LAST_FRAGMENT = "lastFragment"; //Remember last used fragment when app is closed.
 
     public enum FragmentTypes {
-        SEARCH_STATION, SEARCH_JOURNEY_FROM_TO, SEARCH_RESULT, DETAILED_JOURNEY, TIME_AND_DATE_PICKER, TIME_SET, REPORT_FRAGMENT, DUMMY
+        SEARCH_STATION, SEARCH_JOURNEY_FROM_TO, SEARCH_RESULT, DETAILED_JOURNEY, TIME_AND_DATE_PICKER, TIME_SET, REPORT_FRAGMENT, MAP, DUMMY
     }
 
     private RecyclerView drawerList;

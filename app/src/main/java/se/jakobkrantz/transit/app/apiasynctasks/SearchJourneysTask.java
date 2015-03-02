@@ -52,7 +52,11 @@ public class SearchJourneysTask extends AsyncTask<String, Void, ArrayList<Journe
         } catch (SAXException e) {
             e.printStackTrace();
         }
-        return xmlQueryJourneyHandler.getJourneys();
+        String key = xmlQueryJourneyHandler.getJourneyRouteKey();
+        ArrayList<Journey> j = xmlQueryJourneyHandler.getJourneys();
+        //This is a really bad H4X to save code and time.
+        j.get(0).setJourneyResultKey(key);
+        return j;
     }
 
     @Override
@@ -66,10 +70,7 @@ public class SearchJourneysTask extends AsyncTask<String, Void, ArrayList<Journe
 
     }
 
-    public static interface DataDownloadListener {
-        void dataDownloadedSuccessfully(Object data);
-        void dataDownloadFailed();
-    }
+
 }
 
 
