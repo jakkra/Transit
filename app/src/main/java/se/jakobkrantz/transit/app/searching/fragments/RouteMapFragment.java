@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.google.android.gms.maps.*;
 
@@ -54,7 +53,6 @@ public class RouteMapFragment extends Fragment implements OnMapReadyCallback, Da
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.map_fragment, container, false);
         progressWheel = (ProgressWheel) view.findViewById(R.id.progress_wheel);
-
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_f);
         mapFragment.getMapAsync(this);
         return view;
