@@ -4,6 +4,7 @@ package se.jakobkrantz.transit.app.apiasynctasks;
  */
 
 import android.os.AsyncTask;
+import android.util.Log;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -16,7 +17,6 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-
 
 public class SearchJourneysTask extends AsyncTask<String, Void, ArrayList<Journey>> {
     private XMLQueryJourneyHandler xmlQueryJourneyHandler;
@@ -54,7 +54,8 @@ public class SearchJourneysTask extends AsyncTask<String, Void, ArrayList<Journe
         }
         String key = xmlQueryJourneyHandler.getJourneyRouteKey();
         ArrayList<Journey> j = xmlQueryJourneyHandler.getJourneys();
-        //This is a really bad H4X to save code and time.
+        //This is a really bad H4X, will fix!
+        //TODO give all the same journeyKey in xml parser and then give them sequenceNbr depending on position in array
         j.get(0).setJourneyResultKey(key);
         return j;
     }
@@ -62,7 +63,6 @@ public class SearchJourneysTask extends AsyncTask<String, Void, ArrayList<Journe
     @Override
     protected void onPostExecute(ArrayList<Journey> journeys) {
         if (journeys != null) {
-
             dataDownloadListener.dataDownloadedSuccessfully(journeys);
         } else {
             dataDownloadListener.dataDownloadFailed();

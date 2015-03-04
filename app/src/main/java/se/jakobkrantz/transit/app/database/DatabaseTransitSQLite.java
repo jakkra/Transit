@@ -195,8 +195,8 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
 
             s.setStationId(cursor.getInt(0));
             s.setStationName(cursor.getString(1));
-            s.setLatitude(Double.parseDouble(cursor.getString(2)));
-            s.setLongitude(Double.parseDouble(cursor.getString(3)));
+            s.setX(Double.parseDouble(cursor.getString(2)));
+            s.setY(Double.parseDouble(cursor.getString(3)));
             s.setType(cursor.getString(4));
             s.setTimeSearched(cursor.getString(5));
 
@@ -225,8 +225,8 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
             Station s = new Station();
             s.setStationId(cursor.getInt(0));
             s.setStationName(cursor.getString(1));
-            s.setLatitude(Double.parseDouble(cursor.getString(2)));
-            s.setLongitude(Double.parseDouble(cursor.getString(3)));
+            s.setX(Double.parseDouble(cursor.getString(2)));
+            s.setY(Double.parseDouble(cursor.getString(3)));
             s.setType(cursor.getString(4));
             s.setTimeSearched(cursor.getString(5));
             stations.add(s);
@@ -262,11 +262,11 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
             s1 = new Station();
             s1.setStationId(cursor.getInt(0));
             s1.setStationName(cursor.getString(2));
-            s1.setLatitude(Double.parseDouble(cursor.getString(4)));
-            s1.setLongitude(Double.parseDouble(cursor.getString(6)));
+            s1.setX(Double.parseDouble(cursor.getString(4)));
+            s1.setY(Double.parseDouble(cursor.getString(6)));
             s1.setType(cursor.getString(8));
             s1.setTimeSearched(cursor.getString(10));
-            db.close();
+
             return s1;
         } else {
             cursor = db.query(table, null, COLUMN_STATION_NAME1 + " = ?", new String[]{station}, null, null, null, "1");
@@ -275,11 +275,11 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
                 s1 = new Station();
                 s1.setStationId(cursor.getInt(1));
                 s1.setStationName(cursor.getString(3));
-                s1.setLatitude(Double.parseDouble(cursor.getString(5)));
-                s1.setLongitude(Double.parseDouble(cursor.getString(7)));
+                s1.setX(Double.parseDouble(cursor.getString(5)));
+                s1.setY(Double.parseDouble(cursor.getString(7)));
                 s1.setType(cursor.getString(9));
                 s1.setTimeSearched(cursor.getString(10));
-                db.close();
+
                 return s1;
             }
 
@@ -309,11 +309,11 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
             s1.setStationName(cursor.getString(2));
             s2.setStationName(cursor.getString(3));
 
-            s1.setLatitude(Double.parseDouble(cursor.getString(4)));
-            s2.setLatitude(Double.parseDouble(cursor.getString(5)));
+            s1.setX(Double.parseDouble(cursor.getString(4)));
+            s2.setX(Double.parseDouble(cursor.getString(5)));
 
-            s1.setLongitude(Double.parseDouble(cursor.getString(6)));
-            s2.setLongitude(Double.parseDouble(cursor.getString(7)));
+            s1.setY(Double.parseDouble(cursor.getString(6)));
+            s2.setY(Double.parseDouble(cursor.getString(7)));
 
             s1.setType(cursor.getString(8));
             s2.setType(cursor.getString(9));
@@ -358,11 +358,11 @@ public class DatabaseTransitSQLite extends SQLiteOpenHelper {
             s1.setStationName(cursor.getString(2));
             s2.setStationName(cursor.getString(3));
 
-            s1.setLatitude(Double.parseDouble(cursor.getString(4)));
-            s2.setLatitude(Double.parseDouble(cursor.getString(5)));
+            s1.setX(Double.parseDouble(cursor.getString(4)));
+            s2.setX(Double.parseDouble(cursor.getString(5)));
 
-            s1.setLongitude(Double.parseDouble(cursor.getString(6)));
-            s2.setLongitude(Double.parseDouble(cursor.getString(7)));
+            s1.setY(Double.parseDouble(cursor.getString(6)));
+            s2.setY(Double.parseDouble(cursor.getString(7)));
 
             s1.setType(cursor.getString(8));
             s2.setType(cursor.getString(9));

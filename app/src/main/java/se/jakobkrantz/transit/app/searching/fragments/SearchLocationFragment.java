@@ -85,8 +85,6 @@ public class SearchLocationFragment extends Fragment implements ListView.OnItemC
 
             args.putString(BundleConstants.FROM_STATION, s.getStationName());
             args.putString(BundleConstants.FROM_STATION_ID, Integer.toString(s.getStationId()));
-            args.putString(BundleConstants.FROM_STATION_LONG, Double.toString(s.getLongitude()));
-            args.putString(BundleConstants.FROM_STATION_LAT, Double.toString(s.getLatitude()));
             args.putString(BundleConstants.FROM_STATION_TYPE, s.getType());
             args.putString(BundleConstants.FROM_STATION_SEARCHED, s.getTimeSearched());
 

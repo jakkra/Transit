@@ -54,7 +54,7 @@ public class SearchActivity extends BaseActivity implements SearchLocationFragme
             case DETAILED_JOURNEY:
                 DetailedJourneyFragment detailedJourneyFragment = new DetailedJourneyFragment();
                 detailedJourneyFragment.setArguments(args);
-                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, detailedJourneyFragment).addToBackStack("Detailed").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, detailedJourneyFragment).addToBackStack("Detailed").commit();
                 break;
             case TIME_AND_DATE_PICKER:
                 FragmentManager fm = getSupportFragmentManager();
@@ -64,7 +64,7 @@ public class SearchActivity extends BaseActivity implements SearchLocationFragme
             case MAP:
                 RouteMapFragment routeMapFragment = new RouteMapFragment();
                 routeMapFragment.setArguments(args);
-                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, routeMapFragment).addToBackStack("map").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, routeMapFragment).addToBackStack("map").commit();
                 break;
             default:
                 DummyFragment dummyFragment = new DummyFragment();

@@ -10,8 +10,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
+import com.pnikosis.materialishprogress.ProgressWheel;
 import se.jakobkrantz.transit.app.apiasynctasks.DataDownloadListener;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.base.FragmentEventListener;
@@ -42,7 +44,7 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
     private DatabaseTransitSQLite database;
     private RecyclerView listView;
     private FavouriteListAdapter favListAdapter;
-    private ProgressBar progressBar;
+    private ProgressWheel progressBar;
     private FillUIHelper fillUIHelper;
     private Date searchDate;
     private ImageButton setTimeButton;
@@ -70,7 +72,7 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
         setTimeButton = (ImageButton) view.findViewById(R.id.setTimeButton);
         setTimeButton.setOnClickListener(this);
         listView = (RecyclerView) view.findViewById(R.id.listView);
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        progressBar = (ProgressWheel) view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
         fillUIHelper = new FillUIHelper(view);
         favListAdapter = new FavouriteListAdapter(database.getFavouriteJourneys(NBR_OF_LIST_ITEM_TO_SHOW), database.getRecentJourneys(NBR_OF_LIST_ITEM_TO_SHOW), this, NBR_OF_LIST_ITEM_TO_SHOW);
@@ -322,6 +324,7 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
         task.setDataDownloadListener(this);
         String url = Constants.getURL(s.getFromStation().getStationId(), s.getToStation().getStationId(), Constants.getCurrentDate(), Constants.getCurrentTime(), 1);
         progressBar.setVisibility(View.VISIBLE);
+        Log.e("URL", url);
         task.execute(url);
         fromStation.setText(s.getFromStation().toString());
         toStation.setText(s.getToStation().toString());

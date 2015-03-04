@@ -41,9 +41,9 @@ public class XMLQueryStationHandler extends DefaultHandler {
         } else if (localName.equals("Type")) {
             tempStation.setType(sb.toString());
         } else if (localName.equals("X")) {
-            tempStation.setLatitude(Double.parseDouble(sb.toString()));
+            tempStation.setX(Double.parseDouble(sb.toString()));
         } else if (localName.equals("Y")) {
-            tempStation.setLongitude(Double.parseDouble(sb.toString()));
+            tempStation.setY(Double.parseDouble(sb.toString()));
         } else if (localName.equals("Point")) { // End tag point, done reading station.
             if (stations != null) {
                 stations.add(tempStation);

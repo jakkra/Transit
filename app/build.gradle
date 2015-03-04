@@ -6,6 +6,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.14.2'
+
     }
 }
 apply plugin: 'com.android.application'
@@ -42,6 +43,7 @@ dependencies {
     compile "com.google.android.gms:play-services:6.5.+"
     compile 'com.github.markushi:circlebutton:1.1'
     compile 'com.getbase:floatingactionbutton:1.8.0'
-
+    compile 'org.unbescape:unbescape:1.0'
+    compile 'com.pnikosis:materialish-progress:1.4'
 
 }

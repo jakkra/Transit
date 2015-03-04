@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.pnikosis.materialishprogress.ProgressWheel;
 import se.jakobkrantz.transit.app.apiasynctasks.DataDownloadListener;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.base.BaseActivity;
@@ -40,8 +41,11 @@ public class DetailedJourneyFragment extends Fragment implements DataDownloadLis
     private int endId;
     private String date;
     private String time;
+    private ProgressWheel progressWheel;
     private FragmentEventListener eventListener;
     private FloatingActionButton mapButton;
+
+    private View rootView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,14 +54,21 @@ public class DetailedJourneyFragment extends Fragment implements DataDownloadLis
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.detailed_journey_fragment, container, false);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_container);
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorDividerBackground);
-        recycleView = (RecyclerView) view.findViewById(R.id.detailed_recycle_view);
-        uiFiller = new FillDetailedHeaderHelper(view);
-        mapButton = (FloatingActionButton) view.findViewById(R.id.map_button);
-        return view;
+        if (rootView == null) {
+            super.onCreateView(inflater, container, savedInstanceState);
+            View view = inflater.inflate(R.layout.detailed_journey_fragment, container, false);
+            swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_container);
+            swipeRefreshLayout.setColorSchemeResources(R.color.colorDividerBackground);
+            progressWheel = (ProgressWheel) view.findViewById(R.id.progress_detail);
+            recycleView = (RecyclerView) view.findViewById(R.id.detailed_recycle_view);
+            uiFiller = new FillDetailedHeaderHelper(view);
+            mapButton = (FloatingActionButton) view.findViewById(R.id.map_button);
+            rootView = view;
+        } else {
+            ((ViewGroup) rootView.getParent()).removeView(rootView);
+
+        }
+        return rootView;
     }
 
     @Override
@@ -92,10 +103,18 @@ public class DetailedJourneyFragment extends Fragment implements DataDownloadLis
         task.execute(url);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(BundleConstants.FROM_STATION_ID, startId + "");
+        outState.putString(BundleConstants.TO_STATION_ID, endId + "");
+
+    }
 
     @Override
     public void dataDownloadedSuccessfully(Object data) {
         ArrayList<Journey> journeys = (ArrayList<Journey>) data;
+
         if (journeys.size() > 0) {
             journey = journeys.get(0);
             uiFiller.updateUI(journey);
@@ -111,13 +130,16 @@ public class DetailedJourneyFragment extends Fragment implements DataDownloadLis
                 });
             }
             if (adapter == null) {
+
                 adapter = new DetailedJourneyAdapter(journey);
                 recycleView.setAdapter(adapter);
             } else {
                 adapter.update(journey);
+
             }
         }
         swipeRefreshLayout.setRefreshing(false);
+        progressWheel.setVisibility(View.GONE);
 
 
     }

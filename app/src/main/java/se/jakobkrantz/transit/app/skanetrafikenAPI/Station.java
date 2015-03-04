@@ -2,13 +2,20 @@ package se.jakobkrantz.transit.app.skanetrafikenAPI;/*
  * Created by krantz on 14-11-18.
  */
 
+import android.util.Log;
+import com.google.android.gms.maps.model.LatLng;
+import se.jakobkrantz.coordinatetransformation.positions.RT90Position;
+import se.jakobkrantz.coordinatetransformation.positions.WGS84Position;
+
 public class Station {
     private String stationName;
     private int stationId;
     private double latitude;
     private double longitude;
+    private double x, y;
     private String type;
     private String timeSearched;
+    private LatLng latLng;
 
     public Station(String stationName, int stationId, double latitude, double longitude, String type) {
         this.stationName = stationName;
@@ -20,6 +27,10 @@ public class Station {
 
     public Station() {
 
+    }
+
+    public LatLng getLatLng() {
+        return latLng;
     }
 
     public String toString() {
@@ -47,19 +58,34 @@ public class Station {
     }
 
     public double getLatitude() {
-        return latitude;
+        return 0;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+    public void setX(double x) {
+        this.x = x;
+        if (y != 0) {
+            setLatLng(x, y);
+        }
+    }
+
+    public void setY(double y) {
+        this.y = y;
+        if (x != 0) {
+            setLatLng(x, y);
+        }
+    }
+
+    private void setLatLng(double x, double y) {
+        RT90Position position = new RT90Position(x, y);
+        WGS84Position wgsPos = position.toWGS84();
+        double lat = ((double) Math.round(wgsPos.getLatitude() * 10000)) / 10000;
+        double lon = ((double) Math.round(wgsPos.getLongitude() * 10000)) / 10000;
+        this.latLng = new LatLng(lat, lon);
+
     }
 
     public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
+        return 0;
     }
 
 

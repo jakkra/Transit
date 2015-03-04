@@ -4,24 +4,29 @@ package se.jakobkrantz.transit.app.apiasynctasks;
  */
 
 import android.os.AsyncTask;
-import com.google.android.gms.maps.model.LatLng;
+import android.util.Log;
+import org.unbescape.html.HtmlEscape;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import se.jakobkrantz.transit.app.skanetrafikenAPI.CoordinateRoute;
 import se.jakobkrantz.transit.app.skanetrafikenAPI.XMLRouteMapHandler;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Scanner;
 
-public class SearchRouteMap extends AsyncTask<String, Void, ArrayList<LatLng>> {
+public class SearchRouteMapTask extends AsyncTask<String, Void, ArrayList<CoordinateRoute>> {
     private XMLRouteMapHandler xmlRouteMapHandler;
     private XMLReader xmlR;
-    
-    public SearchRouteMap() {
+    private DataDownloadListener downloadListener;
+
+    public SearchRouteMapTask() {
         SAXParserFactory saxPF = SAXParserFactory.newInstance();
         SAXParser saxP;
 
@@ -37,24 +42,37 @@ public class SearchRouteMap extends AsyncTask<String, Void, ArrayList<LatLng>> {
         xmlR.setContentHandler(xmlRouteMapHandler);
     }
 
+    public void setDataDownloadListener(DataDownloadListener downloadListener) {
+        this.downloadListener = downloadListener;
+    }
+
 
     @Override
-    protected ArrayList<LatLng> doInBackground(String... params) {
+    protected ArrayList<CoordinateRoute> doInBackground(String... params) {
+        Log.e("url in async", params[0]);
+
         try {
-            URL url = new URL(params[0]);
-            xmlR.parse(new InputSource(url.openStream()));
+            String xml = new Scanner(new URL(params[0]).openStream()).useDelimiter("\\A").next();
+            xml = HtmlEscape.unescapeHtml(xml);
+            InputSource stream = new InputSource(new StringReader(xml));
+            xmlR.parse(stream);
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {
             e.printStackTrace();
         }
-        return xmlRouteMapHandler.getLatLngs();
+
+        return xmlRouteMapHandler.getCoordinateRoutes();
+
     }
 
     @Override
-    protected void onPostExecute(ArrayList<LatLng> stations) {
-        if (stations != null) {
-            //adapter.setSearchResults(stations);
+    protected void onPostExecute(ArrayList<CoordinateRoute> journey) {
+        if (journey != null) {
+            downloadListener.dataDownloadedSuccessfully(journey);
+        } else {
+            downloadListener.dataDownloadFailed();
         }
     }
 }

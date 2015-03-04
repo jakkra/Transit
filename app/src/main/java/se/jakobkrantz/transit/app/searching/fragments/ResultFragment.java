@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.*;
 import android.widget.Toast;
+import com.pnikosis.materialishprogress.ProgressWheel;
 import se.jakobkrantz.transit.app.apiasynctasks.DataDownloadListener;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.searching.ResultListAdapter;
@@ -35,6 +36,7 @@ public class ResultFragment extends Fragment implements DataDownloadListener, Sw
     private ResultListAdapter resultListAdapter;
     private OnDetailedJourneySelectedListener listener;
     private Date searchDate;
+    private ProgressWheel progressWheel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,7 @@ public class ResultFragment extends Fragment implements DataDownloadListener, Sw
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         recycleView = (RecyclerView) view.findViewById(R.id.recycle_view);
+        progressWheel = (ProgressWheel) view.findViewById(R.id.progress_result);
         return view;
     }
 
@@ -126,6 +129,8 @@ public class ResultFragment extends Fragment implements DataDownloadListener, Sw
             //Fragment reopened, means recycleView is initialised again
             recycleView.setAdapter(resultListAdapter);
         }
+        progressWheel.setVisibility(View.GONE);
+
     }
 
     @Override

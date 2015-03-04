@@ -27,4 +27,10 @@ public class DummyFragment extends Fragment {
         tv.setText("Dummy I am");
         return view;
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (getArguments() != null) outState.putAll(getArguments());
+    }
 }

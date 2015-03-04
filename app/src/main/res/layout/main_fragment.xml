@@ -15,7 +15,8 @@
                 android:layout_height="match_parent" android:layout_gravity="center_horizontal"
                 android:background="@color/colorPrimaryDarker">
 
-            <View style="@style/DividerMainTop" android:layout_alignParentBottom="true" android:layout_alignParentLeft="true"
+            <View style="@style/DividerMainTop" android:layout_alignParentBottom="true"
+                  android:layout_alignParentLeft="true"
                   android:layout_alignParentStart="true" android:padding="1dp"/>
             <ImageButton
                     android:layout_width="70dp"
@@ -248,14 +249,21 @@
                           android:textColor="@color/resultListTextColor" android:id="@+id/nbr_changes"
                           android:layout_below="@+id/time_between" android:layout_alignParentLeft="true"
                           android:layout_alignParentStart="true"/>
-                <ProgressBar
+                
+                <com.pnikosis.materialishprogress.ProgressWheel
+                        xmlns:wheel="http://schemas.android.com/apk/res-auto"
                         style="@android:style/Widget.ProgressBar.Small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/progressBar"
+                        wheel:matProg_rimWidth="5dp"
+                        wheel:matProg_spinSpeed="3"
+                        wheel:matProg_barColor="@color/colorPrimary"
+                        wheel:matProg_progressIndeterminate="true"
                         android:layout_centerHorizontal="true"
                         android:layout_centerInParent="true"
                         android:layout_centerVertical="true"/>
+                
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                           android:textColor="@color/resultListTextColor" android:id="@+id/textView10"
                           android:layout_toEndOf="@+id/imageView11"
