@@ -54,10 +54,13 @@
                       android:id="@+id/text_view_from_station"
                       android:textColorHint="@color/colorPrimary"
                       android:singleLine="true"
+
                       android:textColor="@color/colorPrimary"
                       android:hint="@string/edit_text_search_from" android:paddingTop="5dp" android:textSize="22sp"
                       android:layout_alignParentTop="true" android:layout_toRightOf="@+id/relative_swap"
                       android:layout_toLeftOf="@+id/setTimeButton" android:layout_toStartOf="@+id/setTimeButton"/>
+            <View style="@style/Divider" android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
+                  android:layout_alignParentStart="true" android:padding="5dp"/>
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                       android:textColor="@color/colorPrimary"
                       android:singleLine="true"
@@ -249,7 +252,7 @@
                           android:textColor="@color/resultListTextColor" android:id="@+id/nbr_changes"
                           android:layout_below="@+id/time_between" android:layout_alignParentLeft="true"
                           android:layout_alignParentStart="true"/>
-                
+
                 <com.pnikosis.materialishprogress.ProgressWheel
                         xmlns:wheel="http://schemas.android.com/apk/res-auto"
                         style="@android:style/Widget.ProgressBar.Small"
@@ -263,7 +266,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_centerInParent="true"
                         android:layout_centerVertical="true"/>
-                
+
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                           android:textColor="@color/resultListTextColor" android:id="@+id/textView10"
                           android:layout_toEndOf="@+id/imageView11"

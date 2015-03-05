@@ -4,7 +4,13 @@ package se.jakobkrantz.transit.app.searching.fragments;
  */
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -57,6 +63,7 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
         setHasOptionsMenu(true);
         database = new DatabaseTransitSQLite(getActivity());
         initBundle = getArguments();
+
     }
 
     @Override
@@ -192,6 +199,12 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
             toStation.setText(j.get(0).getToStation().toString());
         }
         fillStationsText(initBundle);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+
+        if (prefs.getBoolean("tutorial", true)) {
+            showDemo();
+        }
     }
 
 
@@ -286,6 +299,8 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
                 fromStation.setText("");
                 toStation.setText("");
                 return true;
+            case R.id.action_help:
+                showDemo();
             default:
                 break;
         }
@@ -384,6 +399,36 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
     @Override
     public void onTimeSet(Date date) {
         searchDate = date;
+
+    }
+
+    private void showDemo() {
+        final Dialog dialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar);
+        dialog.setContentView(R.layout.demo_main);
+        ImageView imageView = (ImageView) dialog.findViewById(R.id.demo_image_view);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        //options.inJustDecodeBounds = true;
+        options.inDither = true;
+        options.inSampleSize = 2;
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.demo, options);
+        imageView.setImageBitmap(bitmap);
+        LinearLayout layout = (LinearLayout) dialog.findViewById(R.id.llOverlay_fragment);
+        layout.setBackgroundColor(Color.TRANSPARENT);
+        layout.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                // Get SharedPrefs
+                PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, true);
+                SharedPreferences setNoti = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                setNoti.edit().putBoolean("tutorial", false).commit();
+                dialog.dismiss();
+
+            }
+
+        });
+
+        dialog.show();
 
     }
 }
