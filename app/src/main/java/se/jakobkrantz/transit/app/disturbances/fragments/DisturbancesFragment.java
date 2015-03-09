@@ -11,12 +11,11 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.*;
-import at.markushi.ui.CircleButton;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.disturbances.DisturbanceAdapter;
 import se.jakobkrantz.transit.app.disturbances.DisturbancesActivity;
 import se.jakobkrantz.transit.app.reporting.MessageIntentService;
-import se.jakobkrantz.transit.app.utils.GcmConstants;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -25,7 +24,7 @@ import java.util.Set;
 public class DisturbancesFragment extends Fragment {
     private Context context;
     private RecyclerView list;
-    private CircleButton reportButton;
+    private FloatingActionButton reportButton;
     private Bundle data;
     private View.OnClickListener listener;
     private DisturbanceAdapter adapter;
@@ -45,7 +44,7 @@ public class DisturbancesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_disturbances, container, false);
         list = (RecyclerView) view.findViewById(R.id.disturbance_list);
-        reportButton = (CircleButton) view.findViewById(R.id.disturbance_button);
+        reportButton = (FloatingActionButton) view.findViewById(R.id.disturbance_button);
         reportButton.setOnClickListener(listener);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);

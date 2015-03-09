@@ -5,9 +5,14 @@ package se.jakobkrantz.transit.app.reporting.fragments;
  */
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.*;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,7 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import at.markushi.ui.CircleButton;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -40,22 +45,23 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
     private static final String PROPERTY_APP_VERSION = "0";
     private static final String REGISTRATION_SUCCESSFUL = "regSucc";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    
+
     private String SENDER_ID = "24223089278"; // Project number
 
     private GoogleCloudMessaging gcm;
     private Context context;
-
     private String regId;
-
-    private CircleButton sendButton;
+    private FloatingActionButton sendButton;
     private Spinner disturbanceType;
     private EditText disturbanceNote;
-    private NumberPicker minutePicker;
+    private TextView delay;
     private TextView fromStation;
     private TextView toStation;
     private FragmentEventListener eventListener;
     private ArrayAdapter<CharSequence> spinnerAdapter;
+    private int deviationTime;
+    private CheckBox shareDeviationLocation;
+    private Location loc;
 
     private RegistrationBroadcastReceiver broadcastReceiver;
     private boolean ackReceived;
@@ -64,11 +70,95 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
+        LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+        criteria.setAltitudeRequired(false);
+        criteria.setBearingRequired(false);
+        criteria.setCostAllowed(true);
+        criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
+        LocationListener locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                if (isBetterLocation(location, loc)) {
+                    loc = location;
+                }
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+        String provider = lm.getBestProvider(criteria, true);
+        if (provider != null) {
+            lm.requestLocationUpdates(provider, 200, 10f, locationListener);
+            Log.e("provider", "not null");
+        }
 
         broadcastReceiver = new RegistrationBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter(MessageIntentService.ACTION_MESSAGE_INTENT_SERVICE);
         intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
         context.registerReceiver(broadcastReceiver, intentFilter);
+
+    }
+
+    /**
+     * Determines whether one Location reading is better than the current Location fix
+     *
+     * @param location            The new Location that you want to evaluate
+     * @param currentBestLocation The current Location fix, to which you want to compare the new one
+     */
+    protected boolean isBetterLocation(Location location, Location currentBestLocation) {
+        if (currentBestLocation == null) {
+            // A new location is always better than no location
+            return true;
+        }
+
+        // Check whether the new location fix is newer or older
+        long timeDelta = location.getTime() - currentBestLocation.getTime();
+        boolean isNewer = timeDelta > 0;
+
+
+        // Check whether the new location fix is more or less accurate
+        int accuracyDelta = (int) (location.getAccuracy() - currentBestLocation.getAccuracy());
+        boolean isLessAccurate = accuracyDelta > 0;
+        boolean isMoreAccurate = accuracyDelta < 0;
+        boolean isSignificantlyLessAccurate = accuracyDelta > 200;
+
+        // Check if the old and new location are from the same provider
+        boolean isFromSameProvider = isSameProvider(location.getProvider(),
+                currentBestLocation.getProvider());
+
+        // Determine location quality using a combination of timeliness and accuracy
+        if (isMoreAccurate) {
+            return true;
+        } else if (isNewer && !isLessAccurate) {
+            return true;
+        } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks whether two providers are the same
+     */
+    private boolean isSameProvider(String provider1, String provider2) {
+        if (provider1 == null) {
+            return provider2 == null;
+        }
+        return provider1.equals(provider2);
     }
 
     @Override
@@ -85,18 +175,21 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
             }
 
             View view = inflater.inflate(R.layout.fragment_report, container, false);
-            sendButton = (CircleButton) view.findViewById(gcmButton);
+            sendButton = (FloatingActionButton) view.findViewById(gcmButton);
             disturbanceType = (Spinner) view.findViewById(R.id.spinner);
             disturbanceNote = (EditText) view.findViewById(R.id.disturbance_note);
             fromStation = (TextView) view.findViewById(R.id.report_from_station);
             toStation = (TextView) view.findViewById(R.id.report_to_station);
+            delay = (TextView) view.findViewById(R.id.deviation_mins);
+            shareDeviationLocation = (CheckBox) view.findViewById(R.id.share_location_report);
+            delay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showDeviationPicker();
+                }
+            });
             fromStation.setOnClickListener(this);
             toStation.setOnClickListener(this);
-
-            minutePicker = (NumberPicker) view.findViewById(R.id.minutePicker);
-            minutePicker.setMinValue(0);
-            minutePicker.setMaxValue(60);
-            minutePicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
             spinnerAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.disturbance_types, android.R.layout.simple_spinner_item);
             spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -303,31 +396,44 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
             new AsyncTask<Void, Void, String>() {
                 @Override
                 protected String doInBackground(Void... params) {
+                    Bundle args = getArguments();
+
+                    Bundle dataToSend = new Bundle();
+                    String fromNbr = null;
+                    String toNbr = null;
+                    if (args != null) {
+                        fromNbr = args.getString(BundleConstants.FROM_STATION_ID);
+                        toNbr = args.getString(BundleConstants.TO_STATION_ID);
+                    }
+                    if (fromNbr == null || toNbr == null) {
+                        return "Error, must fill both from and to field";
+                    }
+                    if (deviationTime == 0) {
+                        return "Must fill in approximated deviation";
+                    }
                     if (wasRegToBackendSuccessful()) {
-                        System.out.println("Backend successful refgister");
-                        Bundle args = getArguments();
+                        System.out.println("Backend already registered");
 
                         String msg;
                         try {
-                            Bundle dataToSend = new Bundle();
-                            String fromNbr = null;
-                            String toNbr = null;
-                            if (args != null) {
-                                fromNbr = args.getString(BundleConstants.FROM_STATION_ID);
-                                toNbr = args.getString(BundleConstants.TO_STATION_ID);
-                            }
-                            if (fromNbr == null || toNbr == null) {
-                                return "Error, must fill both from and to field";
-                            }
+
                             dataToSend.putString(GcmConstants.ACTION, GcmConstants.ACTION_REPORT_DISTURBANCE);
                             dataToSend.putString(GcmConstants.DISTURBANCE_FROM_STATION_NBR, fromNbr);
                             dataToSend.putString(GcmConstants.DISTURBANCE_TO_STATION_NBR, toNbr);
                             dataToSend.putString(GcmConstants.DISTURBANCE_FROM_STATION_NAME, fromStation.getText().toString());
                             dataToSend.putString(GcmConstants.DISTURBANCE_TO_STATION_NAME, toStation.getText().toString());
-                            dataToSend.putString(GcmConstants.DISTURBANCE_APPROX_MINS, Integer.toString(minutePicker.getValue()));
+                            dataToSend.putString(GcmConstants.DISTURBANCE_APPROX_MINS, Integer.toString(deviationTime));
                             dataToSend.putString(GcmConstants.DISTURBANCE_TYPE, disturbanceType.getSelectedItem().toString());
                             dataToSend.putString(GcmConstants.DISTURBANCE_REPORT_TIME, new SimpleDateFormat("dd/MM/yy HH:mm:ss").format(Calendar.getInstance().getTime()));
                             dataToSend.putString(GcmConstants.DISTURBANCE_REPORT_TIME_MILLIS, Long.toString(System.currentTimeMillis()));
+                            if (loc != null) {
+                                dataToSend.putString(GcmConstants.DISTURBANCE_LAT, Double.toString(loc.getLatitude()));
+                                dataToSend.putString(GcmConstants.DISTURBANCE_LONG, Double.toString(loc.getLongitude()));
+                                Log.e("Location lat/long", loc.getLatitude() + "/" + loc.getLongitude());
+                            } else {
+                                Log.e("loc", " null");
+
+                            }
 
                             if (!disturbanceNote.getText().equals("")) {
                                 dataToSend.putString(GcmConstants.DISTURBANCE_NOTE, disturbanceNote.getText().toString());
@@ -418,6 +524,32 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
                 ackReceived = true;
             }
         }
+
+    }
+
+    public void showDeviationPicker() {
+
+        final Dialog d = new Dialog(getActivity());
+        d.setTitle("Försening (min)");
+        d.setContentView(R.layout.number_picker);
+        Button b1 = (Button) d.findViewById(R.id.number_picker_button);
+        final NumberPicker np = (NumberPicker) d.findViewById(R.id.number_picker);
+        np.setMaxValue(100);
+        np.setMinValue(0);
+        np.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+        np.setWrapSelectorWheel(false);
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delay.setText(String.valueOf("Försening: " + np.getValue()));
+                deviationTime = np.getValue();
+                d.dismiss();
+            }
+        });
+
+        d.show();
+
 
     }
 }

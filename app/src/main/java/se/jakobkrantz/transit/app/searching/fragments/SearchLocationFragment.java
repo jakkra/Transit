@@ -83,6 +83,8 @@ public class SearchLocationFragment extends Fragment implements ListView.OnItemC
         Station s = ((Station) searchFragmentListAdapter.getItem(position));
         if (source.equals(BundleConstants.SOURCE_FROM_STATION)) {
 
+            args.putString(BundleConstants.FROM_STATION_LONG, Double.toString(s.getLongitude()));
+            args.putString(BundleConstants.FROM_STATION_LAT, Double.toString(s.getLatitude()));
             args.putString(BundleConstants.FROM_STATION, s.getStationName());
             args.putString(BundleConstants.FROM_STATION_ID, Integer.toString(s.getStationId()));
             args.putString(BundleConstants.FROM_STATION_TYPE, s.getType());
@@ -130,6 +132,4 @@ public class SearchLocationFragment extends Fragment implements ListView.OnItemC
     @Override
     public void afterTextChanged(Editable s) {
     }
-
-
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
 
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
@@ -12,13 +11,19 @@
             android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>
 
-    <at.markushi.ui.CircleButton
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+    <com.getbase.floatingactionbutton.FloatingActionButton
+            xmlns:fab="http://schemas.android.com/apk/res-auto"
             android:id="@+id/disturbance_button"
-            android:src="@drawable/ic_plus"
-            app:cb_color="#99CC00"
-            app:cb_pressedRingWidth="8dip" android:layout_gravity="right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            fab:fab_size="normal"
+            fab:fab_icon="@drawable/ic_plus"
+            fab:fab_colorNormal="@color/colorDividerBackground"
+            fab:fab_colorPressed="@color/colorPrimary"
+            android:layout_marginBottom="16dp"
+            android:layout_centerInParent="true"
             android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"/>
 
 

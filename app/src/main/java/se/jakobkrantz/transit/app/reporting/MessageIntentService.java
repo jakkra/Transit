@@ -16,6 +16,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import se.jakobkrantz.transit.app.R;
 import se.jakobkrantz.transit.app.disturbances.DisturbancesActivity;
 import se.jakobkrantz.transit.app.utils.GcmConstants;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,7 +25,7 @@ public class MessageIntentService extends IntentService {
     public static final String ACTION_MESSAGE_INTENT_SERVICE = "action_messIntent";
     public static final String ACTION_DISTURBANCE_RECEIVED = "action_DistIntent";
     public static final String DISTURBANCE_EXTRAS = "reggSuccessful";
-    
+
     private static final String ACK_RECEIVED = "ackReceived";
     private NotificationManager mNotificationManager;
 
@@ -99,12 +100,15 @@ public class MessageIntentService extends IntentService {
         String note = data.getString(GcmConstants.DISTURBANCE_NOTE);
         String reportTime = data.getString(GcmConstants.DISTURBANCE_REPORT_TIME);
         String reportTimeMillis = data.getString(GcmConstants.DISTURBANCE_REPORT_TIME_MILLIS);
-        
+        double lat = data.getDouble(GcmConstants.DISTURBANCE_LAT);
+        double lon = data.getDouble(GcmConstants.DISTURBANCE_LONG);
+
         String info = "Försening mellan " + from + " och " + to + "\n"
                 + "Typ: " + type + "\n"
                 + "Approximerad försening: " + delay + "\n"
                 + "Notering: " + note + "\n"
-                + "Tid för rapporteting: " + reportTime;
+                + "Tid för rapporteting: " + reportTime
+                + "lat/long: " + lat + "/" + lon;
         SharedPreferences.Editor editor = prefs.edit();
         Set<String> set = prefs.getStringSet("distSet", new HashSet<String>());
         Set<String> updatedSet = new HashSet<String>(set);

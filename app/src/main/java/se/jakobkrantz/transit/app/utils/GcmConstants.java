@@ -10,6 +10,8 @@ public class GcmConstants {
     public static final String DISTURBANCE_TYPE = "distType";
     public static final String DISTURBANCE_REPORT_TIME = "distReportTime";
     public static final String DISTURBANCE_REPORT_TIME_MILLIS = "distRepInMillis";
+    public static final String DISTURBANCE_LAT = "distLat";
+    public static final String DISTURBANCE_LONG = "distLong";
     public static String ACTION = "action";
 
     public static String ACTION_REGISTER = "regUserIdAction";
