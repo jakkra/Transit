@@ -42,6 +42,7 @@ public class SearchJourneysTask extends AsyncTask<String, Void, ArrayList<Journe
     public void setDataDownloadListener(DataDownloadListener dataDownloadListener) {
         this.dataDownloadListener = dataDownloadListener;
     }
+
     @Override
     protected ArrayList<Journey> doInBackground(String... params) {
         try {
@@ -56,7 +57,9 @@ public class SearchJourneysTask extends AsyncTask<String, Void, ArrayList<Journe
         ArrayList<Journey> j = xmlQueryJourneyHandler.getJourneys();
         //This is a really bad H4X, will fix!
         //TODO give all the same journeyKey in xml parser and then give them sequenceNbr depending on position in array
-        j.get(0).setJourneyResultKey(key);
+        if (j.size() != 0) {
+            j.get(0).setJourneyResultKey(key);
+        }
         return j;
     }
 
