@@ -57,6 +57,8 @@ public class BaseActivity extends ActionBarActivity implements ListView.OnItemCl
         }
         drawerListText = getResources().getStringArray(R.array.drawer_labels);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+
         drawerList = (RecyclerView) findViewById(R.id.left_drawer);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
@@ -65,10 +67,14 @@ public class BaseActivity extends ActionBarActivity implements ListView.OnItemCl
         drawerListAdapter = new DrawerListAdapter(drawerListText, this);
         drawerList.setAdapter(drawerListAdapter);
 
+
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerToggle.setDrawerIndicatorEnabled(true);
         drawerToggle.syncState();
         drawerLayout.setDrawerListener(drawerToggle);
+        //Disable drawer
+        //drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        //drawerToggle.setDrawerIndicatorEnabled(false);
     }
 
     @Override

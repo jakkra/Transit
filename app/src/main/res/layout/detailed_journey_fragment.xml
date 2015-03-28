@@ -14,6 +14,7 @@
         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" android:paddingLeft="15dp" android:paddingTop="5dp"
+                android:paddingBottom="4dp"
                 android:paddingRight="15dp">
 
 
@@ -116,7 +117,6 @@
                        android:id="@+id/imageView11" android:layout_toEndOf="@+id/imageView10"
                        android:layout_above="@+id/arrival_time" android:layout_toRightOf="@+id/imageView10"/>
 
-
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:textColor="@color/white"
                       android:id="@+id/textView10"
@@ -160,17 +160,18 @@
                     wheel:matProg_progressIndeterminate="true" android:layout_gravity="center"/>
             <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
 
-                <com.getbase.floatingactionbutton.FloatingActionButton android:id="@+id/map_button"
-                                                                       android:layout_width="wrap_content"
-                                                                       android:layout_height="wrap_content"
-                                                                       android:layout_alignParentBottom="true"
-                                                                       android:layout_alignParentEnd="true"
-                                                                       android:layout_alignParentRight="true"
-                                                                       fab:fab_size="normal"
-                                                                       fab:fab_icon="@drawable/ic_globe"
-                                                                       fab:fab_colorNormal="@color/colorPrimary"
-                                                                       fab:fab_colorPressed="@color/colorDividerBackground"
-                                                                       android:layout_marginBottom="16dp"/>
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/map_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        fab:fab_size="normal"
+                        fab:fab_icon="@drawable/ic_globe"
+                        fab:fab_colorNormal="@color/colorPrimary"
+                        fab:fab_colorPressed="@color/colorDividerBackground"
+                        android:layout_marginBottom="16dp"/>
 
             </RelativeLayout>
 
