@@ -24,7 +24,7 @@ public class DummyFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.dummy_fragment, container, false);
         tv = (TextView) view.findViewById(R.id.editText);
-        tv.setText("Dummy I am");
+        tv.setText("Dummy I am, oh yes indeed");
         return view;
     }
 

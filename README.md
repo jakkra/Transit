@@ -10,7 +10,11 @@ Play store link (light version, without reporting) : https://play.google.com/sto
 
 ![Detailed](pics/detail.png)
 
+![map](pics/map.png)
+
+
 ![Drawer](pics/drawer.png)
+
 
 ## Reporting
 Note that the reporting at the moment only will pass your report on to everyone else and leave them with a push notification. Without consideration to if they want the report or not.
