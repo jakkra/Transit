@@ -3,6 +3,7 @@ package se.jakobkrantz.transit.app.searching;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import se.jakobkrantz.transit.app.base.BaseActivity;
 import se.jakobkrantz.transit.app.R;
@@ -27,7 +28,11 @@ public class SearchActivity extends BaseActivity implements SearchLocationFragme
         } else {
             onEvent(FragmentTypes.SEARCH_JOURNEY_FROM_TO, null);
         }
-        getSupportActionBar().setTitle(getResources().getStringArray(R.array.drawer_labels)[0]);
+        ActionBar bar = getSupportActionBar();
+        if (bar != null) {
+            bar.setTitle(getResources().getStringArray(R.array.drawer_labels)[0]);
+
+        }
 
     }
 
