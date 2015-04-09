@@ -1,5 +1,7 @@
 package se.jakobkrantz.transit.app.skanetrafikenAPI;
 
+import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -43,6 +45,30 @@ public class TimeAndDateConverter {
     }
 
     /**
+     * Adds minutes to a time, represented by a String
+     *
+     * @param String in format 2012-10-15T08:17:00
+     * @return String in format 2012-10-15T08:17:00 with minutes appended
+     */
+    public static String appendMinsTodate(String dateTimeString, int minutes) {
+        Log.d("appendMins", dateTimeString + " -----" + minutes);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Date date = null;
+        try {
+            date = dateFormat.parse(dateTimeString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.MINUTE, minutes);
+        date = cal.getTime();
+        Log.d("appendMins updated time", dateFormat.format(date));
+
+        return dateFormat.format(date);
+    }
+
+    /**
      * Extracts date and month from dateTimeString and formats
      *
      * @param dateTimeString in format 2012-10-15T08:17:00
@@ -66,7 +92,7 @@ public class TimeAndDateConverter {
     /**
      * Converts dates between formats
      *
-     * @param in format 2012-10-15T08:17:00
+     * @param dateTimeString format 2012-10-15T08:17:00
      * @return String in format YYYY-MM-DD
      */
     public static String getDate(String dateTimeString) {
@@ -116,7 +142,7 @@ public class TimeAndDateConverter {
     /**
      * Calculates minutes from now to a specific time in the future
      *
-     * @param String startTime in format 2012-10-15T08:17:00
+     * @param startTime startTime in format 2012-10-15T08:17:00
      * @return formatted String dd:HH:mm, if @param startTime is passed, '-' is returned.
      */
     public static String timeToDeparture(String startTime) {
@@ -136,6 +162,7 @@ public class TimeAndDateConverter {
         long millisDiff = cal.getTimeInMillis() - now.getTimeInMillis();
         if (millisDiff > 0) {
             diffMinutes = ((double) millisDiff / (60 * 1000));
+            diffMinutes++;
             if (diffMinutes > 120) {
                 hours = diffMinutes / 60;
                 diffMinutes = diffMinutes % 60;
