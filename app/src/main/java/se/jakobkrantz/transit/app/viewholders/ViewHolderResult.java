@@ -16,11 +16,7 @@ import java.util.List;
 public class ViewHolderResult extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
     private View view;
     public ViewHolderClickListener listener;
-    public TextView timeToArrival;
-    public TextView timeBetween;
-    public TextView nbrDepTime;
     public TextView message;
-    public List<ImageView> transferIcons;
     public FillUIHelper fillUIHelper;
 
     public ViewHolderResult(View view, ViewHolderClickListener listener) {
@@ -30,7 +26,6 @@ public class ViewHolderResult extends RecyclerView.ViewHolder implements View.On
         fillUIHelper = new FillUIHelper(view);
         CardView cw = (CardView) view.findViewById(R.id.resultCardItem);
         cw.setOnClickListener(this);
-        cw.setOnLongClickListener(this);
 
     }
 
