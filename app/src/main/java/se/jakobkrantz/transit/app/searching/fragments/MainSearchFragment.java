@@ -124,6 +124,7 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
                     if (database.addStationFavPair(s)) {
                         favListAdapter.addFavourite(s);
                     }
+
                 }
             }
         });
@@ -180,7 +181,6 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
                         b.putString(BundleConstants.SET_TIME_AND_DATE, new SimpleDateFormat("yyMMdd HH:mm").format(searchDate));
                     }
 
-
                     database.addRecentJourneySearch(s);
                     database.addStationsToRecent(recentSearches);
                     favListAdapter.addRecentJourney(s);
@@ -228,7 +228,6 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
         } else if (v.getId() == R.id.relative_swap) {
             swapFromAndToStation();
         } else {
-
             Bundle args = initBundle;
             if (args == null) args = new Bundle();
             if (v.getId() == R.id.text_view_from_station) {
@@ -407,7 +406,6 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
         dialog.setContentView(R.layout.demo_main);
         ImageView imageView = (ImageView) dialog.findViewById(R.id.demo_image_view);
         BitmapFactory.Options options = new BitmapFactory.Options();
-        //options.inJustDecodeBounds = true;
         options.inDither = true;
         options.inSampleSize = 2;
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.demo, options);

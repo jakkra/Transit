@@ -61,6 +61,12 @@ public class DetailedJourneyFragment extends Fragment implements DataDownloadLis
             swipeRefreshLayout.setColorSchemeResources(R.color.colorDividerBackground);
             progressWheel = (ProgressWheel) view.findViewById(R.id.progress_detail);
             recycleView = (RecyclerView) view.findViewById(R.id.detailed_recycle_view);
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+            recycleView.setLayoutManager(mLayoutManager);
+            recycleView.setHasFixedSize(true);
+            recycleView.setItemAnimator(new DefaultItemAnimator());
+            swipeRefreshLayout.setRefreshing(true);
+            swipeRefreshLayout.setOnRefreshListener(this);
             uiFiller = new FillDetailedHeaderHelper(view);
             mapButton = (FloatingActionButton) view.findViewById(R.id.map_button);
             rootView = view;
@@ -74,12 +80,6 @@ public class DetailedJourneyFragment extends Fragment implements DataDownloadLis
     @Override
     public void onStart() {
         super.onStart();
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        recycleView.setLayoutManager(mLayoutManager);
-        recycleView.setHasFixedSize(true);
-        recycleView.setItemAnimator(new DefaultItemAnimator());
-        swipeRefreshLayout.setRefreshing(true);
-        swipeRefreshLayout.setOnRefreshListener(this);
 
         Bundle args = getArguments();
         startId = Integer.parseInt(args.getString(BundleConstants.FROM_STATION_ID));

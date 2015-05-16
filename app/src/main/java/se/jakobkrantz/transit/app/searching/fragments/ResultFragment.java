@@ -62,6 +62,11 @@ public class ResultFragment extends Fragment implements DataDownloadListener, Sw
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         recycleView = (RecyclerView) view.findViewById(R.id.recycle_view);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        recycleView.setLayoutManager(mLayoutManager);
+        recycleView.setHasFixedSize(true);
+        recycleView.setItemAnimator(new DefaultItemAnimator());
+        swipeRefreshLayout.setRefreshing(true);
         progressWheel = (ProgressWheel) view.findViewById(R.id.progress_result);
         return view;
     }
@@ -69,11 +74,6 @@ public class ResultFragment extends Fragment implements DataDownloadListener, Sw
     @Override
     public void onStart() {
         super.onStart();
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        recycleView.setLayoutManager(mLayoutManager);
-        recycleView.setHasFixedSize(true);
-        recycleView.setItemAnimator(new DefaultItemAnimator());
-        swipeRefreshLayout.setRefreshing(true);
         swipeRefreshLayout.setOnRefreshListener(this);
         SearchJourneysTask task = new SearchJourneysTask();
         task.setDataDownloadListener(this);

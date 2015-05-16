@@ -72,7 +72,7 @@ public class BaseActivity extends ActionBarActivity implements ListView.OnItemCl
         drawerToggle.setDrawerIndicatorEnabled(true);
         drawerToggle.syncState();
         drawerLayout.setDrawerListener(drawerToggle);
-        //Disable drawer
+        //Disable drawer for Play Store version
         //drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         //drawerToggle.setDrawerIndicatorEnabled(false);
     }
