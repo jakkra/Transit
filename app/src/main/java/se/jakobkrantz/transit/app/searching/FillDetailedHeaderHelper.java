@@ -59,7 +59,7 @@ public class FillDetailedHeaderHelper {
             tw.setText("");
         }
         timeBetween.setText(TimeAndDateConverter.formatTime(j.getDepDateTime()) + " - " + TimeAndDateConverter.formatTime(j.getArrDateTime()));
-        nbrDepTime.setText(j.getTotalTravelTime() + " min ");
+        nbrDepTime.setText("restid " + j.getTotalTravelTime() + " min ");
         timeToDep.setText(" om " + j.getTimeToDep());
         List<String> lineNbrs = j.getChangeNbrs();
         List<Integer> lineTypes = j.getLineTypes();
