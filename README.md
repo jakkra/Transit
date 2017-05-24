@@ -2,6 +2,7 @@ Transit
 =======
 Android app used to search for journeys with Skånetrafiken.
 
+Unfortunately I can't find the key for playStore, so I can't update the app in playStore to the latest version.
 Play store link (light version, without reporting) : https://play.google.com/store/apps/details?id=se.jakobkrantz.transit.app
 
 ![Home](pics/home.png)
