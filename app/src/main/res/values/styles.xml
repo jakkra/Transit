@@ -6,6 +6,7 @@
     <style name="AppTheme.Base" parent="Theme.AppCompat">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkMore</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
         <item name="android:actionBarItemBackground">@color/colorPrimary</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>

@@ -6,93 +6,127 @@
               android:layout_width="match_parent"
               android:clickable="false"
               android:layout_height="match_parent">
+
     <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" android:layout_gravity="center_horizontal" android:layout_weight="10.5">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="12.5"
+        android:orientation="vertical">
+
         <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/colorPrimaryDarker">
+
+            <View
+                android:id="@+id/view2"
+                style="@style/DividerMainTop"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:padding="1dp" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" android:layout_gravity="center_horizontal"
-                android:background="@color/colorPrimaryDarker">
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@+id/relative_swap"
+                android:paddingLeft="5dp"
+                android:orientation="vertical">
 
-            <View style="@style/DividerMainTop" android:layout_alignParentBottom="true"
-                  android:layout_alignParentLeft="true"
-                  android:layout_alignParentStart="true" android:padding="1dp" android:id="@+id/view2"/>
+                <TextView
+                    android:id="@+id/text_view_from_station"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="35dp"
+
+                    android:layout_marginRight="35dp"
+                    android:layout_toLeftOf="@+id/setTimeButton"
+                    android:layout_toRightOf="@+id/relative_swap"
+                    android:layout_toStartOf="@+id/setTimeButton"
+                    android:hint="@string/edit_text_search_from"
+                    android:paddingTop="5dp"
+                    android:singleLine="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textColorHint="@color/colorPrimary"
+                    android:textSize="26sp" />
+
+                <TextView
+                    android:id="@+id/text_view_to_station"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/view2"
+
+                    android:layout_marginEnd="35dp"
+
+
+                    android:layout_marginRight="35dp"
+                    android:layout_toLeftOf="@+id/setTimeButton"
+                    android:layout_toRightOf="@+id/relative_swap"
+                    android:layout_toStartOf="@+id/setTimeButton"
+
+                    android:hint="@string/edit_text_search_to"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="5dp"
+                    android:singleLine="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textColorHint="@color/colorPrimary"
+                    android:textSize="26sp" />
+            </LinearLayout>
+
             <ImageButton
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:text="Tid"
-                    android:src="@drawable/selector_clock"
-                    android:id="@+id/setTimeButton"
-                    android:scaleType="fitCenter"
-                    android:background="@null"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_centerVertical="true" android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" android:padding="4dp"/>
-            <RelativeLayout android:layout_width="40dp" android:layout_height="80dp"
-                            android:layout_alignParentLeft="true"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_alignParentStart="true" android:id="@+id/relative_swap"
-                    >
+                android:id="@+id/setTimeButton"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@null"
+                android:padding="4dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/selector_clock"
+                android:text="Tid" />
 
-                <ImageView android:layout_width="40dp" android:layout_height="40dp"
-                           android:src="@drawable/selector_swap_left_search"
-                           android:id="@+id/imageView5"
-                           android:layout_alignParentLeft="true"
-                           android:layout_alignParentStart="true" android:paddingBottom="5dp"/>
+            <RelativeLayout
+                android:id="@+id/relative_swap"
+                android:layout_width="40dp"
+                android:layout_height="80dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp">
+
                 <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/selector_swap_right_search"
-                        android:id="@+id/imageView"
-                        android:adjustViewBounds="false"
-                        android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
-                        android:layout_alignParentBottom="true" android:paddingTop="5dp"/>
+                    android:id="@+id/imageView5"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:adjustViewBounds="false"
+                    android:src="@drawable/selector_swap_left_search" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/imageView5"
+                    android:adjustViewBounds="false"
+                    android:src="@drawable/selector_swap_right_search" />
             </RelativeLayout>
 
-            <TextView
-                android:id="@+id/text_view_from_station"
-                android:layout_width="219dp"
-                android:layout_height="wrap_content"
+            <View
+                style="@style/Divider"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginEnd="35dp"
+                android:padding="5dp" />
 
-                android:layout_marginRight="35dp"
-                android:layout_toLeftOf="@+id/setTimeButton"
-                android:layout_toRightOf="@+id/relative_swap"
-                android:layout_toStartOf="@+id/setTimeButton"
-                android:hint="@string/edit_text_search_from"
-                android:paddingTop="5dp"
-                android:singleLine="true"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="@color/colorPrimary"
-                android:textSize="22sp" />
-            <View style="@style/Divider" android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
-                  android:layout_alignParentStart="true" android:padding="5dp"/>
-
-            <TextView
-                android:id="@+id/text_view_to_station"
-                android:layout_width="219dp"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/view2"
-
-                android:layout_marginEnd="35dp"
-
-
-                android:layout_marginRight="35dp"
-                android:layout_toLeftOf="@+id/setTimeButton"
-                android:layout_toRightOf="@+id/relative_swap"
-                android:layout_toStartOf="@+id/setTimeButton"
-
-                android:hint="@string/edit_text_search_to"
-                android:paddingBottom="2dp"
-                android:paddingTop="5dp"
-                android:singleLine="true"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="@color/colorPrimary"
-                android:textSize="22sp" />
         </RelativeLayout>
     </LinearLayout>
     <LinearLayout android:layout_width="fill_parent"
@@ -110,199 +144,333 @@
                 android:clickable="true"
                 android:layout_alignParentTop="true"/>
     </LinearLayout>
-    <LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="9">
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:orientation="vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@color/colorPrimaryDark">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="11"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimaryDark"
+            android:orientation="vertical">
 
 
-            <Button
+            <RelativeLayout
+                android:id="@+id/relative"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_above="@+id/gcmButton"
+                android:layout_centerHorizontal="true"
+                android:paddingBottom="1dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <View
+                    style="@style/Divider"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:padding="5dp" />
+
+                <TextView
+                    android:id="@+id/transport_name_nbr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/search_journey_button_text"
-                    android:background="@drawable/btn_main_fragment_selector"
-                    android:id="@+id/gcmButton" android:layout_gravity="center_horizontal"
-                    android:layout_alignParentBottom="true" android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" android:layout_toRightOf="@+id/favourite_button"
-                    android:layout_toEndOf="@+id/favourite_button"/>
-            <RelativeLayout
-                    android:layout_width="fill_parent"
-                    android:id="@+id/relative"
-                    android:layout_height="fill_parent"
-                    android:layout_centerHorizontal="true" android:layout_above="@+id/gcmButton"
-                    android:paddingLeft="10dp" android:paddingRight="10dp" android:paddingBottom="1dp">
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="14sp"
+                    android:textColor="@color/resultListTextColor"
+                    android:textStyle="bold" />
 
-                <View style="@style/Divider" android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
-                      android:layout_alignParentStart="true" android:padding="5dp"/>
                 <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/resultListTextColor"
-                        android:id="@+id/transport_name_nbr"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true" android:textStyle="bold"/>
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/resultListTextColor"
-                        android:id="@+id/time_between" android:layout_below="@+id/transport_name_nbr"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true" android:textSize="18sp"/>
+                    android:id="@+id/time_between"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/transport_name_nbr"
+                    android:textColor="@color/resultListTextColor"
+                    android:textSize="18sp" />
+
                 <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_alignParentBottom="true"
-                        android:id="@+id/imageView1"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"/>
+                    android:id="@+id/imageView1"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+
                 <TextView
-                        android:layout_width="wrap_content"
-                        android:textColor="@color/resultListTextColor"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/nbr_dep_time"
-                        android:textStyle="bold" android:layout_above="@+id/textView10"
-                        android:layout_alignParentRight="true" android:layout_alignParentEnd="true"/>
+                    android:id="@+id/nbr_dep_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/textView10"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/resultListTextColor"
+                    android:textStyle="bold" />
+
                 <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/resultListTextColor"
-                        android:singleLine="true"
-                        android:id="@+id/message"
-                        android:layout_toLeftOf="@+id/nbr_dep_time"
-                        android:layout_below="@+id/time_between" android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:textSize="12sp" android:paddingBottom="5dp"/>
+                    android:id="@+id/message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/time_between"
+                    android:layout_toLeftOf="@+id/nbr_dep_time"
+                    android:paddingBottom="5dp"
+                    android:singleLine="true"
+                    android:textColor="@color/resultListTextColor"
+                    android:textSize="12sp" />
+
                 <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/resultListTextColor"
-                        android:id="@+id/time_to_dep" android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"/>
-                <ImageView android:layout_width="20dp" android:layout_height="20dp"
-                           android:id="@+id/iw_first_bus_type" android:layout_toEndOf="@+id/transport_name_nbr"
-                           android:paddingTop="2dp"
-                           android:layout_alignBottom="@+id/transport_name_nbr"
-                           android:layout_toRightOf="@+id/transport_name_nbr"/>
-                <ImageView android:layout_width="25dp" android:layout_height="25dp"
-                           android:id="@+id/iw_clock" android:layout_toEndOf="@+id/time_between"
-                           android:layout_alignTop="@+id/time_between" android:layout_toRightOf="@+id/time_between"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                          android:textColor="@color/resultListTextColor" android:id="@+id/delay_min"
-                          android:layout_toEndOf="@+id/iw_clock"
-                          android:layout_alignBottom="@+id/time_between" android:layout_toRightOf="@+id/iw_clock"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                          android:textColor="@color/resultListTextColor" android:id="@+id/stop_view"
-                          android:layout_alignTop="@+id/imageView1" android:layout_toRightOf="@+id/imageView1"
-                          android:layout_toEndOf="@+id/imageView1"/>
-                <ImageView android:layout_width="20dp" android:layout_height="20dp"
-                           android:id="@+id/imageView2"
-                           android:layout_alignParentBottom="true"
+                    android:id="@+id/time_to_dep"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:textColor="@color/resultListTextColor" />
 
-                           android:layout_toEndOf="@+id/stop_view"
-                           android:layout_toRightOf="@+id/stop_view"/>
-                <ImageView android:layout_width="20dp" android:layout_height="20dp"
-                           android:id="@+id/imageView3"
-                           android:layout_toRightOf="@+id/imageView2"
-                           android:layout_alignParentBottom="true"
+                <ImageView
+                    android:id="@+id/iw_first_bus_type"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignBottom="@+id/transport_name_nbr"
+                    android:layout_toEndOf="@+id/transport_name_nbr"
+                    android:layout_toRightOf="@+id/transport_name_nbr"
+                    android:paddingTop="2dp" />
 
-                           android:layout_toEndOf="@+id/imageView2"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                          android:textColor="@color/resultListTextColor" android:id="@+id/note_view"
-                          android:layout_toEndOf="@+id/imageView3"
-                          android:layout_alignTop="@+id/imageView3" android:layout_toRightOf="@+id/imageView3"/>
-                <ImageView android:layout_width="20dp" android:layout_height="20dp"
-                           android:id="@+id/imageView4"
-                           android:layout_alignParentBottom="true"
+                <ImageView
+                    android:id="@+id/iw_clock"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignTop="@+id/time_between"
+                    android:layout_toEndOf="@+id/time_between"
+                    android:layout_toRightOf="@+id/time_between" />
 
-                           android:layout_toEndOf="@+id/note_view"
-                           android:layout_alignTop="@+id/note_view" android:layout_toRightOf="@+id/note_view"/>
-                <ImageView android:layout_width="20dp" android:layout_height="20dp"
-                           android:id="@+id/circleView"
-                           android:layout_alignParentBottom="true"
+                <TextView
+                    android:id="@+id/delay_min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/time_between"
+                    android:layout_toEndOf="@+id/iw_clock"
+                    android:layout_toRightOf="@+id/iw_clock"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="2dp"
+                    android:textSize="13sp"
+                    android:textColor="@color/resultListTextColor" />
 
-                           android:layout_toEndOf="@+id/imageView4"
-                           android:layout_toRightOf="@+id/imageView4"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                          android:textColor="@color/resultListTextColor" android:id="@+id/textView7"
-                          android:layout_toEndOf="@+id/circleView"
-                          android:layout_alignTop="@+id/circleView" android:layout_toRightOf="@+id/circleView"/>
-                <ImageView android:layout_width="20dp" android:layout_height="20dp"
-                           android:layout_alignParentBottom="true"
+                <TextView
+                    android:id="@+id/stop_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/imageView1"
+                    android:layout_toEndOf="@+id/imageView1"
+                    android:layout_toRightOf="@+id/imageView1"
+                    android:textColor="@color/resultListTextColor" />
 
-                           android:id="@+id/imageView6" android:layout_toEndOf="@+id/textView7"
-                           android:layout_toRightOf="@+id/textView7"/>
-                <ImageView android:layout_width="20dp" android:layout_height="20dp"
-                           android:layout_alignParentBottom="true"
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_alignParentBottom="true"
 
-                           android:id="@+id/imageView7" android:layout_toEndOf="@+id/imageView6"
-                           android:layout_toRightOf="@+id/imageView6"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                          android:textColor="@color/resultListTextColor" android:id="@+id/textView8"
-                          android:layout_toEndOf="@+id/imageView7"
-                          android:layout_alignTop="@+id/imageView7" android:layout_toRightOf="@+id/imageView7"/>
-                <ImageView android:layout_width="20dp" android:layout_height="20dp"
-                           android:layout_alignParentBottom="true"
+                    android:layout_toEndOf="@+id/stop_view"
+                    android:layout_toRightOf="@+id/stop_view" />
 
-                           android:id="@+id/imageView8" android:layout_toEndOf="@+id/textView8"
-                           android:layout_toRightOf="@+id/textView8"/>
-                <ImageView android:layout_width="20dp" android:layout_height="20dp"
-                           android:layout_alignParentBottom="true"
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toEndOf="@+id/imageView2"
 
-                           android:id="@+id/imageView9" android:layout_toEndOf="@+id/imageView8"
-                           android:layout_toRightOf="@+id/imageView8"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                          android:textColor="@color/resultListTextColor" android:id="@+id/textView9"
-                          android:layout_toEndOf="@+id/imageView9"
-                          android:layout_alignBottom="@+id/textView8" android:layout_toRightOf="@+id/imageView9"/>
-                <ImageView android:layout_width="20dp" android:layout_height="20dp"
-                           android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@+id/imageView2" />
 
-                           android:id="@+id/imageView10" android:layout_toEndOf="@+id/textView9"
-                           android:layout_toRightOf="@+id/textView9"/>
-                <ImageView android:layout_width="20dp" android:layout_height="20dp"
-                           android:layout_alignParentBottom="true"
+                <TextView
+                    android:id="@+id/note_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/imageView3"
+                    android:layout_toEndOf="@+id/imageView3"
+                    android:layout_toRightOf="@+id/imageView3"
+                    android:textColor="@color/resultListTextColor" />
 
-                           android:id="@+id/imageView11" android:layout_toEndOf="@+id/imageView10"
-                           android:layout_toRightOf="@+id/imageView10"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                          android:textColor="@color/resultListTextColor" android:id="@+id/nbr_changes"
-                          android:layout_below="@+id/time_between" android:layout_alignParentLeft="true"
-                          android:layout_alignParentStart="true"/>
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_alignParentBottom="true"
 
-                <com.pnikosis.materialishprogress.ProgressWheel
-                        xmlns:wheel="http://schemas.android.com/apk/res-auto"
-                        style="@android:style/Widget.ProgressBar.Small"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/progressBar"
-                        wheel:matProg_rimWidth="5dp"
-                        wheel:matProg_spinSpeed="3"
-                        wheel:matProg_barColor="@color/colorPrimary"
-                        wheel:matProg_progressIndeterminate="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerInParent="true"
-                        android:layout_centerVertical="true"/>
+                    android:layout_alignTop="@+id/note_view"
+                    android:layout_toEndOf="@+id/note_view"
+                    android:layout_toRightOf="@+id/note_view" />
 
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                          android:textColor="@color/resultListTextColor" android:id="@+id/textView10"
-                          android:layout_toEndOf="@+id/imageView11"
-                          android:layout_alignTop="@+id/imageView11" android:layout_toRightOf="@+id/imageView11"/>
+                <ImageView
+                    android:id="@+id/circleView"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_alignParentBottom="true"
+
+                    android:layout_toEndOf="@+id/imageView4"
+                    android:layout_toRightOf="@+id/imageView4" />
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/circleView"
+                    android:layout_toEndOf="@+id/circleView"
+                    android:layout_toRightOf="@+id/circleView"
+                    android:textColor="@color/resultListTextColor" />
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+
+                    android:layout_alignParentBottom="true"
+                    android:layout_toEndOf="@+id/textView7"
+                    android:layout_toRightOf="@+id/textView7" />
+
+                <ImageView
+                    android:id="@+id/imageView7"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+
+                    android:layout_alignParentBottom="true"
+                    android:layout_toEndOf="@+id/imageView6"
+                    android:layout_toRightOf="@+id/imageView6" />
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/imageView7"
+                    android:layout_toEndOf="@+id/imageView7"
+                    android:layout_toRightOf="@+id/imageView7"
+                    android:textColor="@color/resultListTextColor" />
+
+                <ImageView
+                    android:id="@+id/imageView8"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+
+                    android:layout_alignParentBottom="true"
+                    android:layout_toEndOf="@+id/textView8"
+                    android:layout_toRightOf="@+id/textView8" />
+
+                <ImageView
+                    android:id="@+id/imageView9"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+
+                    android:layout_alignParentBottom="true"
+                    android:layout_toEndOf="@+id/imageView8"
+                    android:layout_toRightOf="@+id/imageView8" />
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/textView8"
+                    android:layout_toEndOf="@+id/imageView9"
+                    android:layout_toRightOf="@+id/imageView9"
+                    android:textColor="@color/resultListTextColor" />
+
+                <ImageView
+                    android:id="@+id/imageView10"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+
+                    android:layout_alignParentBottom="true"
+                    android:layout_toEndOf="@+id/textView9"
+                    android:layout_toRightOf="@+id/textView9" />
+
+                <ImageView
+                    android:id="@+id/imageView11"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+
+                    android:layout_alignParentBottom="true"
+                    android:layout_toEndOf="@+id/imageView10"
+                    android:layout_toRightOf="@+id/imageView10" />
+
+                <TextView
+                    android:id="@+id/nbr_changes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/time_between"
+                    android:textColor="@color/resultListTextColor" />
+
+                <com.pnikosis.materialishprogress.ProgressWheel xmlns:wheel="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/progressBar"
+                    style="@android:style/Widget.ProgressBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
+                    wheel:matProg_barColor="@color/colorPrimary"
+                    wheel:matProg_progressIndeterminate="true"
+                    wheel:matProg_rimWidth="5dp"
+                    wheel:matProg_spinSpeed="3" />
+
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/imageView11"
+                    android:layout_toEndOf="@+id/imageView11"
+                    android:layout_toRightOf="@+id/imageView11"
+                    android:textColor="@color/resultListTextColor" />
 
             </RelativeLayout>
-            <Button
-                    android:layout_width="182dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/fav_btn"
-                    android:background="@drawable/btn_main_fragment_selector"
-                    android:id="@+id/favourite_button"
-                    android:paddingLeft="10dp" android:paddingRight="10dp"
-                    android:layout_alignParentBottom="true" android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"/>
 
 
         </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2.53"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/favourite_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_weight="1"
+                android:background="@drawable/btn_main_fragment_selector"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/fav_btn" />
+
+            <Button
+                android:id="@+id/gcmButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_toEndOf="@+id/favourite_button"
+                android:layout_toRightOf="@+id/favourite_button"
+                android:layout_weight="1"
+                android:background="@drawable/btn_main_fragment_selector"
+                android:text="@string/search_journey_button_text" />
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

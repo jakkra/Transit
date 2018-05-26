@@ -3,6 +3,7 @@ package se.jakobkrantz.transit.searching;/*
  */
 
 
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -72,6 +73,8 @@ public class FillDetailedHeaderHelper {
                 String nbr = lineNbrs.get(i).replaceAll("[^\\d.]", "");
                 routeNbrs.get(i).setText(nbr);
             }
+            routeNbrs.get(i).setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+
         }
         if (lineTypes.size() != 1) {
             for (int i = 0; i < lineTypes.size(); i++) {

@@ -13,7 +13,7 @@
     <string name="line_separator">lineSeparator</string>
     <string name="fav_btn">Spara sökning</string>
     <string name="fav_header">Favoriter</string>
-    <string name="rec_header">Senaste sökningar</string>
+    <string name="rec_header">Senaste</string>
     <string name="clear_searches">Rensa sökningar</string>
     <string name="clear_favourites">Rensa favoriter</string>
     <string name="label_arrival">Ankomst:</string>
@@ -45,7 +45,7 @@
     <string name="help">Hjälp</string>
 
     <string-array name="drawer_labels">
-        <item>Sök</item>
+        <item></item>
         <item>Rapportera</item>
         <item>Förseningar</item>
         <item>Inställningar</item>

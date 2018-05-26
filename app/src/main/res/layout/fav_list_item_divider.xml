@@ -6,7 +6,7 @@
                 android:background="@color/colorDividerBackground"
                 android:layout_margin="0dp"
                 android:layout_gravity="center"
-                android:layout_height="30dp">
+                android:layout_height="35dp">
 
 
     <TextView
@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_centerInParent="true"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:textColor="@color/listDividerTextColor"
             />
 

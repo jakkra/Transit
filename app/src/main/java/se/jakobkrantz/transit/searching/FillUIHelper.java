@@ -106,9 +106,8 @@ public class FillUIHelper {
             } else {
                 String nbr = lineNbrs.get(i).replaceAll("[^\\d.]", "");
                 routeNbrs.get(i).setText(nbr);
-
             }
-
+            routeNbrs.get(i).setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
 
         }
         if (lineTypes.size() != 1) {

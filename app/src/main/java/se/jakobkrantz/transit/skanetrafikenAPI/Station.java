@@ -1,4 +1,5 @@
-package se.jakobkrantz.transit.skanetrafikenAPI;/*
+package se.jakobkrantz.transit.skanetrafikenAPI;
+/*
  * Created by krantz on 14-11-18.
  */
 
