@@ -51,30 +51,48 @@
                         android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
                         android:layout_alignParentBottom="true" android:paddingTop="5dp"/>
             </RelativeLayout>
-            <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                      android:id="@+id/text_view_from_station"
-                      android:textColorHint="@color/colorPrimary"
-                      android:singleLine="true"
 
-                      android:textColor="@color/colorPrimary"
-                      android:hint="@string/edit_text_search_from" android:paddingTop="5dp" android:textSize="22sp"
-                      android:layout_alignParentTop="true" android:layout_toRightOf="@+id/relative_swap"
-                      android:layout_toLeftOf="@+id/setTimeButton" android:layout_toStartOf="@+id/setTimeButton"/>
+            <TextView
+                android:id="@+id/text_view_from_station"
+                android:layout_width="219dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="35dp"
+
+                android:layout_marginRight="35dp"
+                android:layout_toLeftOf="@+id/setTimeButton"
+                android:layout_toRightOf="@+id/relative_swap"
+                android:layout_toStartOf="@+id/setTimeButton"
+                android:hint="@string/edit_text_search_from"
+                android:paddingTop="5dp"
+                android:singleLine="true"
+                android:textColor="@color/colorPrimary"
+                android:textColorHint="@color/colorPrimary"
+                android:textSize="22sp" />
             <View style="@style/Divider" android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
                   android:layout_alignParentStart="true" android:padding="5dp"/>
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                      android:textColor="@color/colorPrimary"
-                      android:singleLine="true"
 
-                      android:id="@+id/text_view_to_station"
+            <TextView
+                android:id="@+id/text_view_to_station"
+                android:layout_width="219dp"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/view2"
+
+                android:layout_marginEnd="35dp"
 
 
-                      android:hint="@string/edit_text_search_to" android:paddingTop="5dp" android:textSize="22sp"
-                      android:textColorHint="@color/colorPrimary"
+                android:layout_marginRight="35dp"
+                android:layout_toLeftOf="@+id/setTimeButton"
+                android:layout_toRightOf="@+id/relative_swap"
+                android:layout_toStartOf="@+id/setTimeButton"
 
-                      android:paddingBottom="2dp"
-                      android:layout_above="@+id/view2" android:layout_toRightOf="@+id/relative_swap"
-                      android:layout_toLeftOf="@+id/setTimeButton" android:layout_toStartOf="@+id/setTimeButton"/>
+                android:hint="@string/edit_text_search_to"
+                android:paddingBottom="2dp"
+                android:paddingTop="5dp"
+                android:singleLine="true"
+                android:textColor="@color/colorPrimary"
+                android:textColorHint="@color/colorPrimary"
+                android:textSize="22sp" />
         </RelativeLayout>
     </LinearLayout>
     <LinearLayout android:layout_width="fill_parent"

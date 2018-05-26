@@ -411,7 +411,6 @@ public class MainSearchFragment extends Fragment implements View.OnClickListener
     @Override
     public void onTimeSet(Date date) {
         searchDate = date;
-
     }
 
     private void showDemo() {
